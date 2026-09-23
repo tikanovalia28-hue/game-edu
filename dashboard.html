@@ -1,0 +1,563 @@
+<!DOCTYPE html><html lang="id" style><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;family=Quicksand:wght@500;600;700&amp;display=swap" rel="stylesheet"><script id="tailwind-config">try{
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            fredoka: ['Fredoka', 'cursive', 'sans-serif'],
+            quicksand: ['Quicksand', 'sans-serif'],
+          },
+          colors: {
+            warmCream: '#fffbf0',
+            sunYellow: '#fdbd24',
+            sunYellowDark: '#f59e0b',
+            mintGreen: '#10b981',
+            mintBright: '#4ade80',
+            tealAccent: '#14b8a6',
+            kidsBlue: '#38bdf8',
+            pastelMint: '#5eead4',
+          },
+          boxShadow: {
+            'kid-card': '0 20px 35px -10px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)',
+          }
+        }
+      }
+    }
+  }catch(_e){}</script><meta content="web_standard" name="shell-type"><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script></head><body class="min-h-screen w-full relative overflow-x-hidden flex flex-col justify-between bg-gradient-to-br from-[#e0f2fe] via-[#fef9c3] to-[#ccfbf1] text-slate-700 selection:bg-amber-200 m-0 p-0">
+<!-- BEGIN: Fullscreen Cheerful Sky Background Elements -->
+<div aria-hidden="true" class="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none">
+<!-- Smiling Sun in Top Right Corner -->
+<div class="absolute -top-12 -right-12 sm:-top-6 sm:-right-6 md:top-2 md:right-4 w-44 h-44 sm:w-60 sm:h-60 md:w-72 md:h-72">
+<!-- Sun Rays Rotating -->
+<div class="absolute inset-0 animate-sun-ray opacity-80">
+<svg class="w-full h-full text-amber-300/70 fill-current" viewBox="0 0 100 100">
+<polygon points="50,0 55,20 50,15 45,20"></polygon>
+<polygon points="50,100 55,80 50,85 45,80"></polygon>
+<polygon points="0,50 20,55 15,50 20,45"></polygon>
+<polygon points="100,50 80,55 85,50 80,45"></polygon>
+<polygon points="15,15 32,28 27,27 28,32"></polygon>
+<polygon points="85,85 68,72 73,73 72,68"></polygon>
+<polygon points="15,85 28,68 27,73 32,72"></polygon>
+<polygon points="85,15 72,32 73,27 68,28"></polygon>
+</svg>
+</div>
+<!-- Sun Face Body -->
+<div class="absolute inset-5 rounded-full bg-gradient-to-tr from-amber-400 via-amber-300 to-yellow-200 shadow-xl shadow-amber-300/40 flex items-center justify-center border-4 border-white/80">
+<span class="text-3xl sm:text-5xl select-none">😊</span>
+</div>
+</div>
+<!-- Soft Rainbow Arch (Top Left) -->
+<div class="absolute -top-16 -left-16 sm:-top-8 sm:-left-8 opacity-60 sm:opacity-85 pointer-events-none">
+<svg height="320" viewBox="0 0 120 120" width="320">
+<circle cx="20" cy="100" fill="none" opacity="0.45" r="80" stroke="#f43f5e" stroke-width="6"></circle>
+<circle cx="20" cy="100" fill="none" opacity="0.45" r="74" stroke="#fb923c" stroke-width="6"></circle>
+<circle cx="20" cy="100" fill="none" opacity="0.45" r="68" stroke="#facc15" stroke-width="6"></circle>
+<circle cx="20" cy="100" fill="none" opacity="0.45" r="62" stroke="#4ade80" stroke-width="6"></circle>
+<circle cx="20" cy="100" fill="none" opacity="0.45" r="56" stroke="#38bdf8" stroke-width="6"></circle>
+<circle cx="20" cy="100" fill="none" opacity="0.45" r="50" stroke="#a855f7" stroke-width="6"></circle>
+</svg>
+</div>
+<!-- Fluffy Floating Clouds -->
+<div class="absolute top-20 left-8 sm:left-40 animate-cloud-slow opacity-90">
+<svg class="drop-shadow-sm" fill="white" height="65" viewBox="0 0 110 60" width="120">
+<path d="M20 50 A 18 18 0 0 1 20 20 A 24 24 0 0 1 65 14 A 22 22 0 0 1 95 32 A 16 16 0 0 1 90 50 Z"></path>
+</svg>
+</div>
+<div class="absolute bottom-24 right-12 sm:right-36 animate-cloud-slow opacity-85" style="animation-delay: -5s;">
+<svg class="drop-shadow-sm" fill="white" height="75" viewBox="0 0 110 60" width="140">
+<path d="M20 50 A 18 18 0 0 1 20 20 A 24 24 0 0 1 65 14 A 22 22 0 0 1 95 32 A 16 16 0 0 1 90 50 Z"></path>
+</svg>
+</div>
+<div class="hidden md:block absolute top-1/2 left-4 animate-cloud-slow opacity-75" style="animation-delay: -3s;">
+<svg class="drop-shadow-sm" fill="white" height="55" viewBox="0 0 110 60" width="100">
+<path d="M20 50 A 18 18 0 0 1 20 20 A 24 24 0 0 1 65 14 A 22 22 0 0 1 95 32 A 16 16 0 0 1 90 50 Z"></path>
+</svg>
+</div>
+<div class="hidden lg:block absolute bottom-1/3 left-1/3 animate-cloud-slow opacity-60" style="animation-delay: -7s;">
+<svg class="drop-shadow-sm" fill="white" height="48" viewBox="0 0 110 60" width="90">
+<path d="M20 50 A 18 18 0 0 1 20 20 A 24 24 0 0 1 65 14 A 22 22 0 0 1 95 32 A 16 16 0 0 1 90 50 Z"></path>
+</svg>
+</div>
+<!-- Sparkly Tiny Stars in Sky -->
+<div class="absolute top-28 right-1/3 text-amber-400 text-2xl animate-pulse" style="animation-duration: 3s;">✨</div>
+<div class="absolute bottom-28 left-16 text-yellow-500 text-2xl animate-pulse" style="animation-duration: 4s;">⭐</div>
+<div class="absolute top-48 left-1/4 text-emerald-500 text-lg animate-pulse" style="animation-duration: 2.5s;">★</div>
+<div class="absolute bottom-1/2 right-16 text-sky-500 text-xl animate-pulse" style="animation-duration: 3.5s;">✨</div>
+<div class="absolute top-16 right-1/4 text-pink-400 text-base animate-pulse" style="animation-duration: 3.2s;">🌟</div>
+</div>
+<!-- END: Fullscreen Cheerful Sky Background Elements -->
+<!-- BEGIN: TopBar -->
+<header class="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 pt-4 sm:pt-6 pb-2 flex items-center justify-between z-20 relative">
+<!-- Brand Pill -->
+<div class="inline-flex items-center gap-2 bg-[#fbb01b] text-amber-950 font-bold px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-base tracking-wide shadow-sm hover:opacity-95 transition-transform cursor-pointer border border-amber-400/60" data-purpose="brand-pill" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.15rem;">
+<span class="inline-block w-4 h-4 rounded-full border-2 border-amber-900 flex items-center justify-center text-[10px] leading-none font-black">★</span>
+<span class="font-kids font-semibold">Taman Bermain Anak TK</span>
+</div>
+<!-- Quick Actions (Musik Interaktif) -->
+<div class="flex items-center gap-2.5">
+<button class="inline-flex items-center gap-1.5 hover:bg-[#0c9064] active:scale-95 transition text-white px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-sm bg-[#0fa976] border border-emerald-300/60 cursor-pointer" data-purpose="audio-toggle-btn" id="audioToggleBtn" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.15rem;" title="Nyalakan / Matikan Musik Ceria">
+<span class="" id="audioIcon">♪</span>
+<span class="" id="audioText">Musik Nyala</span>
+</button>
+</div>
+</header>
+<!-- END: TopBar -->
+<!-- BEGIN: MainContent Area -->
+<main class="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-8 lg:py-10 flex-1 flex items-center z-10 relative"><div class="flex flex-col w-full">
+<!-- Back navigation & Header section -->
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-6">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<!-- Quick user profile / star badge -->
+</div>
+<!-- Main Title & Subtitle -->
+<div class="text-center mt-6 sm:mt-10 mb-8 sm:mb-12">
+<h1 class="font-kids text-[clamp(2rem,1.5rem+3vw,3.5rem)] font-bold text-slate-800 drop-shadow-sm tracking-tight mb-2">
+        Yuk, Pilih Permainan! 🎈
+      </h1>
+<p class="font-quicksand text-[clamp(1rem,0.8rem+1vw,1.25rem)] font-semibold text-slate-600 max-w-xl mx-auto px-4">
+        Pilih permainan yang ingin kamu mainkan hari ini! Temukan petualangan seru dan kumpulkan bintang sebanyak-banyaknya. ✨
+      </p>
+</div>
+</div>
+<!-- Game Cards Grid Section -->
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16"><div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+<!-- Kartu 1 -->
+<div class="bg-white/95 rounded-[2.5rem] p-6 sm:p-8 border-4 border-amber-300 shadow-xl shadow-amber-300/20 flex flex-col justify-between hover:scale-105 hover:rotate-1 hover:shadow-2xl hover:shadow-amber-400/40 transition-all duration-300 relative group cursor-pointer game-card" data-game-title="Memasangkan Permainan Tradisional">
+<div class="absolute -top-4 -right-4 bg-emerald-400 text-white p-3 rounded-full shadow-lg text-2xl group-hover:rotate-12 group-hover:scale-110 transition-transform">🧩</div>
+<div>
+<div class="bg-gradient-to-br from-emerald-100 to-teal-100 rounded-3xl p-6 mb-6 flex items-center justify-center border-2 border-emerald-300/60 h-44 group-hover:bg-emerald-200/60 transition-colors">
+<span class="text-6xl drop-shadow-md select-none group-hover:scale-110 transition-transform">🎯</span>
+</div>
+<span class="inline-block bg-emerald-100 text-emerald-700 font-kids text-xs font-bold px-3 py-1 rounded-full mb-3 border border-emerald-200">Level: Mudah ⭐</span>
+<h3 class="font-kids text-2xl font-bold text-slate-800 mb-2 leading-tight">Memasangkan Permainan Tradisional</h3>
+<p class="font-quicksand text-slate-600 text-sm font-semibold mb-6">Hubungkan gambar dengan keterangan yang tepat! Kenali ragam permainan seru nusantara.</p>
+</div>
+<button class="font-kids w-full py-3.5 px-6 rounded-full text-base font-bold bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-500 hover:to-yellow-500 text-amber-950 shadow-lg active:scale-95 transition cursor-pointer border-2 border-white flex items-center justify-center gap-2 main-action-btn" data-game="Memasangkan Permainan Tradisional">
+<span class="">Main Sekarang</span>
+<span class="text-xl">🚀</span>
+</button>
+</div>
+<!-- Kartu 2 -->
+<div class="bg-white/95 rounded-[2.5rem] p-6 sm:p-8 border-4 border-amber-300 shadow-xl shadow-amber-300/20 flex flex-col justify-between hover:scale-105 hover:-rotate-1 hover:shadow-2xl hover:shadow-amber-400/40 transition-all duration-300 relative group cursor-pointer game-card" data-game-title="Menyusun Huruf">
+<div class="absolute -top-4 -right-4 bg-sky-400 text-white p-3 rounded-full shadow-lg text-2xl group-hover:rotate-12 group-hover:scale-110 transition-transform">abc</div>
+<div>
+<div class="bg-gradient-to-br from-sky-100 to-indigo-100 rounded-3xl p-6 mb-6 flex items-center justify-center border-2 border-sky-300/60 h-44 group-hover:bg-sky-200/60 transition-colors">
+<span class="text-6xl drop-shadow-md select-none group-hover:scale-110 transition-transform">🔤</span>
+</div>
+<span class="inline-block bg-sky-100 text-sky-700 font-kids text-xs font-bold px-3 py-1 rounded-full mb-3 border border-sky-200">Level: Seru ⭐⭐</span>
+<h3 class="font-kids text-2xl font-bold text-slate-800 mb-2 leading-tight">Menyusun Huruf</h3>
+<p class="font-quicksand text-slate-600 text-sm font-semibold mb-6">Susun huruf menjadi kata yang benar! Belajar membaca jadi makin mengasyikkan.</p>
+</div>
+<button class="font-kids w-full py-3.5 px-6 rounded-full text-base font-bold bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-500 hover:to-yellow-500 text-amber-950 shadow-lg active:scale-95 transition cursor-pointer border-2 border-white flex items-center justify-center gap-2 main-action-btn" data-game="Menyusun Huruf">
+<span class="">Main Sekarang</span>
+<span class="text-xl">🚀</span>
+</button>
+</div>
+<!-- Kartu 3 -->
+<div class="bg-white/95 rounded-[2.5rem] p-6 sm:p-8 border-4 border-amber-300 shadow-xl shadow-amber-300/20 flex flex-col justify-between hover:scale-105 hover:rotate-1 hover:shadow-2xl hover:shadow-amber-400/40 transition-all duration-300 relative group cursor-pointer game-card" data-game-title="Mencari Jejak">
+<div class="absolute -top-4 -right-4 bg-pink-400 text-white p-3 rounded-full shadow-lg text-2xl group-hover:rotate-12 group-hover:scale-110 transition-transform">🗺️</div>
+<div>
+<div class="bg-gradient-to-br from-pink-100 to-rose-100 rounded-3xl p-6 mb-6 flex items-center justify-center border-2 border-pink-300/60 h-44 group-hover:bg-pink-200/60 transition-colors">
+<span class="text-6xl drop-shadow-md select-none group-hover:scale-110 transition-transform">🧭</span>
+</div>
+<span class="inline-block bg-pink-100 text-pink-700 font-kids text-xs font-bold px-3 py-1 rounded-full mb-3 border border-pink-200">Level: Petualangan ⭐⭐⭐</span>
+<h3 class="font-kids text-2xl font-bold text-slate-800 mb-2 leading-tight">Mencari Jejak</h3>
+<p class="font-quicksand text-slate-600 text-sm font-semibold mb-6">Ikuti jejak dan temukan jawabannya! Asah ketelitian dan daya ingatmu di sini.</p>
+</div>
+<button class="font-kids w-full py-3.5 px-6 rounded-full text-base font-bold bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-500 hover:to-yellow-500 text-amber-950 shadow-lg active:scale-95 transition cursor-pointer border-2 border-white flex items-center justify-center gap-2 main-action-btn" data-game="Mencari Jejak">
+<span class="">Main Sekarang</span>
+<span class="text-xl">🚀</span>
+</button>
+</div>
+</div></div>
+<!-- Interactive Modal Popup Ramah Anak -->
+<div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none" id="gameModal">
+<div class="bg-white rounded-[2.5rem] border-4 border-amber-300 shadow-2xl p-6 sm:p-10 max-w-md w-full text-center transform transition-transform duration-300 relative overflow-hidden scale-90" id="modalBox">
+<!-- Rainbow top bar -->
+<div class="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-pink-400 via-amber-300 via-teal-300 to-sky-400"></div>
+<div class="text-6xl mb-4 mt-2 animate-bounce">🎈</div>
+<h3 class="font-kids text-2xl sm:text-3xl font-bold text-slate-800 mb-3" id="modalGameTitle">Mulai: Mencari Jejak! 🚀</h3>
+<p class="font-quicksand text-slate-600 text-base sm:text-lg font-semibold mb-6" id="modalGameDesc">Asyik! Kamu memilih Mencari Jejak. Ayo bersiap seru-seruan sekarang juga! ✨</p>
+<button class="font-kids w-full py-3.5 px-6 rounded-full text-base font-bold bg-gradient-to-r from-emerald-400 to-teal-500 hover:from-emerald-500 hover:to-teal-600 text-white shadow-lg active:scale-95 transition cursor-pointer border-2 border-white" id="closeGameModalBtn">
+        Asyik, Lanjutkan! 🎉
+      </button>
+</div>
+</div>
+<div class="max-w-7xl mx-auto flex items-center justify-center">
+<div class="inline-flex items-center gap-2 bg-white/90 border border-amber-200/90 px-4 sm:px-6 py-1.5 rounded-full shadow-sm hover:shadow transition-all group max-w-full" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.25rem;">
+<span class="text-amber-500 text-sm sm:text-base group-hover:scale-125 transition-transform shrink-0">💖</span>
+<p class="font-kids text-xs sm:text-sm font-semibold text-slate-700 tracking-wide text-center truncate sm:whitespace-normal">
+        Game ini dibuat oleh : <span class="text-indigo-600 font-bold underline decoration-amber-300 decoration-2">Cintya Eka Puspita Sari</span> <span class="text-amber-500">✨</span>
+</p>
+</div>
+</div>
+<!-- END: BottomCreditsBar -->
+<!-- BEGIN: Celebration Modal & Confetti Canvas -->
+<canvas class="fixed inset-0 pointer-events-none z-50" height="1147" id="confettiCanvas" width="1280"></canvas>
+<p class="text-slate-600 text-sm sm:text-base font-semibold mb-6">
+    </p>
+</div>
+</div>
+<!-- END: Celebration Modal & Confetti Canvas -->
+<!-- BEGIN: InteractiveScripts (Web Audio Synth & Confetti) -->
+<script class="" data-purpose="audio-and-confetti-handler">
+  document.addEventListener('DOMContentLoaded', () => {
+    /* ----------------------------------------------------
+       1. WEB AUDIO API SYNTHESIZER (Jingle & Melody)
+       ---------------------------------------------------- */
+    let audioCtx = null;
+    let isBgmPlaying = false;
+    let bgmInterval = null;
+    let noteIndex = 0;
+
+    // Cheerful pentatonic melody notes (Hz)
+    const melodyNotes = [
+      523.25, // C5
+      659.25, // E5
+      783.99, // G5
+      880.00, // A5
+      1046.50,// C6
+      880.00, // A5
+      783.99, // G5
+      659.25  // E5
+    ];
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContextClass();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    // Play a short sweet chime / note
+    function playNote(freq, type = 'sine', duration = 0.25, gainVal = 0.08) {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+        gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {
+        console.error('Audio play error:', e);
+      }
+    }
+
+    // Hover pop sound
+    function playHoverPop() {
+      playNote(440, 'sine', 0.1, 0.04);
+    }
+
+    // Celebration Fanfare Jingle for "Mulai Bermain"
+    function playCelebrationFanfare() {
+      const fanfare = [
+        { f: 523.25, d: 0.15, wait: 0 },
+        { f: 659.25, d: 0.15, wait: 120 },
+        { f: 783.99, d: 0.15, wait: 240 },
+        { f: 1046.50, d: 0.45, wait: 380 }
+      ];
+      fanfare.forEach(item => {
+        setTimeout(() => {
+          playNote(item.f, 'triangle', item.d, 0.18);
+        }, item.wait);
+      });
+    }
+
+    // Background playful loop
+    function startBgm() {
+      if (bgmInterval) clearInterval(bgmInterval);
+      getAudioContext();
+      isBgmPlaying = true;
+      noteIndex = 0;
+      
+      // Play note every 280ms
+      bgmInterval = setInterval(() => {
+        const note = melodyNotes[noteIndex % melodyNotes.length];
+        playNote(note, 'sine', 0.22, 0.05);
+        noteIndex++;
+      }, 280);
+
+      updateBgmUi();
+    }
+
+    function stopBgm() {
+      if (bgmInterval) {
+        clearInterval(bgmInterval);
+        bgmInterval = null;
+      }
+      isBgmPlaying = false;
+      updateBgmUi();
+    }
+
+    function updateBgmUi() {
+      const audioBtn = document.getElementById('audioToggleBtn');
+      const audioIcon = document.getElementById('audioIcon');
+      const audioText = document.getElementById('audioText');
+
+      if (isBgmPlaying) {
+        audioIcon.textContent = '♪';
+        audioText.textContent = 'Musik Nyala';
+        audioBtn.className = 'inline-flex items-center gap-1.5 hover:bg-[#0c9064] active:scale-95 transition text-white px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-sm bg-[#0fa976] border border-emerald-300/60 cursor-pointer';
+      } else {
+        audioIcon.textContent = '✕';
+        audioText.textContent = 'Musik Mati';
+        audioBtn.className = 'inline-flex items-center gap-1.5 hover:bg-slate-500 active:scale-95 transition text-white px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-sm bg-slate-400 border border-slate-300 cursor-pointer';
+      }
+    }
+
+    const audioToggleBtn = document.getElementById('audioToggleBtn');
+    if (audioToggleBtn) {
+      audioToggleBtn.addEventListener('click', () => {
+        if (isBgmPlaying) {
+          stopBgm();
+        } else {
+          startBgm();
+        }
+      });
+    }
+
+    /* ----------------------------------------------------
+       2. CONFETTI BURST ANIMATION (HTML5 Canvas)
+       ---------------------------------------------------- */
+    const canvas = document.getElementById('confettiCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let confettiAnimationId = null;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const confettiColors = ['#f43f5e', '#fb923c', '#facc15', '#4ade80', '#38bdf8', '#a855f7', '#ec4899'];
+
+    function createConfettiBurst(originX, originY, count = 80) {
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = Math.random() * 12 + 5;
+        particles.push({
+          x: originX,
+          y: originY,
+          vx: Math.cos(angle) * velocity,
+          vy: Math.sin(angle) * velocity - 4,
+          size: Math.random() * 8 + 6,
+          color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+          rotation: Math.random() * 360,
+          rotationSpeed: Math.random() * 10 - 5,
+          opacity: 1,
+          decay: Math.random() * 0.015 + 0.01,
+          gravity: 0.35,
+          shape: Math.random() > 0.4 ? 'rect' : 'circle'
+        });
+      }
+
+      if (!confettiAnimationId) {
+        animateConfetti();
+      }
+    }
+
+    function animateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += p.gravity;
+        p.vx *= 0.98;
+        p.rotation += p.rotationSpeed;
+        p.opacity -= p.decay;
+
+        if (p.opacity <= 0 || p.y > canvas.height + 20) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.opacity);
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rotation * Math.PI) / 180);
+        ctx.fillStyle = p.color;
+
+        if (p.shape === 'rect') {
+          ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+        } else {
+          ctx.beginPath();
+          ctx.arc(0, 0, p.size / 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      if (particles.length > 0) {
+        confettiAnimationId = requestAnimationFrame(animateConfetti);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confettiAnimationId = null;
+      }
+    }
+
+    /* ----------------------------------------------------
+       3. INTERACTIVE CARDS & GAME MODAL HANDLERS
+       ---------------------------------------------------- */
+    const gameCards = document.querySelectorAll('.game-card');
+    const mainActionBtns = document.querySelectorAll('.main-action-btn');
+    const gameModal = document.getElementById('gameModal');
+    const modalBox = document.getElementById('modalBox');
+    const modalGameTitle = document.getElementById('modalGameTitle');
+    const modalGameDesc = document.getElementById('modalGameDesc');
+    const closeGameModalBtn = document.getElementById('closeGameModalBtn');
+    let selectedGame = '';
+    let selectedGameUrl = '';
+
+   const gameUrls = {
+      'Memasangkan Permainan Tradisional': 'game1.html',
+      'Menyusun Huruf': 'game2.html',
+      'Mencari Jejak': 'game3.html'
+  };
+
+    // Hover audio trigger for game cards
+    gameCards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        playHoverPop();
+      });
+    });
+
+    // Click handler for cards & buttons
+    mainActionBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const gameName = btn.getAttribute('data-game');
+        selectedGame = gameName;
+        selectedGameUrl = gameUrls[gameName];
+        const rect = btn.getBoundingClientRect();
+        const burstX = rect.left + rect.width / 2;
+        const burstY = rect.top + rect.height / 2;
+
+        createConfettiBurst(burstX, burstY, 80);
+        playCelebrationFanfare();
+
+        if (!isBgmPlaying) {
+          setTimeout(() => startBgm(), 500);
+        }
+
+        if (modalGameTitle) modalGameTitle.textContent = `Mulai: ${gameName}! 🚀`;
+        if (modalGameDesc) modalGameDesc.textContent = `Asyik! Kamu memilih ${gameName}. Ayo bersiap seru-seruan sekarang juga! ✨`;
+
+        if (gameModal && modalBox) {
+          gameModal.classList.remove('opacity-0', 'pointer-events-none');
+          gameModal.classList.add('opacity-100', 'pointer-events-auto');
+          modalBox.classList.remove('scale-90');
+          modalBox.classList.add('scale-100');
+        }
+      });
+    });
+
+    gameCards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        // If they click anywhere else on the card except the button
+        if (e.target.closest('.main-action-btn')) return;
+        const gameName = card.getAttribute('data-game-title');
+        selectedGame = gameName;
+        selectedGameUrl = gameUrls[gameName];
+        const rect = card.getBoundingClientRect();
+        const burstX = rect.left + rect.width / 2;
+        const burstY = rect.top + rect.height / 2;
+
+        createConfettiBurst(burstX, burstY, 80);
+        playCelebrationFanfare();
+
+        if (!isBgmPlaying) {
+          setTimeout(() => startBgm(), 500);
+        }
+
+        if (modalGameTitle) modalGameTitle.textContent = `Mulai: ${gameName}! 🚀`;
+        if (modalGameDesc) modalGameDesc.textContent = `Asyik! Kamu memilih ${gameName}. Ayo bersiap seru-seruan sekarang juga! ✨`;
+
+        if (gameModal && modalBox) {
+          gameModal.classList.remove('opacity-0', 'pointer-events-none');
+          gameModal.classList.add('opacity-100', 'pointer-events-auto');
+          modalBox.classList.remove('scale-90');
+          modalBox.classList.add('scale-100');
+        }
+      });
+    });
+
+    function closeGameModal() {
+      if (gameModal && modalBox) {
+        gameModal.classList.add('opacity-0', 'pointer-events-none');
+        gameModal.classList.remove('opacity-100', 'pointer-events-auto');
+        modalBox.classList.remove('scale-100');
+        modalBox.classList.add('scale-90');
+      }
+    }
+
+    if (closeGameModalBtn) {
+      closeGameModalBtn.addEventListener('click', () => {
+        if (selectedGameUrl) {
+          window.location.href = selectedGameUrl;
+       }
+      });
+    }
+    
+    if (gameModal) {
+      gameModal.addEventListener('click', (e) => {
+        if (e.target === gameModal) closeGameModal();
+      });
+    }
+
+    /* Welcome Modal on load */
+    const welcomeModal = document.getElementById('welcomeModal');
+    const modalCard = document.getElementById('modalCard');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+
+    function openWelcomeModal() {
+      if (welcomeModal && modalCard) {
+        welcomeModal.classList.remove('opacity-0', 'pointer-events-none');
+        welcomeModal.classList.add('opacity-100', 'pointer-events-auto');
+        modalCard.classList.remove('scale-90');
+        modalCard.classList.add('scale-100');
+      }
+    }
+    function closeWelcomeModal() {
+      if (welcomeModal && modalCard) {
+        welcomeModal.classList.add('opacity-0', 'pointer-events-none');
+        welcomeModal.classList.remove('opacity-100', 'pointer-events-auto');
+        modalCard.classList.remove('scale-100');
+        modalCard.classList.add('scale-90');
+      }
+    }
+
+    setTimeout(() => {
+      openWelcomeModal();
+    }, 400);
+
+    if (closeModalBtn) {
+      closeModalBtn.addEventListener('click', closeWelcomeModal);
+    }
+    if (welcomeModal) {
+      welcomeModal.addEventListener('click', (e) => {
+        if (e.target === welcomeModal) closeWelcomeModal();
+      });
+    }
+  });
+</script>
+<!-- END: InteractiveScripts -->
+<p class=""></p></div></main>
+
+
+</body></html>

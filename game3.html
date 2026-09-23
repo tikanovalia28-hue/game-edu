@@ -1,0 +1,2035 @@
+<!DOCTYPE html><html lang="id" style><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Kids EduGame - Game 3: Bantu Anak Menemukan Jalan!</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;family=Nunito:wght@600;700;800;900&amp;family=Quicksand:wght@500;600;700;800&amp;family=Rubik:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+    body {
+      font-family: 'Quicksand', 'Rubik', 'Nunito', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+    .font-nunito { font-family: 'Nunito', sans-serif; }
+    .font-rubik { font-family: 'Rubik', sans-serif; }
+    .font-fredoka { font-family: 'Fredoka', cursive, sans-serif; }
+
+    /* Custom 3D button bouncy effect */
+    .btn-bouncy {
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-bouncy:active:not(:disabled) {
+      transform: translateY(3px) scale(0.97);
+    }
+
+    @keyframes gentleWiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-5deg); }
+      75% { transform: rotate(5deg); }
+    }
+    .animate-wiggle {
+      animation: gentleWiggle 1.5s infinite ease-in-out;
+    }
+
+    @keyframes softPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    .animate-softpulse {
+      animation: softPulse 2s infinite ease-in-out;
+    }
+
+    @keyframes shakeObstacle {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px) rotate(-3deg); }
+      40% { transform: translateX(6px) rotate(3deg); }
+      60% { transform: translateX(-4px) rotate(-2deg); }
+      80% { transform: translateX(4px) rotate(2deg); }
+    }
+    .shake-cell {
+      animation: shakeObstacle 0.4s ease-in-out;
+    }
+
+    @keyframes hopJoy {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-16px) scale(1.1); }
+    }
+    .animate-hop {
+      animation: hopJoy 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes walkSway {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-6px) rotate(-4deg); }
+      75% { transform: translateY(-6px) rotate(4deg); }
+    }
+    .animate-walk {
+      animation: walkSway 0.6s infinite ease-in-out;
+    }
+
+    @keyframes pulseStep {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.12); opacity: 1; }
+    }
+    .animate-step-pulse {
+      animation: pulseStep 1.2s infinite ease-in-out;
+    }
+
+    /* Animasi Not Musik Ceria Melayang */
+    @keyframes floatNote {
+      0% { transform: translateY(0) scale(0.7) rotate(0deg); opacity: 0; }
+      50% { opacity: 0.9; }
+      100% { transform: translateY(-16px) scale(1.1) rotate(15deg); opacity: 0; }
+    }
+    .note-bubble {
+      animation: floatNote 1.6s ease-in-out infinite;
+    }
+
+    ::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body class="bg-[#eaf6fb] text-[#2c3e50] min-h-screen flex flex-col justify-between overflow-x-hidden relative selection:bg-amber-200">
+<!-- BACKGROUND DECORATIONS -->
+<div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+<!-- Pelangi di Kiri Atas -->
+<svg class="absolute -top-10 -left-10 w-48 sm:w-72 md:w-96 h-auto opacity-70" fill="none" viewBox="0 0 300 200">
+<path d="M -20,200 A 180,180 0 0,1 260,200" stroke="#fda4af" stroke-linecap="round" stroke-width="20"></path>
+<path d="M 0,200 A 160,160 0 0,1 240,200" stroke="#fde047" stroke-linecap="round" stroke-width="20"></path>
+<path d="M 20,200 A 140,140 0 0,1 220,200" stroke="#86efac" stroke-linecap="round" stroke-width="20"></path>
+<path d="M 40,200 A 120,120 0 0,1 200,200" stroke="#7dd3fc" stroke-linecap="round" stroke-width="20"></path>
+<path d="M 60,200 A 100,100 0 0,1 180,200" stroke="#d8b4fe" stroke-linecap="round" stroke-width="20"></path>
+</svg>
+<!-- Matahari Senyum Lembut Kanan Atas -->
+<div class="absolute -top-10 -right-10 w-44 sm:w-60 md:w-72 h-44 sm:h-60 md:h-72 bg-gradient-to-br from-amber-300 to-yellow-200 rounded-full opacity-60 blur-md"></div>
+<div class="absolute top-4 right-5 sm:right-10 w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-dashed border-amber-300/40 animate-[spin_40s_linear_infinite] flex items-center justify-center"></div>
+<!-- Awan Putih Lembut -->
+<div class="absolute top-28 left-8 sm:left-24 bg-white/60 backdrop-blur-sm rounded-full w-28 h-10 shadow-sm flex items-center px-4">
+<div class="w-12 h-12 bg-white/70 rounded-full -mt-6"></div>
+<div class="w-8 h-8 bg-white/70 rounded-full -mt-3 ml-1"></div>
+</div>
+<div class="absolute top-24 right-28 bg-white/60 backdrop-blur-sm rounded-full w-36 h-12 shadow-sm hidden md:flex items-center px-4">
+<div class="w-14 h-14 bg-white/70 rounded-full -mt-7"></div>
+<div class="w-10 h-10 bg-white/70 rounded-full -mt-4 ml-2"></div>
+</div>
+<!-- Bintang & Sparkles -->
+<div class="absolute top-48 left-12 text-amber-400 text-xl animate-bounce">⭐</div>
+<div class="absolute top-64 right-16 text-amber-400 text-2xl animate-pulse">✨</div>
+<div class="absolute bottom-36 left-16 text-sky-400 text-xl">🎈</div>
+<div class="absolute bottom-40 right-20 text-rose-400 text-2xl">🧩</div>
+<!-- Bukit Rumput Hijau Lembut di Bawah -->
+<div class="absolute bottom-0 inset-x-0 h-20 sm:h-28 bg-gradient-to-t from-emerald-100/70 via-teal-50/50 to-transparent pointer-events-none"></div>
+</div>
+<!-- MAIN WRAPPER CONTAINER -->
+<div class="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 py-3 sm:py-5 flex flex-col flex-1 justify-between gap-3">
+<!-- HEADER -->
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white/80 backdrop-blur-md px-5 sm:px-8 py-3.5 sm:py-4 rounded-3xl shadow-sm border border-sky-100">
+<!-- Sisi Kiri: Judul & Subtitle -->
+<div class="flex flex-col items-start">
+<div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-sky-100 text-sky-700 text-xs sm:text-sm font-bold tracking-wide mb-1 font-rubik">
+<span class="">🌈</span>
+<span class="">Menemukan Jalan</span>
+</div>
+<div class="flex items-center gap-2">
+<h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#1e3a5f] font-rubik tracking-tight flex items-center gap-2">
+<span class="">Yuk, Bantu Anak Menemukan Jalan!</span>
+</h1>
+</div>
+<p class="text-sm sm:text-base font-semibold text-slate-600 mt-0.5" id="header-subtitle"><span class="text-amber-500 font-bold">✨</span> Pandu langkah anak menemukan jalan pulang menuju rumah, ya!</p>
+</div>
+<!-- Sisi Kanan: [♫ Musik Nyala] [🏠 Kembali] -->
+<div class="flex items-center self-end md:self-center gap-2 sm:gap-3 bg-sky-50/90 p-1.5 sm:p-2 rounded-full border border-sky-200 shadow-inner">
+<!-- Tombol Musik Default Aktif Hijau Toska -->
+<button class="relative btn-bouncy px-5 py-2 sm:py-2.5 rounded-full text-white font-extrabold text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer shadow-md active:scale-95 font-rubik bg-slate-400 hover:bg-slate-500 shadow-none" id="btnMusic" onclick="toggleMusic()">
+<span class="absolute -top-2 right-2 text-xs pointer-events-none note-bubble hidden" id="musicFloatingNote">🎶</span>
+<span class="text-base" id="musicIcon">🔇</span>
+<span id="musicText" class="">Musik Mati</span>
+</button>
+<a class="btn-bouncy px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-white hover:bg-rose-50 text-slate-700 hover:text-rose-600 font-extrabold text-xs sm:text-sm border border-slate-200 shadow-sm flex items-center gap-1.5 transition font-rubik" href="dashboard.html">
+<span class="material-symbols-outlined text-base">home</span>
+<span class="">Kembali</span>
+</a>
+</div>
+</header>
+<!-- SECONDARY STATUS BAR -->
+<div class="flex flex-wrap items-center justify-between gap-3 bg-white/70 backdrop-blur-sm px-5 sm:px-8 py-2.5 sm:py-3 rounded-2xl border border-white shadow-sm">
+<!-- Badge Level Aktif -->
+<div class="flex items-center gap-2.5 font-rubik">
+<span class="px-3.5 py-1 rounded-full bg-amber-400 text-amber-950 font-extrabold text-xs sm:text-sm tracking-wide shadow-sm" id="levelBadge">Level 1: Ayo Pulang ke Rumah</span>
+<span class="text-xs sm:text-sm font-bold text-slate-600" id="stepCounterBadge">Langkah 1 dari 3</span>
+</div>
+<!-- Indikator 5 Dots Progres (Center) -->
+<div class="flex items-center gap-2" id="progressDotsContainer"><div class="w-3.5 h-3.5 rounded-full bg-teal-500 transition-all"></div><div class="w-3.5 h-3.5 rounded-full bg-teal-500 scale-125 ring-2 ring-teal-200 transition-all"></div><div class="w-3.5 h-3.5 rounded-full bg-slate-200 transition-all"></div></div>
+<!-- Skor Pill (Right) -->
+<div class="flex items-center gap-1.5 px-4 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 font-extrabold text-xs sm:text-sm shadow-sm font-rubik">
+<span class="">⭐</span>
+<span class="">Skor: <strong class="text-amber-700 text-sm sm:text-base font-black" id="scoreDisplay">0</strong> / 100</span>
+</div>
+</div>
+<!-- MAIN VIEWPORT CONTAINER -->
+<main class="w-full flex-1 bg-white rounded-3xl md:rounded-[2.5rem] shadow-xl shadow-sky-900/5 border-2 border-white p-4 sm:p-5 md:p-6 flex flex-col justify-between items-center relative overflow-hidden">
+<!-- ==========================================
+     LEVEL 1: BANTU ANAK PULANG KE RUMAH
+     ========================================== -->
+<section class="w-full flex-1 flex flex-col items-center justify-between gap-3 transition-all" id="level-1-view">
+<!-- Instruction Card -->
+<div class="w-full max-w-3xl bg-sky-50/80 border border-sky-200 rounded-2xl p-3 sm:p-3.5 shadow-sm flex items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<span class="text-3xl filter drop-shadow">🏡</span>
+<div>
+<h2 class="font-extrabold text-base sm:text-lg text-[#1e3a5f] font-rubik">Level 1 — Pandu Langkah ke Rumah</h2>
+<p class="text-xs sm:text-sm text-slate-600 font-medium">Bantu anak perempuan untuk menemukan jalan menuju Rumah (🏠)!</p>
+</div>
+</div>
+<div class="hidden sm:flex items-center gap-1.5 bg-emerald-100 text-emerald-800 font-extrabold px-3 py-1 rounded-xl text-xs border border-emerald-200 shadow-sm font-rubik">
+<span class="">Tujuan:</span> <span class="text-lg">🏠</span>
+</div>
+</div>
+<!-- Main Play Board 6x4 Grid -->
+<div class="bg-[#5ca85c] p-3 sm:p-4 rounded-3xl shadow-xl border-4 border-white my-auto max-w-fit">
+<div class="grid grid-cols-6 gap-2 sm:gap-2.5 p-1 select-none relative" id="grid-lvl1"><div id="lvl1-cell-0-0" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#356f35] border border-[#265326] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🌿</span>
+            </div><div id="lvl1-cell-1-0" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl1-cell-2-0" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl1-cell-3-0" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl1-cell-4-0" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#7f4a24] border border-[#5c3316] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🪵</span>
+            </div><div id="lvl1-cell-5-0" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#fffaf0] border-2 border-amber-200 shadow-md">
+              <div class="flex flex-col items-center justify-center -space-y-0.5">
+                <span class="text-2xl sm:text-3xl md:text-4xl filter drop-shadow">🏠</span>
+                <span class="text-[9px] sm:text-[10px] font-black text-amber-900 tracking-wider font-rubik">RUMAH</span>
+              </div>
+            </div><div id="lvl1-cell-0-1" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl1-cell-1-1" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl1-cell-2-1" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#3b8c4c] border border-[#276835] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🐍</span>
+            </div><div id="lvl1-cell-3-1" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl1-cell-4-1" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl1-cell-5-1" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl1-cell-0-2" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl1-cell-1-2" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#3b8c4c] border border-[#276835] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🐍</span>
+            </div><div id="lvl1-cell-2-2" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#7f4a24] border border-[#5c3316] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🪵</span>
+            </div><div id="lvl1-cell-3-2" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#3b743b] border border-[#295629] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🌳</span>
+            </div><div id="lvl1-cell-4-2" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#3b743b] border border-[#295629] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🌳</span>
+            </div><div id="lvl1-cell-5-2" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#356f35] border border-[#265326] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🌿</span>
+            </div><div id="lvl1-cell-0-3" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            <div id="lvl1-kid-sprite" class="absolute inset-0 m-auto flex items-center justify-center z-20 ">
+      <svg viewBox="0 0 80 110" class="w-10 h-14 sm:w-12 sm:h-16 drop-shadow-md select-none">
+        <ellipse cx="40" cy="106" rx="18" ry="4" fill="#000000" opacity="0.15"></ellipse>
+        <rect x="26" y="52" width="28" height="24" rx="7" fill="#f43f5e"></rect>
+        <rect x="30" y="80" width="6" height="18" rx="3" fill="#fbcfe8"></rect>
+        <rect x="44" y="80" width="6" height="18" rx="3" fill="#fbcfe8"></rect>
+        <ellipse cx="33" cy="98" rx="6" ry="4" fill="#e11d48"></ellipse>
+        <ellipse cx="47" cy="98" rx="6" ry="4" fill="#e11d48"></ellipse>
+        <path d="M 28 56 Q 40 50 52 56 L 58 82 Q 40 86 22 82 Z" fill="#ec4899"></path>
+        <path d="M 33 60 L 47 60" stroke="#ffffff" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M 26 58 Q 18 68 22 76" stroke="#fbcfe8" stroke-width="5" stroke-linecap="round" fill="none"></path>
+        <path d="M 54 58 Q 62 68 58 76" stroke="#fbcfe8" stroke-width="5" stroke-linecap="round" fill="none"></path>
+        <circle cx="20" cy="34" r="8" fill="#78350f"></circle>
+        <circle cx="60" cy="34" r="8" fill="#78350f"></circle>
+        <circle cx="40" cy="36" r="18" fill="#fed7aa"></circle>
+        <path d="M 24 32 C 28 18 52 18 56 32 C 50 24 44 24 40 27 C 36 24 30 24 24 32 Z" fill="#78350f"></path>
+        <ellipse cx="22" cy="30" rx="3" ry="3" fill="#f43f5e"></ellipse>
+        <ellipse cx="58" cy="30" rx="3" ry="3" fill="#f43f5e"></ellipse>
+        <circle cx="34" cy="36" r="2.5" fill="#1e293b"></circle>
+        <circle cx="46" cy="36" r="2.5" fill="#1e293b"></circle>
+        <circle cx="35" cy="35" r="0.8" fill="#ffffff"></circle>
+        <circle cx="47" cy="35" r="0.8" fill="#ffffff"></circle>
+        <ellipse cx="30" cy="41" rx="3" ry="2" fill="#f472b6" opacity="0.6"></ellipse>
+        <ellipse cx="50" cy="41" rx="3" ry="2" fill="#f472b6" opacity="0.6"></ellipse>
+        <path d="M 37 42 Q 40 46 43 42" stroke="#e11d48" stroke-width="1.8" stroke-linecap="round" fill="none"></path>
+      </svg>
+    </div></div><div id="lvl1-cell-1-3" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#6b7787] border border-[#4e5865] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🪨</span>
+            </div><div id="lvl1-cell-2-3" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#3b743b] border border-[#295629] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🌳</span>
+            </div><div id="lvl1-cell-3-3" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#6b7787] border border-[#4e5865] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🪨</span>
+            </div><div id="lvl1-cell-4-3" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#3b8c4c] border border-[#276835] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🐍</span>
+            </div><div id="lvl1-cell-5-3" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#7f4a24] border border-[#5c3316] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🪵</span>
+            </div></div>
+</div>
+<!-- D-PAD CONTROLS -->
+<div class="flex flex-col items-center gap-1.5 mt-1">
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-rubik">SENTUH PANAH ARAH:</span>
+<div class="grid grid-cols-3 gap-2.5 w-60 sm:w-64">
+<div></div>
+<button class="h-13 sm:h-15 py-2.5 bg-[#02677f] hover:bg-[#004e60] text-white font-rubik font-extrabold rounded-2xl shadow-md border-b-4 border-[#013744] active:translate-y-1 active:border-b-0 flex flex-col items-center justify-center transition-all btn-bouncy" onclick="handleLvl1Move(0, -1)">
+<span class="material-symbols-outlined text-2xl">arrow_upward</span>
+<span class="text-[11px] font-bold">Atas</span>
+</button>
+<div></div>
+<button class="h-13 sm:h-15 py-2.5 bg-[#02677f] hover:bg-[#004e60] text-white font-rubik font-extrabold rounded-2xl shadow-md border-b-4 border-[#013744] active:translate-y-1 active:border-b-0 flex flex-col items-center justify-center transition-all btn-bouncy" onclick="handleLvl1Move(-1, 0)">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+<span class="text-[11px] font-bold">Kiri</span>
+</button>
+<div class="w-full h-13 sm:h-15 rounded-2xl bg-white border-2 border-sky-200 flex items-center justify-center shadow-inner">
+<span class="text-2xl animate-softpulse">🧭</span>
+</div>
+<button class="h-13 sm:h-15 py-2.5 bg-[#02677f] hover:bg-[#004e60] text-white font-rubik font-extrabold rounded-2xl shadow-md border-b-4 border-[#013744] active:translate-y-1 active:border-b-0 flex flex-col items-center justify-center transition-all btn-bouncy" onclick="handleLvl1Move(1, 0)">
+<span class="material-symbols-outlined text-2xl">arrow_forward</span>
+<span class="text-[11px] font-bold">Kanan</span>
+</button>
+<div></div>
+<button class="h-13 sm:h-15 py-2.5 bg-[#02677f] hover:bg-[#004e60] text-white font-rubik font-extrabold rounded-2xl shadow-md border-b-4 border-[#013744] active:translate-y-1 active:border-b-0 flex flex-col items-center justify-center transition-all btn-bouncy" onclick="handleLvl1Move(0, 1)">
+<span class="material-symbols-outlined text-2xl">arrow_downward</span>
+<span class="text-[11px] font-bold">Bawah</span>
+</button>
+<div></div>
+</div>
+</div>
+<!-- BOTTOM NAV BAR LEVEL 1 (LEBAR PENUH, UJUNG KIRI & UJUNG KANAN) -->
+<div class="w-full flex items-center justify-between gap-4 pt-3.5 border-t border-slate-100 mt-2 px-1">
+<button class="btn-prev-nav px-5 py-2.5 rounded-full bg-slate-100 text-slate-400 font-extrabold text-xs sm:text-sm flex items-center gap-1.5 border border-slate-200 cursor-not-allowed opacity-40 font-rubik pointer-events-none" onclick="goToPreviousLevel()" disabled="">
+<span class="material-symbols-outlined text-lg">arrow_back</span>
+<span class="">Sebelumnya</span>
+</button>
+<button class="btn-next-nav px-6 py-2.5 rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 hover:brightness-105 active:scale-95 text-white font-extrabold text-xs sm:text-sm flex items-center gap-1.5 shadow-md shadow-teal-500/25 transition-all btn-bouncy font-rubik cursor-pointer" onclick="goToNextLevel()">
+<span class="">Selanjutnya</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- ==========================================
+     LEVEL 2: BANTU ANAK PERGI KE SEKOLAH (Wadah Bingkai Luar Lebih Besar & Lega, Rapi di Tengah)
+     ========================================== -->
+<section class="w-full flex-1 flex-col items-center justify-between gap-3 sm:gap-4 transition-all hidden" id="level-2-view">
+<!-- Instruction Banner -->
+<div class="w-full max-w-2xl bg-sky-50/90 border border-sky-200 rounded-2xl p-3 sm:p-3.5 shadow-sm flex flex-col sm:flex-row items-center justify-center sm:justify-between text-center sm:text-left gap-2 sm:gap-3 mx-auto mb-2">
+<div class="flex items-center gap-3">
+<span class="text-3xl sm:text-4xl filter drop-shadow">🏫</span>
+<div>
+<h2 class="font-extrabold text-base sm:text-lg text-[#1e3a5f] font-rubik">Level 2 — Ayo Pergi ke Sekolah!</h2>
+<p class="text-xs sm:text-sm text-slate-600 font-medium">Hati-hati rute jebakan ular 🐍! Susun langkah di bawah, lalu tekan <b>MULAI PERJALANAN</b>.</p>
+</div>
+</div>
+<div class="inline-flex items-center gap-1.5 bg-amber-100 text-amber-900 font-extrabold px-3 py-1 rounded-xl text-xs border border-amber-200 shadow-sm shrink-0 font-rubik">
+<span class="">Tujuan:</span> <span class="text-lg">🏫</span>
+</div>
+</div>
+<!-- KOTAK / WADAH BINGKAI LUAR PAPAN PUZZLE DIBUAT LEBIH BESAR, LEGA & PROPOSIONAL DI TENGAH -->
+<div class="w-full max-w-2xl flex items-center justify-center mx-auto my-auto p-3 sm:p-5 md:p-6 bg-gradient-to-b from-sky-50/70 via-emerald-50/50 to-teal-50/70 rounded-3xl sm:rounded-[2.5rem] border-2 border-emerald-100 shadow-sm">
+<div class="bg-gradient-to-b from-[#8ed68e] to-[#61bd61] p-3 sm:p-4 md:p-5 rounded-2xl sm:rounded-3xl shadow-xl border-4 border-white mx-auto max-w-fit" id="lvl2-board-wrapper">
+<div class="grid grid-cols-6 gap-2 sm:gap-2.5 p-1 select-none relative" id="grid-lvl2"><div id="lvl2-cell-0-0" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#356f35] border border-[#265326] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🌿</span>
+            </div><div id="lvl2-cell-1-0" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#3b743b] border border-[#295629] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🌳</span>
+            </div><div id="lvl2-cell-2-0" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl2-cell-3-0" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#356f35] border border-[#265326] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🌿</span>
+            </div><div id="lvl2-cell-4-0" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl2-cell-5-0" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#fffaf0] border-2 border-sky-300 shadow-md">
+              <div class="flex flex-col items-center justify-center -space-y-0.5">
+                <span class="text-2xl sm:text-3xl md:text-4xl animate-bounce filter drop-shadow">🏫</span>
+                <span class="text-[9px] sm:text-[10px] font-black text-sky-900 tracking-wider font-rubik">SEKOLAH</span>
+              </div>
+            </div><div id="lvl2-cell-0-1" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#6b7787] border border-[#4e5865] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🪨</span>
+            </div><div id="lvl2-cell-1-1" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl2-cell-2-1" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl2-cell-3-1" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl2-cell-4-1" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl2-cell-5-1" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl2-cell-0-2" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#3b743b] border border-[#295629] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🌳</span>
+            </div><div id="lvl2-cell-1-2" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl2-cell-2-2" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#7f4a24] border border-[#5c3316] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🪵</span>
+            </div><div id="lvl2-cell-3-2" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#3b8c4c] border border-[#276835] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🐍</span>
+            </div><div id="lvl2-cell-4-2" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#356f35] border border-[#265326] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🌿</span>
+            </div><div id="lvl2-cell-5-2" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl2-cell-0-3" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            <div id="lvl2-kid-sprite" class="absolute inset-0 m-auto flex items-center justify-center z-20 ">
+      <svg viewBox="0 0 80 110" class="w-10 h-14 sm:w-12 sm:h-16 drop-shadow-md select-none">
+        <ellipse cx="40" cy="106" rx="18" ry="4" fill="#000000" opacity="0.15"></ellipse>
+        <rect x="25" y="48" width="30" height="26" rx="7" fill="#0284c7"></rect>
+        <rect x="30" y="80" width="7" height="18" rx="3.5" fill="#fed7aa"></rect>
+        <rect x="43" y="80" width="7" height="18" rx="3.5" fill="#fed7aa"></rect>
+        <ellipse cx="33" cy="98" rx="7" ry="4.5" fill="#0284c7"></ellipse>
+        <ellipse cx="47" cy="98" rx="7" ry="4.5" fill="#0284c7"></ellipse>
+        <rect x="26" y="68" width="28" height="14" rx="4" fill="#1e3a5f"></rect>
+        <path d="M 26 50 Q 40 46 54 50 L 52 70 L 28 70 Z" fill="#fbbf24"></path>
+        <circle cx="40" cy="60" r="3" fill="#ffffff"></circle>
+        <path d="M 24 54 Q 16 64 20 72" stroke="#fed7aa" stroke-width="5.5" stroke-linecap="round" fill="none"></path>
+        <path d="M 56 54 Q 64 64 60 72" stroke="#fed7aa" stroke-width="5.5" stroke-linecap="round" fill="none"></path>
+        <circle cx="40" cy="32" r="17" fill="#fed7aa"></circle>
+        <path d="M 23 28 C 25 14 55 14 57 28 Z" fill="#0d9488"></path>
+        <ellipse cx="40" cy="28" rx="19" ry="5" fill="#14b8a6"></ellipse>
+        <rect x="42" y="24" width="16" height="5" rx="2" fill="#0d9488"></rect>
+        <circle cx="34" cy="34" r="2.5" fill="#1e293b"></circle>
+        <circle cx="46" cy="34" r="2.5" fill="#1e293b"></circle>
+        <circle cx="35" cy="33" r="0.8" fill="#ffffff"></circle>
+        <circle cx="47" cy="33" r="0.8" fill="#ffffff"></circle>
+        <ellipse cx="30" cy="38" rx="3" ry="1.8" fill="#fb7185" opacity="0.6"></ellipse>
+        <ellipse cx="50" cy="38" rx="3" ry="1.8" fill="#fb7185" opacity="0.6"></ellipse>
+        <path d="M 37 40 Q 40 44 43 40" stroke="#78350f" stroke-width="1.8" stroke-linecap="round" fill="none"></path>
+      </svg>
+    </div></div><div id="lvl2-cell-1-3" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl2-cell-2-3" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-white border border-slate-100">
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span class="">🐾</span>
+              </div>
+            </div><div id="lvl2-cell-3-3" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#3b8c4c] border border-[#276835] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🐍</span>
+            </div><div id="lvl2-cell-4-3" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#7f4a24] border border-[#5c3316] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🪵</span>
+            </div><div id="lvl2-cell-5-3" class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm bg-[#3b743b] border border-[#295629] shadow-inner">
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">🌳</span>
+            </div></div>
+</div>
+</div>
+<!-- RAK JAWABAN / URUTAN LANGKAH DIPERPANJANG KE SAMPING -->
+<div class="w-full max-w-3xl flex flex-col items-center gap-3 mt-1 sm:mt-2 mx-auto">
+<!-- Route Chips Display Bar -->
+<div class="w-full bg-white/95 rounded-2xl p-2.5 sm:p-3.5 border-2 border-sky-200 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-2.5 transition-all">
+<div class="flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-[#02677f] shrink-0 pl-1 font-rubik">
+<span class="material-symbols-outlined text-lg">route</span>
+<span class="">Jalurmu:</span>
+</div>
+<!-- Wadah chip -->
+<div class="flex-1 flex items-center gap-2 overflow-x-auto min-h-[46px] px-3 py-1.5 bg-sky-50/70 rounded-xl border border-sky-100 shadow-inner" id="lvl2-chips-container"><span class="text-slate-400 text-xs italic" id="lvl2-placeholder-txt">Pilih panah arah di bawah (maks 12)...</span></div>
+<div class="flex items-center gap-1.5 shrink-0 self-end md:self-center">
+<button class="px-3 py-2 bg-rose-100 hover:bg-rose-200 text-rose-700 text-xs font-bold rounded-xl transition-all flex items-center gap-1 shadow-sm btn-bouncy font-rubik" onclick="popLvl2Sequence()" title="Hapus langkah terakhir">
+<span class="material-symbols-outlined text-sm">backspace</span>
+<span class="">Hapus</span>
+</button>
+<button class="px-3 py-2 bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-bold rounded-xl transition-all flex items-center gap-1 shadow-sm btn-bouncy font-rubik" onclick="resetLvl2Position()" title="Reset posisi ke awal">
+<span class="material-symbols-outlined text-sm">refresh</span>
+<span class="">Ulangi</span>
+</button>
+</div>
+</div>
+<!-- Controls: 4 Direction Buttons + Big Action Execution Button -->
+<div class="w-full flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+<!-- Directional 4 Buttons -->
+<div class="grid grid-cols-4 gap-2 flex-1 font-rubik">
+<button class="py-2.5 bg-sky-50 hover:bg-sky-100 active:scale-95 border-2 border-sky-200 text-[#02677f] rounded-2xl font-bold text-xs sm:text-sm shadow-sm flex flex-col items-center justify-center btn-bouncy" onclick="addLvl2Sequence('UP')">
+<span class="material-symbols-outlined text-xl">arrow_upward</span>
+<span class="">Atas</span>
+</button>
+<button class="py-2.5 bg-sky-50 hover:bg-sky-100 active:scale-95 border-2 border-sky-200 text-[#02677f] rounded-2xl font-bold text-xs sm:text-sm shadow-sm flex flex-col items-center justify-center btn-bouncy" onclick="addLvl2Sequence('DOWN')">
+<span class="material-symbols-outlined text-xl">arrow_downward</span>
+<span class="">Bawah</span>
+</button>
+<button class="py-2.5 bg-sky-50 hover:bg-sky-100 active:scale-95 border-2 border-sky-200 text-[#02677f] rounded-2xl font-bold text-xs sm:text-sm shadow-sm flex flex-col items-center justify-center btn-bouncy" onclick="addLvl2Sequence('LEFT')">
+<span class="material-symbols-outlined text-xl">arrow_back</span>
+<span class="">Kiri</span>
+</button>
+<button class="py-2.5 bg-sky-50 hover:bg-sky-100 active:scale-95 border-2 border-sky-200 text-[#02677f] rounded-2xl font-bold text-xs sm:text-sm shadow-sm flex flex-col items-center justify-center btn-bouncy" onclick="addLvl2Sequence('RIGHT')">
+<span class="material-symbols-outlined text-xl">arrow_forward</span>
+<span class="">Kanan</span>
+</button>
+</div>
+<!-- Big Green Execution Button -->
+<button class="w-full sm:w-auto px-6 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-500 to-green-600 hover:brightness-105 active:scale-95 text-white font-fredoka text-sm sm:text-base font-bold rounded-2xl shadow-lg border-b-4 border-green-800 transition-all flex items-center justify-center gap-2 btn-bouncy shrink-0 font-rubik" id="lvl2-run-btn" onclick="executeLvl2Journey()">
+<span class="material-symbols-outlined text-2xl">play_circle</span>
+<span class="">MULAI PERJALANAN</span>
+</button>
+</div>
+</div>
+<!-- BOTTOM NAV BAR LEVEL 2 (LEBAR PENUH, UJUNG KIRI & UJUNG KANAN) -->
+<div class="w-full flex items-center justify-between gap-4 pt-3.5 border-t border-slate-100 mt-2 px-1">
+<button class="btn-prev-nav px-5 py-2.5 rounded-full bg-slate-100 text-slate-400 font-extrabold text-xs sm:text-sm flex items-center gap-1.5 border border-slate-200 cursor-not-allowed opacity-40 font-rubik pointer-events-none" onclick="goToPreviousLevel()" disabled="">
+<span class="material-symbols-outlined text-lg">arrow_back</span>
+<span class="">Sebelumnya</span>
+</button>
+<button class="btn-next-nav px-6 py-2.5 rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 hover:brightness-105 active:scale-95 text-white font-extrabold text-xs sm:text-sm flex items-center gap-1.5 shadow-md shadow-teal-500/25 transition-all btn-bouncy font-rubik cursor-pointer" onclick="goToNextLevel()">
+<span class="">Selanjutnya</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- ==========================================
+     LEVEL 3: PETUALANGAN ANAK-ANAK KE TAMAN BERMAIN
+     ========================================== -->
+<section class="w-full flex-1 flex-col items-center justify-between gap-4 transition-all hidden" id="level-3-view">
+<!-- 1. INSTRUKSI SINGKAT & PADAT -->
+<div class="w-full max-w-4xl bg-sky-50/90 border border-sky-200 rounded-2xl px-5 py-3 shadow-sm flex items-center justify-between gap-3 mx-auto mb-1">
+<div class="flex items-center gap-3">
+<span class="text-2xl sm:text-3xl filter drop-shadow">🎡</span>
+<p class="text-sm sm:text-base font-extrabold text-[#1e3a5f] font-rubik">
+      Yuk, bantu anak-anak melangkah menuju Taman Bermain! Jawab kuis panca indra dengan tepat ya! 🎡✨
+    </p>
+</div>
+<div class="hidden sm:inline-flex items-center gap-1.5 bg-pink-100 text-pink-900 font-extrabold px-3 py-1 rounded-xl text-xs border border-pink-200 shadow-sm shrink-0 font-rubik">
+<span class="">Tujuan:</span> <span class="text-sm font-black">Taman Bermain 🎡</span>
+</div>
+</div>
+<!-- 2. TRACK JEJAK KAKI ALAMI TANPA KOTAK PEMBUNGKUS PADA KARAKTER -->
+<div class="w-full max-w-4xl bg-gradient-to-r from-[#8be096] via-[#65cd74] to-[#45be8a] rounded-3xl p-5 sm:p-6 shadow-xl border-4 border-white relative overflow-hidden flex flex-col justify-between min-h-[230px] sm:min-h-[250px] mx-auto">
+<!-- Elemen Latar Belakang Nuansa Taman Bermain -->
+<div class="absolute inset-0 pointer-events-none select-none">
+<span class="absolute top-2 left-6 text-xl opacity-80">🌳</span>
+<span class="absolute bottom-2 left-1/4 text-lg">🌸</span>
+<span class="absolute top-3 left-1/3 text-lg animate-bounce">🦋</span>
+<span class="absolute bottom-3 left-1/2 text-xl">🌷</span>
+<span class="absolute top-2 right-1/4 text-xl">🎈</span>
+<span class="absolute top-3 right-36 text-lg animate-wiggle">✨</span>
+<!-- Garis Jalur S-Curve Lembut -->
+<svg class="w-full h-full absolute inset-0 opacity-40" preserveAspectRatio="none" viewBox="0 0 800 200">
+<path d="M 60 120 C 220 120, 260 110, 400 110 C 540 110, 600 100, 740 100" fill="none" stroke="#fff8db" stroke-linecap="round" stroke-width="40"></path>
+<path d="M 60 120 C 220 120, 260 110, 400 110 C 540 110, 600 100, 740 100" fill="none" stroke="#fef08a" stroke-dasharray="10 8" stroke-linecap="round" stroke-width="4"></path>
+</svg>
+</div>
+<!-- Header Jalur Jejak -->
+<div class="relative z-10 flex items-center justify-between bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full border border-emerald-200 shadow-sm max-w-fit mx-auto sm:mx-0">
+<span class="text-xs sm:text-sm font-rubik font-bold text-emerald-900 flex items-center gap-1.5">
+<span class="">🌿</span> Jalur Jejak Menuju Taman Bermain
+    </span>
+<span class="ml-3 text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full font-rubik" id="lvl3-post-badge">Jejak 1 dari 5</span>
+</div>
+<!-- 5 TITIK JEJAK LAPANG: JEJAK KAKI 👣 TANPA NOMOR MENUJU TAMAN BERMAIN 🎡 -->
+<div class="relative z-10 w-full my-auto px-4 sm:px-8 py-2">
+<div class="grid grid-cols-5 gap-3 sm:gap-6 items-center justify-items-center w-full" id="track-footprints-container">
+<!-- Jejak 1 -->
+<div class="relative flex flex-col items-center group cursor-default animate-step-pulse" id="track-step-0">
+<div class="w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-full bg-white shadow-xl border-3 border-amber-400 flex items-center justify-center text-3xl sm:text-4xl filter drop-shadow ring-4 ring-yellow-300 transition-all" id="foot-icon-0">👣</div>
+</div>
+<!-- Jejak 2 -->
+<div class="relative flex flex-col items-center group cursor-default" id="track-step-1">
+<div class="w-13 h-13 sm:w-15 sm:h-15 md:w-16 md:h-16 rounded-full bg-white/80 shadow-md border-2 border-white flex items-center justify-center text-2xl sm:text-3xl filter drop-shadow transition-all opacity-60" id="foot-icon-1">👣</div>
+</div>
+<!-- Jejak 3 -->
+<div class="relative flex flex-col items-center group cursor-default" id="track-step-2">
+<div class="w-13 h-13 sm:w-15 sm:h-15 md:w-16 md:h-16 rounded-full bg-white/80 shadow-md border-2 border-white flex items-center justify-center text-2xl sm:text-3xl filter drop-shadow transition-all opacity-60" id="foot-icon-2">👣</div>
+</div>
+<!-- Jejak 4 -->
+<div class="relative flex flex-col items-center group cursor-default" id="track-step-3">
+<div class="w-13 h-13 sm:w-15 sm:h-15 md:w-16 md:h-16 rounded-full bg-white/80 shadow-md border-2 border-white flex items-center justify-center text-2xl sm:text-3xl filter drop-shadow transition-all opacity-60" id="foot-icon-3">👣</div>
+</div>
+<!-- Titik Akhir: FINISH TAMAN BERMAIN -->
+<div class="relative flex flex-col items-center group cursor-default" id="track-step-4">
+<div class="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 rounded-3xl bg-gradient-to-tr from-amber-200 via-rose-100 to-yellow-200 shadow-xl border-3 border-amber-400 flex flex-col items-center justify-center filter drop-shadow animate-softpulse" id="foot-icon-4">
+<span class="text-3xl sm:text-4xl filter drop-shadow">🎡🎠</span>
+</div>
+<span class="mt-1 text-[11px] sm:text-xs font-black text-amber-950 bg-amber-300 border border-amber-400 px-2.5 py-0.5 rounded-full shadow-sm font-rubik">Taman Bermain</span>
+</div>
+</div>
+</div>
+<!-- ILUSTRASI ANIMASI ANAK-ANAK ALAMI (TANPA KOTAK PEMBUNGKUS / TANPA BORDER PUTIH) -->
+<div class="relative z-20 flex items-center justify-center gap-2 transition-all duration-700 pointer-events-none mt-1" id="lvl3-duo-wrapper" style="transform: translateX(-44%);">
+<div class="flex items-center gap-2.5 filter drop-shadow-md">
+<div class="w-10 h-14 sm:w-12 sm:h-16 flex items-center justify-center" id="duo-boy-sprite">
+      <svg viewBox="0 0 80 110" class="w-10 h-14 sm:w-12 sm:h-16 drop-shadow-md select-none">
+        <ellipse cx="40" cy="106" rx="18" ry="4" fill="#000000" opacity="0.15"></ellipse>
+        <rect x="25" y="48" width="30" height="26" rx="7" fill="#0284c7"></rect>
+        <rect x="30" y="80" width="7" height="18" rx="3.5" fill="#fed7aa"></rect>
+        <rect x="43" y="80" width="7" height="18" rx="3.5" fill="#fed7aa"></rect>
+        <ellipse cx="33" cy="98" rx="7" ry="4.5" fill="#0284c7"></ellipse>
+        <ellipse cx="47" cy="98" rx="7" ry="4.5" fill="#0284c7"></ellipse>
+        <rect x="26" y="68" width="28" height="14" rx="4" fill="#1e3a5f"></rect>
+        <path d="M 26 50 Q 40 46 54 50 L 52 70 L 28 70 Z" fill="#fbbf24"></path>
+        <circle cx="40" cy="60" r="3" fill="#ffffff"></circle>
+        <path d="M 24 54 Q 16 64 20 72" stroke="#fed7aa" stroke-width="5.5" stroke-linecap="round" fill="none"></path>
+        <path d="M 56 54 Q 64 64 60 72" stroke="#fed7aa" stroke-width="5.5" stroke-linecap="round" fill="none"></path>
+        <circle cx="40" cy="32" r="17" fill="#fed7aa"></circle>
+        <path d="M 23 28 C 25 14 55 14 57 28 Z" fill="#0d9488"></path>
+        <ellipse cx="40" cy="28" rx="19" ry="5" fill="#14b8a6"></ellipse>
+        <rect x="42" y="24" width="16" height="5" rx="2" fill="#0d9488"></rect>
+        <circle cx="34" cy="34" r="2.5" fill="#1e293b"></circle>
+        <circle cx="46" cy="34" r="2.5" fill="#1e293b"></circle>
+        <circle cx="35" cy="33" r="0.8" fill="#ffffff"></circle>
+        <circle cx="47" cy="33" r="0.8" fill="#ffffff"></circle>
+        <ellipse cx="30" cy="38" rx="3" ry="1.8" fill="#fb7185" opacity="0.6"></ellipse>
+        <ellipse cx="50" cy="38" rx="3" ry="1.8" fill="#fb7185" opacity="0.6"></ellipse>
+        <path d="M 37 40 Q 40 44 43 40" stroke="#78350f" stroke-width="1.8" stroke-linecap="round" fill="none"></path>
+      </svg>
+    </div>
+<div class="w-10 h-14 sm:w-12 sm:h-16 flex items-center justify-center" id="duo-girl-sprite">
+      <svg viewBox="0 0 80 110" class="w-10 h-14 sm:w-12 sm:h-16 drop-shadow-md select-none">
+        <ellipse cx="40" cy="106" rx="18" ry="4" fill="#000000" opacity="0.15"></ellipse>
+        <rect x="26" y="52" width="28" height="24" rx="7" fill="#f43f5e"></rect>
+        <rect x="30" y="80" width="6" height="18" rx="3" fill="#fbcfe8"></rect>
+        <rect x="44" y="80" width="6" height="18" rx="3" fill="#fbcfe8"></rect>
+        <ellipse cx="33" cy="98" rx="6" ry="4" fill="#e11d48"></ellipse>
+        <ellipse cx="47" cy="98" rx="6" ry="4" fill="#e11d48"></ellipse>
+        <path d="M 28 56 Q 40 50 52 56 L 58 82 Q 40 86 22 82 Z" fill="#ec4899"></path>
+        <path d="M 33 60 L 47 60" stroke="#ffffff" stroke-width="2" stroke-linecap="round"></path>
+        <path d="M 26 58 Q 18 68 22 76" stroke="#fbcfe8" stroke-width="5" stroke-linecap="round" fill="none"></path>
+        <path d="M 54 58 Q 62 68 58 76" stroke="#fbcfe8" stroke-width="5" stroke-linecap="round" fill="none"></path>
+        <circle cx="20" cy="34" r="8" fill="#78350f"></circle>
+        <circle cx="60" cy="34" r="8" fill="#78350f"></circle>
+        <circle cx="40" cy="36" r="18" fill="#fed7aa"></circle>
+        <path d="M 24 32 C 28 18 52 18 56 32 C 50 24 44 24 40 27 C 36 24 30 24 24 32 Z" fill="#78350f"></path>
+        <ellipse cx="22" cy="30" rx="3" ry="3" fill="#f43f5e"></ellipse>
+        <ellipse cx="58" cy="30" rx="3" ry="3" fill="#f43f5e"></ellipse>
+        <circle cx="34" cy="36" r="2.5" fill="#1e293b"></circle>
+        <circle cx="46" cy="36" r="2.5" fill="#1e293b"></circle>
+        <circle cx="35" cy="35" r="0.8" fill="#ffffff"></circle>
+        <circle cx="47" cy="35" r="0.8" fill="#ffffff"></circle>
+        <ellipse cx="30" cy="41" rx="3" ry="2" fill="#f472b6" opacity="0.6"></ellipse>
+        <ellipse cx="50" cy="41" rx="3" ry="2" fill="#f472b6" opacity="0.6"></ellipse>
+        <path d="M 37 42 Q 40 46 43 42" stroke="#e11d48" stroke-width="1.8" stroke-linecap="round" fill="none"></path>
+      </svg>
+    </div>
+</div>
+</div>
+</div>
+<!-- 3. WADAH KUIS TEPAT DI BAWAH JEJAK -->
+<div class="w-full max-w-4xl bg-white/95 rounded-3xl p-4 sm:p-6 shadow-xl border-3 border-sky-100 flex flex-col justify-between gap-4 mx-auto">
+<!-- Top Bar Soal -->
+<div class="flex items-center justify-between border-b pb-2.5">
+<div class="inline-flex items-center gap-2 font-rubik">
+<span class="bg-sky-100 text-[#02677f] font-extrabold text-xs sm:text-sm px-3.5 py-1 rounded-full" id="quiz-step-tag">Tantangan 1</span>
+<span class="text-xs sm:text-sm font-bold text-slate-500" id="quiz-category-tag">Melihat Indah</span>
+</div>
+<span class="text-xs sm:text-sm font-bold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full flex items-center gap-1 shadow-sm font-rubik">
+<span class="">⭐</span> +8 Poin
+    </span>
+</div>
+<!-- GAMBAR SOAL = HANYA OBJEK TANPA TEKS/DESKRIPSI DI DALAMNYA -->
+<div class="flex flex-col items-center text-center gap-2 my-1" id="quiz-header-container">
+<!-- Gambar Soal: Bersih & Ikon Besar Saja -->
+<div class="flex flex-col items-center justify-center" id="quiz-media-display"><div class="flex items-center justify-center p-4 sm:p-5 bg-sky-50/90 border-2 border-sky-200 rounded-3xl shadow-inner min-w-[180px] sm:min-w-[220px]">
+            <div class="text-5xl sm:text-6xl filter drop-shadow animate-softpulse select-none">
+              🌈✨
+            </div>
+          </div></div>
+<!-- Pertanyaan Ditampilkan di Bawah Kotak Gambar -->
+<h3 class="font-fredoka text-lg sm:text-2xl font-bold text-[#1e3a5f] max-w-xl mt-1" id="quiz-question-text">Panca indra mana yang digunakan untuk melihat?</h3>
+</div>
+<!-- PILIHAN JAWABAN: CUKUP GAMBAR ORGAN DAN NAMA ORGAN SINGKAT -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5 w-full font-rubik" id="quiz-choices-box"><button class="p-3.5 sm:p-4 bg-sky-50/90 hover:bg-sky-100 border-sky-200 border-3 hover:border-teal-500 rounded-3xl flex items-center justify-start gap-4 shadow-md transition-all transform active:scale-95 group btn-bouncy font-rubik">
+          <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center text-3xl sm:text-4xl group-hover:scale-110 transition-transform filter drop-shadow shrink-0">
+            👁️
+          </div>
+          <div class="text-left flex-1">
+            <span class="font-rubik text-lg sm:text-xl font-black text-[#1e3a5f] group-hover:text-teal-700 transition-colors block">Mata</span>
+          </div>
+        </button><button class="p-3.5 sm:p-4 bg-amber-50/90 hover:bg-amber-100 border-amber-200 border-3 hover:border-teal-500 rounded-3xl flex items-center justify-start gap-4 shadow-md transition-all transform active:scale-95 group btn-bouncy font-rubik">
+          <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center text-3xl sm:text-4xl group-hover:scale-110 transition-transform filter drop-shadow shrink-0">
+            👃
+          </div>
+          <div class="text-left flex-1">
+            <span class="font-rubik text-lg sm:text-xl font-black text-[#1e3a5f] group-hover:text-teal-700 transition-colors block">Hidung</span>
+          </div>
+        </button></div>
+<!-- Status / Feedback Message -->
+<div class="h-6 text-center text-xs sm:text-sm font-bold text-rose-500 flex items-center justify-center font-rubik" id="quiz-feedback-text"></div>
+</div>
+<!-- BOTTOM NAV BAR LEVEL 3 (LEBAR PENUH, UJUNG KIRI & UJUNG KANAN) -->
+<div class="w-full flex items-center justify-between gap-4 pt-3.5 border-t border-slate-100 mt-2 px-1">
+<button class="btn-prev-nav px-5 py-2.5 rounded-full bg-slate-100 text-slate-400 font-extrabold text-xs sm:text-sm flex items-center gap-1.5 border border-slate-200 cursor-not-allowed opacity-40 font-rubik pointer-events-none" onclick="goToPreviousLevel()" disabled="">
+<span class="material-symbols-outlined text-lg">arrow_back</span>
+<span class="">Sebelumnya</span>
+</button>
+<button class="btn-next-nav px-6 py-2.5 rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 hover:brightness-105 active:scale-95 text-white font-extrabold text-xs sm:text-sm flex items-center gap-1.5 shadow-md shadow-teal-500/25 transition-all btn-bouncy font-rubik cursor-pointer" onclick="goToNextLevel()">
+<span class="">Selanjutnya</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</div>
+</section>
+</main>
+<!-- FOOTER KREDIT PEMBUAT WAJIB -->
+<div class="text-center py-1">
+<div class="inline-flex items-center gap-1.5 px-4 sm:px-6 py-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-pink-200 text-[#1e3a5f] text-xs sm:text-sm font-bold shadow-sm font-rubik">
+<span class="">💖</span>
+<span class="">Game ini dibuat oleh: <span class="text-sky-600 font-extrabold">Cintya Eka Puspita Sari</span></span>
+<span class="">✨</span>
+</div>
+</div>
+</div>
+<!-- NOTIFICATION POPUP: NOT ARRIVED AT SCHOOL (LEVEL 2) -->
+<div class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden items-center justify-center p-4" id="modal-not-yet">
+<div class="bg-white rounded-3xl max-w-sm w-full p-5 sm:p-6 shadow-2xl border-4 border-amber-300 text-center flex flex-col items-center gap-3">
+<div class="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center text-3xl">
+  😊
+</div>
+<h3 class="font-fredoka text-lg font-bold text-amber-800">Hampir Sampai!</h3>
+<p class="text-xs sm:text-sm text-slate-600 font-medium" id="modal-not-yet-msg">
+  Belum sampai ke sekolah 😊 Pilih arah lagi agar perjalanan bisa dilanjutkan!
+</p>
+<button class="w-full mt-2 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-2xl shadow-md transition-all active:scale-95 btn-bouncy font-rubik" onclick="dismissNotYetModal()">
+  Pilih Arah Lagi
+</button>
+</div>
+</div>
+<!-- LEVEL COMPLETION MODAL (LEVEL 1 & LEVEL 2) -->
+<div class="fixed inset-0 z-50 bg-black/45 backdrop-blur-sm hidden items-center justify-center p-4" id="modal-level-success">
+<div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border-4 border-teal-400 text-center flex flex-col items-center gap-4">
+<div class="w-20 h-20 rounded-3xl bg-teal-50 flex items-center justify-center text-5xl shadow-inner">
+  🎉
+</div>
+<div>
+<h3 class="font-fredoka text-xl sm:text-2xl font-black text-[#1e3a5f]" id="success-modal-title">
+  Hebat! Kamu Berhasil!
+</h3>
+<p class="text-xs sm:text-sm text-slate-600 font-bold mt-1" id="success-modal-desc">
+  Kamu berhasil menemukan jalan pulang ke rumah!
+</p>
+</div>
+<div class="bg-amber-50 border border-amber-200 px-5 py-2.5 rounded-2xl flex items-center gap-2 font-rubik">
+<span class="text-xl">⭐</span>
+<span class="font-bold text-amber-800 text-sm sm:text-base" id="success-modal-points">+30 Poin (Skor: 30 / 100)</span>
+</div>
+<button class="w-full py-3 bg-gradient-to-r from-teal-500 to-emerald-500 hover:brightness-105 active:scale-95 text-white font-rubik text-base sm:text-lg font-extrabold rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 btn-bouncy" id="success-modal-btn" onclick="proceedToNextLevel()">
+<span id="success-btn-text" class="">Lanjut Level 2 →</span>
+</button>
+</div>
+</div>
+<!-- GRAND VICTORY MODAL (100 / 100 POIN) -->
+<div class="fixed inset-0 z-50 bg-black/50 backdrop-blur-md hidden items-center justify-center p-4" id="modal-victory">
+<div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border-4 border-amber-400 text-center flex flex-col items-center gap-4 relative overflow-hidden">
+<div class="w-24 h-24 rounded-full bg-gradient-to-tr from-amber-300 to-yellow-200 flex items-center justify-center text-6xl shadow-lg animate-bounce">
+  🎡
+</div>
+<div>
+<span class="text-xs uppercase font-extrabold tracking-widest text-amber-700 bg-amber-100 px-3 py-1 rounded-full font-rubik">Pencapaian Sempurna!</span>
+<h2 class="font-fredoka text-2xl sm:text-3xl font-black text-[#1e3a5f] mt-2">🎉 SAMPAI DI TAMAN BERMAIN! 🎉</h2>
+<p class="text-sm sm:text-base text-slate-600 font-bold mt-1">
+  Hore! Kamu berhasil mengantar anak-anak sampai ke Taman Bermain yang seru! 🎡🎠
+</p>
+</div>
+<!-- Score Box -->
+<div class="w-full bg-gradient-to-b from-amber-50 to-orange-50 border-2 border-amber-200 rounded-2xl p-4 flex items-center justify-around shadow-inner font-rubik">
+<div class="flex flex-col items-center">
+<span class="text-xs font-bold text-slate-500 uppercase">Skor Akhir</span>
+<span class="font-fredoka text-2xl sm:text-3xl font-black text-amber-700">⭐ 100 / 100</span>
+</div>
+<div class="h-10 w-[2px] bg-amber-300"></div>
+<div class="flex flex-col items-center">
+<span class="text-xs font-bold text-slate-500 uppercase">Predikat</span>
+<span class="font-fredoka text-lg sm:text-xl font-bold text-emerald-700">Penjelajah Hebat</span>
+</div>
+</div>
+<!-- Action Buttons: Reset & Kembali -->
+<div class="flex flex-col sm:flex-row items-center gap-3 w-full mt-2 font-rubik">
+<button class="w-full sm:flex-1 py-3 bg-amber-100 hover:bg-amber-200 border border-amber-300 text-amber-900 font-bold rounded-2xl shadow transition-all active:scale-95 flex items-center justify-center gap-1.5 btn-bouncy" onclick="restartEntireGame()">
+<span class="material-symbols-outlined">restart_alt</span>
+<span class="">🔄 MULAI ULANG</span>
+</button>
+<a class="w-full sm:flex-1 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 hover:brightness-105 text-white font-bold rounded-2xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-1.5 btn-bouncy" href="dashboard.html">
+<span class="material-symbols-outlined">home</span>
+<span class="">🏠 
+    KEMBALI</span>
+</a>
+</div>
+</div>
+</div>
+<!-- ==========================================
+     SCRIPTS & GAME ENGINE
+     ========================================== -->
+<script>
+    /* ==========================================================================
+       1. SOUND SYNTHESIZER
+       ========================================================================== */
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.isMusicMuted = false;
+        this.bgInterval = null;
+        this.tempo = 82;
+        this.step = 0;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+      }
+
+      playMarimbaBGM(freq, duration = 0.55, gainVal = 0.14) {
+        if (this.isMusicMuted) return;
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+
+        try {
+          const now = this.ctx.currentTime;
+          const osc1 = this.ctx.createOscillator();
+          const gain1 = this.ctx.createGain();
+          osc1.type = 'sine';
+          osc1.frequency.setValueAtTime(freq, now);
+
+          const osc2 = this.ctx.createOscillator();
+          const gain2 = this.ctx.createGain();
+          osc2.type = 'triangle';
+          osc2.frequency.setValueAtTime(freq * 3.98, now);
+
+          gain1.gain.setValueAtTime(0.001, now);
+          gain1.gain.linearRampToValueAtTime(gainVal, now + 0.025);
+          gain1.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+          gain2.gain.setValueAtTime(0.001, now);
+          gain2.gain.linearRampToValueAtTime(gainVal * 0.25, now + 0.02);
+          gain2.gain.exponentialRampToValueAtTime(0.0001, now + (duration * 0.6));
+
+          osc1.connect(gain1);
+          osc2.connect(gain2);
+          gain1.connect(this.ctx.destination);
+          gain2.connect(this.ctx.destination);
+
+          osc1.start(now);
+          osc2.start(now);
+          osc1.stop(now + duration);
+          osc2.stop(now + duration);
+        } catch(e) {}
+      }
+
+      playBassBGM(freq, duration = 0.45, gainVal = 0.08) {
+        if (this.isMusicMuted) return;
+        this.init();
+        if (!this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now);
+
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(gainVal, now + 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + duration);
+        } catch(e) {}
+      }
+
+      click() {
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, now);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.18, now + 0.015);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.16);
+        } catch(e) {}
+      }
+
+      sfxPop() {
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.exponentialRampToValueAtTime(620, now + 0.08);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.1);
+        } catch(e) {}
+      }
+
+      sfxBoing() {
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        try {
+          const now = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          now.type = 'triangle';
+          now.frequency.setValueAtTime(320, this.ctx.currentTime);
+          now.frequency.exponentialRampToValueAtTime(160, this.ctx.currentTime + 0.24);
+          gain.gain.setValueAtTime(0.22, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.26);
+          now.connect(gain);
+          gain.connect(this.ctx.destination);
+          now.start(this.ctx.currentTime);
+          now.stop(this.ctx.currentTime + 0.27);
+        } catch(e) {}
+      }
+
+      sfxGentleTetot() {
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        try {
+          const now = this.ctx.currentTime;
+          const osc1 = this.ctx.createOscillator();
+          const gain1 = this.ctx.createGain();
+          osc1.type = 'sine';
+          osc1.frequency.setValueAtTime(320, now);
+          osc1.frequency.linearRampToValueAtTime(290, now + 0.12);
+          gain1.gain.setValueAtTime(0.18, now);
+          gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.13);
+          osc1.connect(gain1);
+          gain1.connect(this.ctx.destination);
+          osc1.start(now);
+          osc1.stop(now + 0.13);
+
+          setTimeout(() => {
+            if (!this.ctx) return;
+            const now2 = this.ctx.currentTime;
+            const osc2 = this.ctx.createOscillator();
+            const gain2 = this.ctx.createGain();
+            osc2.type = 'sine';
+            osc2.frequency.setValueAtTime(240, now2);
+            osc2.frequency.linearRampToValueAtTime(210, now2 + 0.18);
+            gain2.gain.setValueAtTime(0.18, now2);
+            gain2.gain.exponentialRampToValueAtTime(0.001, now2 + 0.2);
+            osc2.connect(gain2);
+            gain2.connect(this.ctx.destination);
+            osc2.start(now2);
+            osc2.stop(now2 + 0.2);
+          }, 140);
+        } catch(e) {}
+      }
+
+      playMelodySample() {
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        const melodyNotes = [523.25, 659.25, 783.99, 1046.50, 783.99, 1046.50];
+        melodyNotes.forEach((f, idx) => {
+          setTimeout(() => {
+            try {
+              const now = this.ctx.currentTime;
+              const osc = this.ctx.createOscillator();
+              const gain = this.ctx.createGain();
+              osc.type = 'triangle';
+              osc.frequency.setValueAtTime(f, now);
+              gain.gain.setValueAtTime(0.001, now);
+              gain.gain.linearRampToValueAtTime(0.2, now + 0.02);
+              gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+              osc.connect(gain);
+              gain.connect(this.ctx.destination);
+              osc.start(now);
+              osc.stop(now + 0.22);
+            } catch(e) {}
+          }, idx * 130);
+        });
+      }
+
+      success() {
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        const notes = [
+          { f: 523.25, d: 0.2 },
+          { f: 659.25, d: 0.2 },
+          { f: 783.99, d: 0.2 },
+          { f: 1046.50, d: 0.35 }
+        ];
+        notes.forEach((n, idx) => {
+          setTimeout(() => {
+            try {
+              const now = this.ctx.currentTime;
+              const osc = this.ctx.createOscillator();
+              const gain = this.ctx.createGain();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(n.f, now);
+              gain.gain.setValueAtTime(0.001, now);
+              gain.gain.linearRampToValueAtTime ? gain.gain.linearRampToValueAtTime(0.24, now + 0.02) : gain.gain.setValueAtTime(0.24, now + 0.02);
+              gain.gain.exponentialRampToValueAtTime(0.0001, now + n.d);
+              osc.connect(gain);
+              gain.connect(this.ctx.destination);
+              osc.start(now);
+              osc.stop(now + n.d);
+            } catch(e) {}
+          }, idx * 85);
+        });
+      }
+
+      startBGM() {
+        if (this.isMusicMuted || this.bgInterval) return;
+        this.init();
+
+        const N = {
+          C3: 130.81, G3: 196.00, A3: 220.00, F3: 174.61,
+          C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00,
+          C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99, A5: 880.00,
+          REST: 0
+        };
+
+        const melody = [
+          { m: N.C5, b: N.C3 }, { m: N.REST, b: N.REST }, { m: N.E5, b: N.G3 }, { m: N.G5, b: N.REST },
+          { m: N.A5, b: N.A3 }, { m: N.G5, b: N.REST }, { m: N.E5, b: N.C3 }, { m: N.REST, b: N.REST },
+          { m: N.F5, b: N.F3 }, { m: N.A5, b: N.REST }, { m: N.G5, b: N.C3 }, { m: N.E5, b: N.REST },
+          { m: N.D5, b: N.G3 }, { m: N.E5, b: N.REST }, { m: N.C5, b: N.C3 }, { m: N.REST, b: N.REST },
+          { m: N.E5, b: N.C3 }, { m: N.REST, b: N.REST }, { m: N.G5, b: N.G3 }, { m: N.REST, b: N.REST },
+          { m: N.A5, b: N.F3 }, { m: N.C5, b: N.REST }, { m: N.G5, b: N.C3 }, { m: N.REST, b: N.REST },
+          { m: N.F5, b: N.F3 }, { m: N.G5, b: N.REST }, { m: N.E5, b: N.G3 }, { m: N.D5, b: N.REST },
+          { m: N.C5, b: N.C3 }, { m: N.REST, b: N.REST }, { m: N.C5, b: N.C3 }, { m: N.REST, b: N.REST }
+        ];
+
+        const stepDurationMs = (60 / this.tempo) * 1000 * 0.5;
+
+        this.bgInterval = setInterval(() => {
+          if (this.isMusicMuted) return;
+          const note = melody[this.step % melody.length];
+          if (note.m && note.m > 0) this.playMarimbaBGM(note.m, 0.48, 0.13);
+          if (note.b && note.b > 0) this.playBassBGM(note.b, 0.42, 0.08);
+          this.step++;
+        }, stepDurationMs);
+      }
+
+      stopBGM() {
+        if (this.bgInterval) {
+          clearInterval(this.bgInterval);
+          this.bgInterval = null;
+        }
+      }
+
+      toggleMusic() {
+        this.isMusicMuted = !this.isMusicMuted;
+        if (this.isMusicMuted) {
+          this.stopBGM();
+        } else {
+          this.init();
+          this.startBGM();
+        }
+        return !this.isMusicMuted;
+      }
+    }
+
+    const sound = new SoundEngine();
+
+    function toggleMusic() {
+      const isMusicPlaying = sound.toggleMusic();
+      const icon = document.getElementById('musicIcon');
+      const text = document.getElementById('musicText');
+      const btn = document.getElementById('btnMusic');
+      const noteBubble = document.getElementById('musicFloatingNote');
+
+      sound.click();
+
+      if (isMusicPlaying) {
+        icon.textContent = '♫';
+        text.textContent = 'Musik Nyala';
+        if (noteBubble) noteBubble.classList.remove('hidden');
+        btn.classList.remove('bg-slate-400', 'hover:bg-slate-500', 'shadow-none');
+        btn.classList.add('bg-teal-500', 'hover:bg-teal-600', 'shadow-teal-500/30');
+      } else {
+        icon.textContent = '🔇';
+        text.textContent = 'Musik Mati';
+        if (noteBubble) noteBubble.classList.add('hidden');
+        btn.classList.remove('bg-teal-500', 'hover:bg-teal-600', 'shadow-teal-500/30');
+        btn.classList.add('bg-slate-400', 'hover:bg-slate-500', 'shadow-none');
+      }
+    }
+
+    function attemptAutoPlayMusic() {
+      sound.init();
+      if (!sound.isMusicMuted && !sound.bgInterval) {
+        sound.startBGM();
+      }
+    }
+    window.addEventListener('click', attemptAutoPlayMusic, { once: true });
+    window.addEventListener('touchstart', attemptAutoPlayMusic, { once: true });
+    window.addEventListener('keydown', attemptAutoPlayMusic, { once: true });
+
+    /* ==========================================================================
+       2. FULL-BODY VECTOR CHARACTERS
+       ========================================================================== */
+    const SVG_GIRL_CHARACTER = `
+      <svg viewBox="0 0 80 110" class="w-10 h-14 sm:w-12 sm:h-16 drop-shadow-md select-none">
+        <ellipse cx="40" cy="106" rx="18" ry="4" fill="#000000" opacity="0.15"/>
+        <rect x="26" y="52" width="28" height="24" rx="7" fill="#f43f5e"/>
+        <rect x="30" y="80" width="6" height="18" rx="3" fill="#fbcfe8"/>
+        <rect x="44" y="80" width="6" height="18" rx="3" fill="#fbcfe8"/>
+        <ellipse cx="33" cy="98" rx="6" ry="4" fill="#e11d48"/>
+        <ellipse cx="47" cy="98" rx="6" ry="4" fill="#e11d48"/>
+        <path d="M 28 56 Q 40 50 52 56 L 58 82 Q 40 86 22 82 Z" fill="#ec4899"/>
+        <path d="M 33 60 L 47 60" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 26 58 Q 18 68 22 76" stroke="#fbcfe8" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <path d="M 54 58 Q 62 68 58 76" stroke="#fbcfe8" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <circle cx="20" cy="34" r="8" fill="#78350f"/>
+        <circle cx="60" cy="34" r="8" fill="#78350f"/>
+        <circle cx="40" cy="36" r="18" fill="#fed7aa"/>
+        <path d="M 24 32 C 28 18 52 18 56 32 C 50 24 44 24 40 27 C 36 24 30 24 24 32 Z" fill="#78350f"/>
+        <ellipse cx="22" cy="30" rx="3" ry="3" fill="#f43f5e"/>
+        <ellipse cx="58" cy="30" rx="3" ry="3" fill="#f43f5e"/>
+        <circle cx="34" cy="36" r="2.5" fill="#1e293b"/>
+        <circle cx="46" cy="36" r="2.5" fill="#1e293b"/>
+        <circle cx="35" cy="35" r="0.8" fill="#ffffff"/>
+        <circle cx="47" cy="35" r="0.8" fill="#ffffff"/>
+        <ellipse cx="30" cy="41" rx="3" ry="2" fill="#f472b6" opacity="0.6"/>
+        <ellipse cx="50" cy="41" rx="3" ry="2" fill="#f472b6" opacity="0.6"/>
+        <path d="M 37 42 Q 40 46 43 42" stroke="#e11d48" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      </svg>
+    `;
+
+    const SVG_BOY_CHARACTER = `
+      <svg viewBox="0 0 80 110" class="w-10 h-14 sm:w-12 sm:h-16 drop-shadow-md select-none">
+        <ellipse cx="40" cy="106" rx="18" ry="4" fill="#000000" opacity="0.15"/>
+        <rect x="25" y="48" width="30" height="26" rx="7" fill="#0284c7"/>
+        <rect x="30" y="80" width="7" height="18" rx="3.5" fill="#fed7aa"/>
+        <rect x="43" y="80" width="7" height="18" rx="3.5" fill="#fed7aa"/>
+        <ellipse cx="33" cy="98" rx="7" ry="4.5" fill="#0284c7"/>
+        <ellipse cx="47" cy="98" rx="7" ry="4.5" fill="#0284c7"/>
+        <rect x="26" y="68" width="28" height="14" rx="4" fill="#1e3a5f"/>
+        <path d="M 26 50 Q 40 46 54 50 L 52 70 L 28 70 Z" fill="#fbbf24"/>
+        <circle cx="40" cy="60" r="3" fill="#ffffff"/>
+        <path d="M 24 54 Q 16 64 20 72" stroke="#fed7aa" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+        <path d="M 56 54 Q 64 64 60 72" stroke="#fed7aa" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+        <circle cx="40" cy="32" r="17" fill="#fed7aa"/>
+        <path d="M 23 28 C 25 14 55 14 57 28 Z" fill="#0d9488"/>
+        <ellipse cx="40" cy="28" rx="19" ry="5" fill="#14b8a6"/>
+        <rect x="42" y="24" width="16" height="5" rx="2" fill="#0d9488"/>
+        <circle cx="34" cy="34" r="2.5" fill="#1e293b"/>
+        <circle cx="46" cy="34" r="2.5" fill="#1e293b"/>
+        <circle cx="35" cy="33" r="0.8" fill="#ffffff"/>
+        <circle cx="47" cy="33" r="0.8" fill="#ffffff"/>
+        <ellipse cx="30" cy="38" rx="3" ry="1.8" fill="#fb7185" opacity="0.6"/>
+        <ellipse cx="50" cy="38" rx="3" ry="1.8" fill="#fb7185" opacity="0.6"/>
+        <path d="M 37 40 Q 40 44 43 40" stroke="#78350f" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      </svg>
+    `;
+
+    /* ==========================================================================
+       3. GLOBAL STATE & MAP DEFINITIONS
+       ========================================================================== */
+    const STATE = {
+      level: 1,
+      score: 0,
+      isBusy: false,
+      lvl1Pos: { x: 0, y: 3 },
+      lvl2Start: { x: 0, y: 3 },
+      lvl2CurrentPos: { x: 0, y: 3 },
+      lvl2Sequence: [],
+      lvl3QuestionIdx: 0
+    };
+
+    const MAP_LVL1 = {
+      cols: 6,
+      rows: 4,
+      grid: [
+        ['bush',  0,       0,       0,       'log',   2],
+        [0,       0,       'snake', 0,       0,       0],
+        [0,       'snake', 'log',   'tree',  'tree',  'bush'],
+        [0,       'rock',  'tree',  'rock',  'snake', 'log']
+      ],
+      start: { x: 0, y: 3 },
+      goal: { x: 5, y: 0 }
+    };
+
+    const MAP_LVL2 = {
+      cols: 6,
+      rows: 4,
+      grid: [
+        ['bush',  'tree',  0,       'bush',  0,       2],
+        ['rock',  0,       0,       0,       0,       0],
+        ['tree',  0,       'log',   'snake', 'bush',  0],
+        [0,       0,       0,       'snake', 'log',   'tree']
+      ],
+      start: { x: 0, y: 3 },
+      goal: { x: 5, y: 0 }
+    };
+
+    const PANCA_INDRA_QUESTIONS = [
+      {
+        tag: "Tantangan 1",
+        category: "Melihat Indah",
+        question: "Panca indra mana yang digunakan untuk melihat?",
+        mediaObj: {
+          icon: "🌈✨",
+          isAudio: false
+        },
+        options: [
+          { organ: "Mata", icon: "👁️", correct: true, side: "left" },
+          { organ: "Hidung", icon: "👃", correct: false, side: "right" }
+        ]
+      },
+      {
+        tag: "Tantangan 2",
+        category: "Mendengar Suara",
+        question: "Panca indra mana yang digunakan untuk mendengar suara?",
+        mediaObj: {
+          icon: "📻🎶",
+          isAudio: true
+        },
+        options: [
+          { organ: "Lidah", icon: "👅", correct: false, side: "left" },
+          { organ: "Telinga", icon: "👂", correct: true, side: "right" }
+        ]
+      },
+      {
+        tag: "Tantangan 3",
+        category: "Membau Wangi",
+        question: "Panca indra mana yang digunakan untuk membau / mencium aroma?",
+        mediaObj: {
+          icon: "🌹🌸",
+          isAudio: false
+        },
+        options: [
+          { organ: "Hidung", icon: "👃", correct: true, side: "left" },
+          { organ: "Kulit / Tangan", icon: "✋", correct: false, side: "right" }
+        ]
+      },
+      {
+        tag: "Tantangan 4",
+        category: "Mengecap Rasa",
+        question: "Panca indra mana yang digunakan untuk mengecap rasa?",
+        mediaObj: {
+          icon: "🍦🍓",
+          isAudio: false
+        },
+        options: [
+          { organ: "Mata", icon: "👁️", correct: false, side: "left" },
+          { organ: "Lidah", icon: "👅", correct: true, side: "right" }
+        ]
+      },
+      {
+        tag: "Tantangan 5",
+        category: "Meraba / Menyentuh",
+        question: "Panca indra mana yang digunakan untuk meraba / menyentuh?",
+        mediaObj: {
+          icon: "🐱🧸",
+          isAudio: false
+        },
+        options: [
+          { organ: "Kulit / Tangan", icon: "✋", correct: true, side: "left" },
+          { organ: "Telinga", icon: "👂", correct: false, side: "right" }
+        ]
+      }
+    ];
+
+    function updateNavButtons() {
+      const prevButtons = document.querySelectorAll('.btn-prev-nav');
+      const nextButtons = document.querySelectorAll('.btn-next-nav');
+
+      prevButtons.forEach(btn => {
+        if (STATE.level === 1) {
+          btn.disabled = true;
+          btn.className = "btn-prev-nav px-5 py-2.5 rounded-full bg-slate-100 text-slate-400 font-extrabold text-xs sm:text-sm flex items-center gap-1.5 border border-slate-200 cursor-not-allowed opacity-40 font-rubik pointer-events-none";
+        } else {
+          btn.disabled = false;
+          btn.className = "btn-prev-nav px-5 py-2.5 rounded-full bg-white hover:bg-slate-100 text-slate-700 font-extrabold text-xs sm:text-sm flex items-center gap-1.5 transition-all btn-bouncy border border-slate-200 shadow-sm font-rubik cursor-pointer";
+        }
+      });
+
+      nextButtons.forEach(btn => {
+        if (STATE.level === 3) {
+          btn.disabled = true;
+          btn.className = "btn-next-nav px-6 py-2.5 rounded-full bg-slate-100 text-slate-400 font-extrabold text-xs sm:text-sm flex items-center gap-1.5 border border-slate-200 cursor-not-allowed opacity-40 font-rubik pointer-events-none";
+        } else {
+          btn.disabled = false;
+          btn.className = "btn-next-nav px-6 py-2.5 rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 hover:brightness-105 active:scale-95 text-white font-extrabold text-xs sm:text-sm flex items-center gap-1.5 shadow-md shadow-teal-500/25 transition-all btn-bouncy font-rubik cursor-pointer";
+        }
+      });
+    }
+
+    function updateHeaderAndStatusBar() {
+      const sub = document.getElementById('header-subtitle');
+      const lvlBadge = document.getElementById('levelBadge');
+      const stepBadge = document.getElementById('stepCounterBadge');
+      const scoreEl = document.getElementById('scoreDisplay');
+
+      if (scoreEl) scoreEl.innerText = STATE.score;
+
+      if (STATE.level === 1) {
+        lvlBadge.innerText = "Level 1: Ayo Pulang ke Rumah";
+        stepBadge.innerText = "Langkah 1 dari 3";
+        sub.innerHTML = '<span class="text-amber-500 font-bold">✨</span> Pandu langkah anak menemukan jalan pulang menuju rumah, ya!';
+      } else if (STATE.level === 2) {
+        lvlBadge.innerText = "Level 2: Pergi ke Sekolah";
+        stepBadge.innerText = "Langkah 2 dari 3";
+        sub.innerHTML = '<span class="text-amber-500 font-bold">✨</span> Susun langkah berurutan mengantar anak sampai ke sekolah!';
+      } else if (STATE.level === 3) {
+        lvlBadge.innerText = "Level 3: Menuju Taman Bermain";
+        stepBadge.innerText = `Jejak ${STATE.lvl3QuestionIdx + 1} dari 5`;
+        sub.innerHTML = '<span class="text-amber-500 font-bold">✨</span> Jawab kuis panca indra untuk melangkah ke Taman Bermain!';
+      }
+
+      updateProgressDots();
+      updateNavButtons();
+    }
+
+    function updateProgressDots() {
+      const container = document.getElementById('progressDotsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      let activeIndex = 0;
+      if (STATE.level === 1) activeIndex = 0;
+      else if (STATE.level === 2) activeIndex = 1;
+      else activeIndex = 1 + STATE.lvl3QuestionIdx;
+
+      for (let i = 0; i < 5; i++) {
+        const dot = document.createElement('div');
+        if (i < activeIndex) {
+          dot.className = "w-3.5 h-3.5 rounded-full bg-teal-500 transition-all";
+        } else if (i === activeIndex) {
+          dot.className = "w-3.5 h-3.5 rounded-full bg-teal-500 scale-125 ring-2 ring-teal-200 transition-all";
+        } else {
+          dot.className = "w-3.5 h-3.5 rounded-full bg-slate-200 transition-all";
+        }
+        container.appendChild(dot);
+      }
+    }
+
+    function fireConfettiCelebration() {
+      try {
+        if (window.confetti) {
+          window.confetti({
+            particleCount: 75,
+            spread: 65,
+            origin: { y: 0.6 }
+          });
+        }
+      } catch(e) {}
+    }
+
+    function getObstacleMeta(type) {
+      switch(type) {
+        case 'tree':
+          return { icon: '🌳', label: 'Pohon', bg: 'bg-[#3b743b]', border: 'border-[#295629]' };
+        case 'log':
+          return { icon: '🪵', label: 'Tunggul', bg: 'bg-[#7f4a24]', border: 'border-[#5c3316]' };
+        case 'snake':
+          return { icon: '🐍', label: 'Ular', bg: 'bg-[#3b8c4c]', border: 'border-[#276835]' };
+        case 'rock':
+          return { icon: '🪨', label: 'Batu', bg: 'bg-[#6b7787]', border: 'border-[#4e5865]' };
+        case 'bush':
+          return { icon: '🌿', label: 'Semak', bg: 'bg-[#356f35]', border: 'border-[#265326]' };
+        default:
+          return null;
+      }
+    }
+
+    /* ==========================================================================
+       4. LEVEL 1 LOGIC
+       ========================================================================== */
+    function initLevel1() {
+      STATE.level = 1;
+      STATE.lvl1Pos = { ...MAP_LVL1.start };
+      updateHeaderAndStatusBar();
+
+      document.getElementById('level-1-view').classList.remove('hidden');
+      document.getElementById('level-2-view').classList.add('hidden');
+      document.getElementById('level-3-view').classList.add('hidden');
+
+      renderLevel1Board();
+    }
+
+    function renderLevel1Board() {
+      const board = document.getElementById('grid-lvl1');
+      board.innerHTML = '';
+
+      for (let r = 0; r < MAP_LVL1.rows; r++) {
+        for (let c = 0; c < MAP_LVL1.cols; c++) {
+          const cell = document.createElement('div');
+          cell.id = `lvl1-cell-${c}-${r}`;
+          cell.className = 'w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm';
+
+          const val = MAP_LVL1.grid[r][c];
+          const obsMeta = getObstacleMeta(val);
+
+          if (obsMeta) {
+            cell.classList.add(obsMeta.bg, 'border', obsMeta.border, 'shadow-inner');
+            cell.innerHTML = `
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">${obsMeta.icon}</span>
+            `;
+          } else if (val === 2) {
+            cell.classList.add('bg-[#fffaf0]', 'border-2', 'border-amber-200', 'shadow-md');
+            cell.innerHTML = `
+              <div class="flex flex-col items-center justify-center -space-y-0.5">
+                <span class="text-2xl sm:text-3xl md:text-4xl filter drop-shadow">🏠</span>
+                <span class="text-[9px] sm:text-[10px] font-black text-amber-900 tracking-wider font-rubik">RUMAH</span>
+              </div>
+            `;
+          } else {
+            cell.classList.add('bg-white', 'border', 'border-slate-100', 'shadow-sm');
+            cell.innerHTML = `
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span>🐾</span>
+              </div>
+            `;
+          }
+
+          board.appendChild(cell);
+        }
+      }
+
+      placeLvl1Kid();
+    }
+
+    function placeLvl1Kid(animateHop = false) {
+      const oldKid = document.getElementById('lvl1-kid-sprite');
+      if (oldKid) oldKid.remove();
+
+      const targetCell = document.getElementById(`lvl1-cell-${STATE.lvl1Pos.x}-${STATE.lvl1Pos.y}`);
+      if (!targetCell) return;
+
+      const kid = document.createElement('div');
+      kid.id = 'lvl1-kid-sprite';
+      kid.className = `absolute inset-0 m-auto flex items-center justify-center z-20 ${animateHop ? 'animate-hop' : ''}`;
+      kid.innerHTML = SVG_GIRL_CHARACTER;
+      targetCell.appendChild(kid);
+    }
+
+    function handleLvl1Move(dx, dy) {
+      if (STATE.isBusy || STATE.level !== 1) return;
+
+      const newX = STATE.lvl1Pos.x + dx;
+      const newY = STATE.lvl1Pos.y + dy;
+
+      if (newX < 0 || newX >= MAP_LVL1.cols || newY < 0 || newY >= MAP_LVL1.rows) {
+        sound.sfxBoing();
+        return;
+      }
+
+      const targetVal = MAP_LVL1.grid[newY][newX];
+      if (targetVal !== 0 && targetVal !== 2) {
+        sound.sfxBoing();
+        const obstacleCell = document.getElementById(`lvl1-cell-${newX}-${newY}`);
+        if (obstacleCell) {
+          obstacleCell.classList.add('shake-cell', '!bg-rose-400');
+          setTimeout(() => {
+            obstacleCell.classList.remove('shake-cell', '!bg-rose-400');
+          }, 400);
+        }
+        return;
+      }
+
+      STATE.lvl1Pos.x = newX;
+      STATE.lvl1Pos.y = newY;
+      sound.sfxPop();
+      placeLvl1Kid(true);
+
+      if (newX === MAP_LVL1.goal.x && newY === MAP_LVL1.goal.y) {
+        triggerLvl1Win();
+      }
+    }
+
+    function triggerLvl1Win() {
+      STATE.isBusy = true;
+      sound.success();
+      fireConfettiCelebration();
+
+      const kid = document.getElementById('lvl1-kid-sprite');
+      if (kid) kid.classList.add('animate-bounce');
+
+      STATE.score = 30;
+      updateHeaderAndStatusBar();
+
+      setTimeout(() => {
+        const modal = document.getElementById('modal-level-success');
+        document.getElementById('success-modal-title').innerText = "🎉 Hebat Sekali!";
+        document.getElementById('success-modal-desc').innerText = "Kamu berhasil menemukan jalan pulang ke rumah!";
+        document.getElementById('success-modal-points').innerText = "+30 Poin (Skor: 30 / 100)";
+        document.getElementById('success-btn-text').innerText = "Lanjut Level 2 →";
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        STATE.isBusy = false;
+      }, 700);
+    }
+
+    /* ==========================================================================
+       5. LEVEL 2 LOGIC
+       ========================================================================== */
+    function initLevel2() {
+      STATE.level = 2;
+      STATE.lvl2Start = { ...MAP_LVL2.start };
+      STATE.lvl2CurrentPos = { ...MAP_LVL2.start };
+      STATE.lvl2Sequence = [];
+      updateHeaderAndStatusBar();
+
+      document.getElementById('level-1-view').classList.add('hidden');
+      document.getElementById('level-2-view').classList.remove('hidden');
+      document.getElementById('level-3-view').classList.add('hidden');
+
+      renderLevel2Board();
+      renderLvl2Chips();
+    }
+
+    function renderLevel2Board() {
+      const board = document.getElementById('grid-lvl2');
+      board.innerHTML = '';
+
+      for (let r = 0; r < MAP_LVL2.rows; r++) {
+        for (let c = 0; c < MAP_LVL2.cols; c++) {
+          const cell = document.createElement('div');
+          cell.id = `lvl2-cell-${c}-${r}`;
+          cell.className = 'w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center relative transition-all duration-200 select-none shadow-sm';
+
+          const val = MAP_LVL2.grid[r][c];
+          const obsMeta = getObstacleMeta(val);
+
+          if (obsMeta) {
+            cell.classList.add(obsMeta.bg, 'border', obsMeta.border, 'shadow-inner');
+            cell.innerHTML = `
+              <span class="text-2xl sm:text-3xl md:text-4xl select-none filter drop-shadow hover:scale-110 transition-transform">${obsMeta.icon}</span>
+            `;
+          } else if (val === 2) {
+            cell.classList.add('bg-[#fffaf0]', 'border-2', 'border-sky-300', 'shadow-md');
+            cell.innerHTML = `
+              <div class="flex flex-col items-center justify-center -space-y-0.5">
+                <span class="text-2xl sm:text-3xl md:text-4xl animate-bounce filter drop-shadow">🏫</span>
+                <span class="text-[9px] sm:text-[10px] font-black text-sky-900 tracking-wider font-rubik">SEKOLAH</span>
+              </div>
+            `;
+          } else {
+            cell.classList.add('bg-white', 'border', 'border-slate-100', 'shadow-sm');
+            cell.innerHTML = `
+              <div class="flex flex-col items-center justify-center opacity-30 text-xs sm:text-sm text-slate-500 font-bold select-none">
+                <span>🐾</span>
+              </div>
+            `;
+          }
+
+          board.appendChild(cell);
+        }
+      }
+
+      placeLvl2Kid();
+    }
+
+    function placeLvl2Kid(animateHop = false) {
+      const oldKid = document.getElementById('lvl2-kid-sprite');
+      if (oldKid) oldKid.remove();
+
+      const targetCell = document.getElementById(`lvl2-cell-${STATE.lvl2CurrentPos.x}-${STATE.lvl2CurrentPos.y}`);
+      if (!targetCell) return;
+
+      const kid = document.createElement('div');
+      kid.id = 'lvl2-kid-sprite';
+      kid.className = `absolute inset-0 m-auto flex items-center justify-center z-20 ${animateHop ? 'animate-hop' : ''}`;
+      kid.innerHTML = SVG_BOY_CHARACTER;
+      targetCell.appendChild(kid);
+    }
+
+    function addLvl2Sequence(dir) {
+      if (STATE.isBusy || STATE.level !== 2) return;
+      if (STATE.lvl2Sequence.length >= 12) {
+        sound.sfxBoing();
+        return;
+      }
+      STATE.lvl2Sequence.push(dir);
+      sound.sfxPop();
+      renderLvl2Chips();
+    }
+
+    function popLvl2Sequence() {
+      if (STATE.isBusy || STATE.level !== 2) return;
+      if (STATE.lvl2Sequence.length > 0) {
+        STATE.lvl2Sequence.pop();
+        sound.sfxPop();
+        renderLvl2Chips();
+      }
+    }
+
+    function resetLvl2Position() {
+      if (STATE.isBusy || STATE.level !== 2) return;
+      STATE.lvl2CurrentPos = { ...STATE.lvl2Start };
+      STATE.lvl2Sequence = [];
+      sound.sfxPop();
+      placeLvl2Kid();
+      renderLvl2Chips();
+    }
+
+    function renderLvl2Chips() {
+      const tray = document.getElementById('lvl2-chips-container');
+      if (!tray) return;
+      tray.innerHTML = '';
+
+      if (STATE.lvl2Sequence.length === 0) {
+        tray.innerHTML = '<span class="text-slate-400 text-xs italic" id="lvl2-placeholder-txt">Pilih panah arah di bawah (maks 12)...</span>';
+        return;
+      }
+
+      const dirMap = {
+        'UP': { icon: 'arrow_upward', label: 'Atas' },
+        'DOWN': { icon: 'arrow_downward', label: 'Bawah' },
+        'LEFT': { icon: 'arrow_back', label: 'Kiri' },
+        'RIGHT': { icon: 'arrow_forward', label: 'Kanan' }
+      };
+
+      STATE.lvl2Sequence.forEach((dir, idx) => {
+        const chip = document.createElement('div');
+        chip.id = `lvl2-chip-${idx}`;
+        chip.className = 'flex items-center gap-1.5 bg-white border border-sky-300 text-[#02677f] px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold shadow-sm shrink-0 transition-all font-rubik';
+        chip.innerHTML = `
+          <span class="w-4 h-4 rounded-full bg-sky-100 text-[#02677f] text-[10px] flex items-center justify-center font-bold">${idx + 1}</span>
+          <span class="material-symbols-outlined text-sm sm:text-base">${dirMap[dir].icon}</span>
+          <span>${dirMap[dir].label}</span>
+        `;
+        tray.appendChild(chip);
+      });
+      tray.scrollLeft = tray.scrollWidth;
+    }
+
+    async function executeLvl2Journey() {
+      if (STATE.isBusy || STATE.level !== 2) return;
+      if (STATE.lvl2Sequence.length === 0) {
+        sound.sfxBoing();
+        return;
+      }
+
+      STATE.isBusy = true;
+      const runBtn = document.getElementById('lvl2-run-btn');
+      if (runBtn) runBtn.classList.add('opacity-50', 'pointer-events-none');
+
+      let curX = STATE.lvl2CurrentPos.x;
+      let curY = STATE.lvl2CurrentPos.y;
+      let hitObstacle = false;
+      let obstacleName = "";
+
+      for (let i = 0; i < STATE.lvl2Sequence.length; i++) {
+        const dir = STATE.lvl2Sequence[i];
+        const chip = document.getElementById(`lvl2-chip-${i}`);
+        if (chip) chip.classList.add('ring-2', 'ring-amber-400', 'bg-amber-100');
+
+        let nextX = curX;
+        let nextY = curY;
+        if (dir === 'UP') nextY--;
+        if (dir === 'DOWN') nextY++;
+        if (dir === 'LEFT') nextX--;
+        if (dir === 'RIGHT') nextX++;
+
+        await new Promise(r => setTimeout(r, 450));
+        if (chip) chip.classList.remove('ring-2', 'ring-amber-400', 'bg-amber-100');
+
+        if (nextX < 0 || nextX >= MAP_LVL2.cols || nextY < 0 || nextY >= MAP_LVL2.rows) {
+          sound.sfxBoing();
+          hitObstacle = true;
+          obstacleName = "ujung jalan";
+          break;
+        }
+
+        const targetCellVal = MAP_LVL2.grid[nextY][nextX];
+
+        if (targetCellVal !== 0 && targetCellVal !== 2) {
+          sound.sfxBoing();
+          hitObstacle = true;
+          const obsMeta = getObstacleMeta(targetCellVal);
+          obstacleName = obsMeta ? obsMeta.label : "rintangan";
+
+          const obs = document.getElementById(`lvl2-cell-${nextX}-${nextY}`);
+          if (obs) {
+            obs.classList.add('shake-cell', '!bg-rose-400');
+            setTimeout(() => obs.classList.remove('shake-cell', '!bg-rose-400'), 450);
+          }
+          break;
+        } else {
+          curX = nextX;
+          curY = nextY;
+          STATE.lvl2CurrentPos = { x: curX, y: curY };
+          sound.sfxPop();
+          placeLvl2Kid(true);
+
+          if (curX === MAP_LVL2.goal.x && curY === MAP_LVL2.goal.y) {
+            break;
+          }
+        }
+      }
+
+      STATE.isBusy = false;
+      if (runBtn) runBtn.classList.remove('opacity-50', 'pointer-events-none');
+
+      STATE.lvl2Sequence = [];
+      renderLvl2Chips();
+
+      if (curX === MAP_LVL2.goal.x && curY === MAP_LVL2.goal.y) {
+        triggerLvl2Win();
+      } else {
+        setTimeout(() => {
+          showNotYetModal(hitObstacle, obstacleName);
+        }, 320);
+      }
+    }
+
+    function showNotYetModal(hitObstacle = false, obsName = "") {
+      const modal = document.getElementById('modal-not-yet');
+      const msg = document.getElementById('modal-not-yet-msg');
+      if (msg) {
+        if (hitObstacle) {
+          msg.innerHTML = `Awas, kamu terhalang <b>${obsName}</b>! 😊 Posisi anak tetap aman di tempat. Susun arah belokan baru ya!`;
+        } else {
+          msg.innerHTML = `Belum sampai ke sekolah 😊 Karakter aman di posisinya. Ayo pilih arah lagi agar perjalanan bisa dilanjutkan!`;
+        }
+      }
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function dismissNotYetModal() {
+      const modal = document.getElementById('modal-not-yet');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function triggerLvl2Win() {
+      STATE.isBusy = true;
+      sound.success();
+      fireConfettiCelebration();
+
+      const kid = document.getElementById('lvl2-kid-sprite');
+      if (kid) kid.classList.add('animate-bounce');
+
+      STATE.score = 60;
+      updateHeaderAndStatusBar();
+
+      setTimeout(() => {
+        const modal = document.getElementById('modal-level-success');
+        document.getElementById('success-modal-title').innerText = "🎉 Luar Biasa!";
+        document.getElementById('success-modal-desc').innerText = "Kamu berhasil melewati rute menantang dan sampai ke sekolah!";
+        document.getElementById('success-modal-points').innerText = "+30 Poin (Skor: 60 / 100)";
+        document.getElementById('success-btn-text').innerText = "Lanjut Level 3 →";
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        STATE.isBusy = false;
+      }, 700);
+    }
+
+    /* ==========================================================================
+       6. LEVEL 3 LOGIC (VALIDASI JAWABAN, BISA JAWAB ULANG, TANPA BOX PEMBUNGKUS)
+       ========================================================================== */
+    function initLevel3() {
+      STATE.level = 3;
+      STATE.lvl3QuestionIdx = 0;
+      STATE.isBusy = false;
+      updateHeaderAndStatusBar();
+
+      document.getElementById('level-1-view').classList.add('hidden');
+      document.getElementById('level-2-view').classList.add('hidden');
+      document.getElementById('level-3-view').classList.remove('hidden');
+
+      // Animasi anak laki-laki dan perempuan alami tanpa kotak pembungkus
+      const boyBox = document.getElementById('duo-boy-sprite');
+      const girlBox = document.getElementById('duo-girl-sprite');
+      if (boyBox) boyBox.innerHTML = SVG_BOY_CHARACTER;
+      if (girlBox) girlBox.innerHTML = SVG_GIRL_CHARACTER;
+
+      renderLevel3Question();
+      updateLvl3TrackVisual();
+    }
+
+    function updateLvl3TrackVisual() {
+      const qIdx = STATE.lvl3QuestionIdx;
+      const badge = document.getElementById('lvl3-post-badge');
+      if (badge) badge.innerText = `Jejak ${Math.min(qIdx + 1, 5)} dari 5`;
+
+      for (let i = 0; i < 4; i++) {
+        const stepWrap = document.getElementById(`track-step-${i}`);
+        const iconBox = document.getElementById(`foot-icon-${i}`);
+        if (!iconBox || !stepWrap) continue;
+
+        if (i < qIdx) {
+          iconBox.className = 'w-13 h-13 sm:w-15 sm:h-15 md:w-16 md:h-16 rounded-full bg-emerald-500 text-white shadow-md border-2 border-white flex items-center justify-center text-2xl sm:text-3xl filter drop-shadow transition-all';
+          iconBox.innerHTML = '👣';
+          stepWrap.classList.remove('animate-step-pulse');
+        } else if (i === qIdx) {
+          iconBox.className = 'w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-full bg-white shadow-xl border-3 border-amber-400 flex items-center justify-center text-3xl sm:text-4xl filter drop-shadow ring-4 ring-yellow-300 transition-all';
+          iconBox.innerHTML = '👣';
+          stepWrap.classList.add('animate-step-pulse');
+        } else {
+          iconBox.className = 'w-13 h-13 sm:w-15 sm:h-15 md:w-16 md:h-16 rounded-full bg-white/80 shadow-md border-2 border-white flex items-center justify-center text-2xl sm:text-3xl filter drop-shadow transition-all opacity-60';
+          iconBox.innerHTML = '👣';
+          stepWrap.classList.remove('animate-step-pulse');
+        }
+      }
+
+      const parkIcon = document.getElementById('foot-icon-4');
+      if (parkIcon) {
+        if (qIdx >= 4) {
+          parkIcon.classList.add('ring-4', 'ring-emerald-400', 'scale-110');
+        } else {
+          parkIcon.classList.remove('ring-4', 'ring-emerald-400', 'scale-110');
+        }
+      }
+
+      // Animasi gerak alami karakter
+      const duoWrapper = document.getElementById('lvl3-duo-wrapper');
+      if (duoWrapper) {
+        const percentages = [0, 22, 45, 68, 88];
+        const activePct = percentages[Math.min(qIdx, 4)];
+        duoWrapper.style.transform = `translateX(${activePct - 44}%)`;
+      }
+    }
+
+    function renderLevel3Question() {
+      const q = PANCA_INDRA_QUESTIONS[STATE.lvl3QuestionIdx];
+      const tag = document.getElementById('quiz-step-tag');
+      const catTag = document.getElementById('quiz-category-tag');
+      const mediaBox = document.getElementById('quiz-media-display');
+      const qText = document.getElementById('quiz-question-text');
+      const choicesBox = document.getElementById('quiz-choices-box');
+      const feedback = document.getElementById('quiz-feedback-text');
+
+      if (tag) tag.innerText = q.tag;
+      if (catTag) catTag.innerText = q.category;
+      if (qText) qText.innerText = q.question;
+      if (feedback) feedback.innerText = '';
+
+      // GAMBAR SOAL: DI DALAM KOTAK TIDAK PERLU TEKS, HANYA OBJEK
+      if (mediaBox) {
+        mediaBox.innerHTML = '';
+        if (q.mediaObj.isAudio) {
+          const audioCard = document.createElement('div');
+          audioCard.className = 'flex flex-col items-center justify-center p-3 sm:p-4 bg-sky-50/90 border-2 border-sky-300 rounded-3xl shadow-inner min-w-[200px] sm:min-w-[240px]';
+          audioCard.innerHTML = `
+            <div class="text-5xl sm:text-6xl filter drop-shadow animate-softpulse py-1 select-none">
+              ${q.mediaObj.icon}
+            </div>
+            <button id="btnPlayQuizAudio" class="mt-2 px-4 py-1.5 bg-teal-500 hover:bg-teal-600 text-white font-rubik font-bold text-xs sm:text-sm rounded-full shadow-md flex items-center gap-1.5 transition-all active:scale-95 btn-bouncy" onclick="playQuestionMelody()">
+              <span class="material-symbols-outlined text-base">volume_up</span>
+              <span>Dengarkan Suara Musik 🎶</span>
+            </button>
+          `;
+          mediaBox.appendChild(audioCard);
+        } else {
+          const objCard = document.createElement('div');
+          objCard.className = 'flex items-center justify-center p-4 sm:p-5 bg-sky-50/90 border-2 border-sky-200 rounded-3xl shadow-inner min-w-[180px] sm:min-w-[220px]';
+          objCard.innerHTML = `
+            <div class="text-5xl sm:text-6xl filter drop-shadow animate-softpulse select-none">
+              ${q.mediaObj.icon}
+            </div>
+          `;
+          mediaBox.appendChild(objCard);
+        }
+      }
+
+      // PILIHAN JAWABAN: Cukup gambar panca indra (organ) & keterangan nama
+      if (!choicesBox) return;
+      choicesBox.innerHTML = '';
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        const sideBg = opt.side === 'left' ? 'bg-sky-50/90 hover:bg-sky-100 border-sky-200' : 'bg-amber-50/90 hover:bg-amber-100 border-amber-200';
+
+        btn.className = `p-3.5 sm:p-4 ${sideBg} border-3 hover:border-teal-500 rounded-3xl flex items-center justify-start gap-4 shadow-md transition-all transform active:scale-95 group btn-bouncy font-rubik`;
+        btn.innerHTML = `
+          <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center text-3xl sm:text-4xl group-hover:scale-110 transition-transform filter drop-shadow shrink-0">
+            ${opt.icon}
+          </div>
+          <div class="text-left flex-1">
+            <span class="font-rubik text-lg sm:text-xl font-black text-[#1e3a5f] group-hover:text-teal-700 transition-colors block">${opt.organ}</span>
+          </div>
+        `;
+        btn.onclick = () => handleLvl3Answer(opt.correct, btn);
+        choicesBox.appendChild(btn);
+      });
+    }
+
+    function playQuestionMelody() {
+      sound.playMelodySample();
+      const btn = document.getElementById('btnPlayQuizAudio');
+      if (btn) {
+        btn.classList.add('bg-amber-500', 'animate-pulse');
+        setTimeout(() => {
+          btn.classList.remove('bg-amber-500', 'animate-pulse');
+        }, 1200);
+      }
+    }
+
+    function handleLvl3Answer(isCorrect, btnElem) {
+      if (STATE.isBusy) return;
+
+      const feedback = document.getElementById('quiz-feedback-text');
+
+      if (!isCorrect) {
+        // Suara sfx o-oh
+        sound.sfxGentleTetot();
+        
+        // Efek getar/merah lembut sesaat menandakan salah
+        if (btnElem) {
+          btnElem.classList.add('shake-cell', '!bg-rose-100', '!border-rose-400');
+          setTimeout(() => {
+            btnElem.classList.remove('shake-cell', '!bg-rose-100', '!border-rose-400');
+          }, 450);
+        }
+
+        if (feedback) {
+          feedback.innerText = "O-oh, coba lagi ya anak pintar! Pikirkan panca indra yang tepat 😊";
+        }
+
+        // PENTING: Karakter TIDAK jalan, langkah TIDAK bertambah, dan pengguna BISA langsung menjawab ulang
+        STATE.isBusy = false;
+        return;
+      }
+
+      // JAWABAN BENAR: Kunci interaksi sebentar, bunyikan nada ceria, jalankan karakter, dan lanjut nomor berikutnya
+      STATE.isBusy = true;
+      sound.success();
+      if (feedback) feedback.innerText = "Hore! Jawabanmu Benar! Langkah jejak berlanjut! 🎉👣";
+
+      if (btnElem) {
+        btnElem.classList.add('!bg-emerald-100', '!border-emerald-500');
+      }
+
+      const duoWrapper = document.getElementById('lvl3-duo-wrapper');
+      if (duoWrapper) {
+        duoWrapper.classList.add('animate-hop');
+      }
+
+      STATE.score = Math.min(100, STATE.score + 8);
+      updateHeaderAndStatusBar();
+
+      setTimeout(() => {
+        if (duoWrapper) {
+          duoWrapper.classList.remove('animate-hop');
+        }
+
+        STATE.lvl3QuestionIdx++;
+        updateLvl3TrackVisual();
+
+        if (STATE.lvl3QuestionIdx < PANCA_INDRA_QUESTIONS.length) {
+          renderLevel3Question();
+          STATE.isBusy = false;
+        } else {
+          setTimeout(() => {
+            STATE.score = 100;
+            updateHeaderAndStatusBar();
+            triggerGrandVictory();
+            STATE.isBusy = false;
+          }, 600);
+        }
+      }, 750);
+    }
+
+    /* ==========================================================================
+       7. DIRECT LEVEL NAVIGATION ("Sebelumnya" & "Selanjutnya" untuk berpindah LEVEL)
+       ========================================================================== */
+    function goToLevel(lvlNumber) {
+      if (STATE.isBusy) return;
+      if (lvlNumber < 1 || lvlNumber > 3) return;
+      sound.click();
+
+      if (lvlNumber === 1) {
+        initLevel1();
+      } else if (lvlNumber === 2) {
+        initLevel2();
+      } else if (lvlNumber === 3) {
+        initLevel3();
+      }
+    }
+
+    function goToPreviousLevel() {
+      if (STATE.level > 1) {
+        goToLevel(STATE.level - 1);
+      }
+    }
+
+    function goToNextLevel() {
+      if (STATE.level < 3) {
+        goToLevel(STATE.level + 1);
+      }
+    }
+
+    function proceedToNextLevel() {
+      const modal = document.getElementById('modal-level-success');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+
+      if (STATE.level === 1) {
+        initLevel2();
+      } else if (STATE.level === 2) {
+        initLevel3();
+      }
+    }
+
+    function triggerGrandVictory() {
+      sound.success();
+      fireConfettiCelebration();
+      const modal = document.getElementById('modal-victory');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function restartEntireGame() {
+      const victoryModal = document.getElementById('modal-victory');
+      victoryModal.classList.add('hidden');
+      victoryModal.classList.remove('flex');
+
+      STATE.score = 0;
+      initLevel1();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initLevel1();
+      try {
+        attemptAutoPlayMusic();
+      } catch(e) {}
+    });
+  </script>
+
+
+</body></html>

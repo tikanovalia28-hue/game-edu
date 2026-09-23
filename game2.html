@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kids EduGame - Game 2: Susun Kata Ceria</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700;800&amp;family=Nunito:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+    body {
+      font-family: 'Quicksand', 'Nunito', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+    .font-nunito {
+      font-family: 'Nunito', sans-serif;
+    }
+    /* Custom 3D button bouncy effect */
+    .btn-bouncy {
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-bouncy:active {
+      transform: translateY(3px) scale(0.97);
+    }
+    
+    /* Playful 3D Liftable Letter Card */
+    .letter-card {
+      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s, background-color 0.2s, opacity 0.2s;
+      cursor: grab;
+      touch-action: none;
+    }
+    .letter-card:active {
+      cursor: grabbing;
+    }
+    .letter-card:hover:not(:disabled) {
+      transform: translateY(-6px) scale(1.06);
+      box-shadow: 0 14px 20px -3px rgba(0, 0, 0, 0.12), 0 6px 8px -2px rgba(0, 0, 0, 0.06);
+    }
+    
+    /* State saat huruf sedang diangkat / dragging */
+    .letter-card.is-lifting {
+      transform: scale(1.18) translateY(-14px) !important;
+      box-shadow: 0 24px 30px -4px rgba(0, 0, 0, 0.22), 0 10px 14px -3px rgba(0, 0, 0, 0.12) !important;
+      z-index: 50;
+    }
+
+    /* Animasi tolak / salah ramah anak */
+    @keyframes rejectShake {
+      0%, 100% { transform: translateX(0) scale(1); }
+      20% { transform: translateX(-10px) rotate(-4deg) scale(1.05); }
+      40% { transform: translateX(10px) rotate(4deg) scale(1.05); }
+      60% { transform: translateX(-7px) rotate(-2deg); }
+      80% { transform: translateX(7px) rotate(2deg); }
+    }
+    .reject-animation {
+      animation: rejectShake 0.45s ease-in-out !important;
+      border-color: #f87171 !important;
+      background-color: #fee2e2 !important;
+      color: #b91c1c !important;
+    }
+
+    /* Animasi bounce back saat kembali */
+    @keyframes bounceBack {
+      0% { transform: translateY(-20px) scale(1.1); }
+      60% { transform: translateY(4px) scale(0.96); }
+      100% { transform: translateY(0) scale(1); }
+    }
+    .bounce-back {
+      animation: bounceBack 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .slot-card {
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .slot-card.filled {
+      animation: popIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .slot-card.drag-over {
+      border-color: #0284c7 !important;
+      background-color: #e0f2fe !important;
+      transform: scale(1.08);
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.7) rotate(-3deg); }
+      70% { transform: scale(1.12) rotate(1deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    @keyframes pulseSuccess {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+    .pulse-success {
+      animation: pulseSuccess 0.4s ease-in-out;
+    }
+
+    /* Animasi Not Musik Ceria Melayang */
+    @keyframes floatNote {
+      0% { transform: translateY(0) scale(0.7) rotate(0deg); opacity: 0; }
+      50% { opacity: 0.9; }
+      100% { transform: translateY(-16px) scale(1.1) rotate(15deg); opacity: 0; }
+    }
+    .note-bubble {
+      animation: floatNote 1.6s ease-in-out infinite;
+    }
+
+    /* Floating drag clone styling */
+    .drag-ghost {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%) scale(1.15);
+      transition: transform 0.05s ease-out;
+      will-change: transform, left, top;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.03);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #7ec8e3;
+      border-radius: 9999px;
+    }
+</style>
+</head>
+<body class="bg-[#eaf6fb] text-[#2c3e50] min-h-screen flex flex-col justify-between overflow-x-hidden relative selection:bg-amber-200">
+<!-- BACKGROUND DECORATIONS -->
+<div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+<!-- Pelangi di Kiri Atas -->
+<svg class="absolute -top-10 -left-10 w-48 sm:w-72 md:w-96 h-auto opacity-70" fill="none" viewbox="0 0 300 200">
+<path d="M -20,200 A 180,180 0 0,1 260,200" stroke="#fda4af" stroke-linecap="round" stroke-width="20"></path>
+<path d="M 0,200 A 160,160 0 0,1 240,200" stroke="#fde047" stroke-linecap="round" stroke-width="20"></path>
+<path d="M 20,200 A 140,140 0 0,1 220,200" stroke="#86efac" stroke-linecap="round" stroke-width="20"></path>
+<path d="M 40,200 A 120,120 0 0,1 200,200" stroke="#7dd3fc" stroke-linecap="round" stroke-width="20"></path>
+<path d="M 60,200 A 100,100 0 0,1 180,200" stroke="#d8b4fe" stroke-linecap="round" stroke-width="20"></path>
+</svg>
+<!-- Matahari Senyum Lembut Kanan Atas -->
+<div class="absolute -top-10 -right-10 w-44 sm:w-60 md:w-72 h-44 sm:h-60 md:h-72 bg-gradient-to-br from-amber-300 to-yellow-200 rounded-full opacity-60 blur-md"></div>
+<div class="absolute top-4 right-5 sm:right-10 w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-dashed border-amber-300/40 animate-[spin_40s_linear_infinite] flex items-center justify-center"></div>
+<!-- Awan Putih Lembut -->
+<div class="absolute top-28 left-8 sm:left-24 bg-white/60 backdrop-blur-sm rounded-full w-28 h-10 shadow-sm flex items-center px-4">
+<div class="w-12 h-12 bg-white/70 rounded-full -mt-6"></div>
+<div class="w-8 h-8 bg-white/70 rounded-full -mt-3 ml-1"></div>
+</div>
+<div class="absolute top-24 right-28 bg-white/60 backdrop-blur-sm rounded-full w-36 h-12 shadow-sm hidden md:flex items-center px-4">
+<div class="w-14 h-14 bg-white/70 rounded-full -mt-7"></div>
+<div class="w-10 h-10 bg-white/70 rounded-full -mt-4 ml-2"></div>
+</div>
+<!-- Bintang & Sparkles -->
+<div class="absolute top-48 left-12 text-amber-400 text-xl animate-bounce">⭐</div>
+<div class="absolute top-64 right-16 text-amber-400 text-2xl animate-pulse">✨</div>
+<div class="absolute bottom-36 left-16 text-sky-400 text-xl">🎈</div>
+<div class="absolute bottom-40 right-20 text-rose-400 text-2xl">🧩</div>
+<!-- Bukit Rumput Hijau Lembut di Bawah -->
+<div class="absolute bottom-0 inset-x-0 h-20 sm:h-28 bg-gradient-to-t from-emerald-100/70 via-teal-50/50 to-transparent pointer-events-none"></div>
+</div>
+<!-- MAIN WRAPPER CONTAINER -->
+<div class="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 py-4 sm:py-6 flex flex-col flex-1 justify-between gap-4">
+<!-- HEADER -->
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white/80 backdrop-blur-md px-5 sm:px-8 py-3.5 sm:py-4 rounded-3xl shadow-sm border border-sky-100">
+<!-- Sisi Kiri: Judul & Subtitle -->
+<div class="flex flex-col items-start">
+<div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-sky-100 text-sky-700 text-xs sm:text-sm font-bold tracking-wide mb-1">
+<span>🌈</span>
+<span>Menyusun Kata</span>
+</div>
+<div class="flex items-center gap-2">
+<h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#1e3a5f] tracking-tight flex items-center gap-2">
+<span>Yuk, Menyusun Huruf dengan Benar!</span>
+</h1>
+</div>
+<p class="text-sm sm:text-base font-semibold text-slate-600 mt-0.5"><span class="text-amber-500 font-bold">✨</span> Susun huruf menjadi kata yang benar, ya!</p>
+</div>
+<!-- Sisi Kanan: [Musik Nyala] [Kembali] -->
+<div class="flex items-center self-end md:self-center gap-2 sm:gap-3 bg-sky-50/90 p-1.5 sm:p-2 rounded-full border border-sky-200 shadow-inner">
+<!-- Tombol Musik Default Aktif Hijau Toska -->
+<button class="relative btn-bouncy px-5 py-2 sm:py-2.5 rounded-full text-white font-extrabold text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer shadow-md shadow-teal-500/30 active:scale-95 bg-teal-500 hover:bg-teal-600" id="btnMusic" onclick="toggleMusic()">
+<span class="absolute -top-2 right-2 text-xs pointer-events-none note-bubble" id="musicFloatingNote">🎶</span>
+<span class="text-base" id="musicIcon">♫</span>
+<span id="musicText">Musik Nyala</span>
+</button>
+<a class="btn-bouncy px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-white hover:bg-rose-50 text-slate-700 hover:text-rose-600 font-extrabold text-xs sm:text-sm border border-slate-200 shadow-sm flex items-center gap-1.5 transition" href="dashboard.html">
+<span>🏡</span>
+<span>Kembali</span>
+</a>
+</div>
+</header>
+<!-- STATUS BAR: Level, Soal, Skor & Indikator Titik -->
+<div class="flex flex-wrap items-center justify-between gap-3 bg-white/70 backdrop-blur-sm px-5 sm:px-8 py-2.5 sm:py-3 rounded-2xl border border-white shadow-sm">
+<!-- Badge Level Aktif -->
+<div class="flex items-center gap-2.5">
+<span class="px-3.5 py-1 rounded-full bg-amber-400 text-amber-950 font-extrabold text-xs sm:text-sm tracking-wide shadow-sm" id="levelBadge">Level 1: Bergambar</span>
+<span class="text-xs sm:text-sm font-bold text-slate-600" id="questionNumBadge">Soal 1 dari 5</span>
+</div>
+<!-- Indikator 5 Dots Progres -->
+<div class="flex items-center gap-2" id="progressDotsContainer"></div>
+<!-- Skor Pill -->
+<div class="flex items-center gap-1.5 px-4 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 font-extrabold text-xs sm:text-sm shadow-sm">
+<span>⭐</span>
+<span>Skor: <strong class="text-amber-700 text-sm sm:text-base" id="scoreDisplay">0</strong> / 100</span>
+</div>
+</div>
+<!-- MAIN GAME PANEL -->
+<main class="w-full flex-1 bg-white rounded-3xl md:rounded-[2.5rem] shadow-xl shadow-sky-900/5 border-2 border-white p-4 sm:p-6 md:p-8 flex flex-col justify-between items-center relative overflow-hidden">
+<!-- SUB-HEADER INSTRUKSI SOAL -->
+<div class="text-center w-full max-w-2xl mb-2 sm:mb-3">
+<h2 class="text-lg sm:text-xl md:text-2xl font-black text-[#1e3a5f] tracking-tight" id="levelTitleText">Level 1 — Susun Kata dari Gambar</h2>
+<p class="text-xs sm:text-sm md:text-base font-semibold text-slate-500 mt-0.5" id="instructionText">“Lihat gambarnya, angkat atau ketuk huruf untuk menyusun kata yang tepat!”</p>
+</div>
+<!-- AREA SOAL UTAMA: URUTAN VERTIKAL (GAMBAR BESAR -> KOTAK JAWABAN -> HURUF ACAK DAPAT DIANGKAT) -->
+<div class="w-full flex-1 flex flex-col items-center justify-center gap-3 sm:gap-5 py-2 my-auto max-w-4xl">
+<!-- 1. GAMBAR BESAR -->
+<div class="w-full flex justify-center items-center transition-all duration-300" id="imageDisplayContainer">
+<div class="relative w-48 h-36 sm:w-64 sm:h-44 md:w-80 md:h-52 bg-gradient-to-b from-sky-50 to-white rounded-3xl border-4 border-sky-100 shadow-md p-3 sm:p-4 flex items-center justify-center group overflow-hidden">
+<!-- Ilustrasi SVG Kartun Edukatif -->
+<div class="w-full h-full flex items-center justify-center" id="illustrationBox"></div>
+<!-- Pin Badge -->
+<div class="absolute top-2 left-3 bg-white/90 backdrop-blur px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold text-sky-700 shadow-sm border border-sky-100">
+  Petunjuk Gambar
+</div>
+</div>
+</div>
+<!-- 2. KOTAK KOSONG UNTUK JAWABAN -->
+<div class="w-full flex flex-col items-center">
+<div class="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5 flex items-center gap-1">
+<span>📥</span>
+<span>Kotak Jawaban:</span>
+<span class="text-slate-400 font-normal lowercase ml-1">(bisa ketuk kotak untuk batalkan)</span>
+</div>
+<!-- Container Slot Jawaban -->
+<div class="flex flex-wrap justify-center items-center gap-2 sm:gap-3 md:gap-4 p-2.5 sm:p-3.5 bg-slate-50/80 rounded-2xl sm:rounded-3xl border-2 border-dashed border-sky-200 min-h-[76px] sm:min-h-[92px] max-w-full transition-colors" id="answerSlotsContainer"></div>
+</div>
+<!-- BUBBLE FEEDBACK INSTAN TOLAK HURUF (Ramah Anak TK) -->
+<div class="min-h-[32px] flex items-center justify-center">
+<div class="transition-all duration-200 transform inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-50 border border-rose-200 text-rose-700 text-xs sm:text-sm font-extrabold shadow-sm opacity-0 scale-95 hidden" id="rejectBubble">
+<span class="text-base">💡</span>
+<span id="rejectBubbleText">Bukan huruf ini, coba cari huruf yang lain ya! 😊</span>
+</div>
+</div>
+<!-- 3. HURUF-HURUF ACAK BISA DIANGKAT / DRAG & DROP / TAP -->
+<div class="w-full flex flex-col items-center">
+<div class="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5 flex items-center gap-1.5">
+<span class="text-amber-400">✨</span>
+<span>Angkat / Ketuk Huruf di Bawah:</span>
+</div>
+<!-- Container Kartu Huruf Tersedia -->
+<div class="flex flex-wrap justify-center items-center gap-2 sm:gap-3 md:gap-4 p-2.5 sm:p-3.5 min-h-[76px] sm:min-h-[92px] max-w-full relative" id="lettersPoolContainer"></div>
+</div>
+</div>
+<!-- TOMBOL KONTROL NAVIGASI BAWAH: [ Sebelumnya ] [ Ulangi ] [ Lewati ] -->
+<footer class="w-full pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+<!-- Tombol Sebelumnya (Terkunci jika di soal 1 pada level saat ini) -->
+<button class="btn-bouncy px-4 sm:px-6 py-2 sm:py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-600 disabled:opacity-40 disabled:cursor-not-allowed font-extrabold text-xs sm:text-sm flex items-center gap-2 transition cursor-pointer" id="btnPrev" onclick="prevQuestion()">
+<span>⬅️</span>
+<span>Sebelumnya</span>
+</button>
+<!-- Tombol Ulangi Soal -->
+<button class="btn-bouncy px-4 sm:px-6 py-2 sm:py-2.5 rounded-2xl bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 font-extrabold text-xs sm:text-sm flex items-center gap-2 transition cursor-pointer" id="btnReset" onclick="resetCurrentQuestion()">
+<span>🔄</span>
+<span>Ulangi</span>
+</button>
+<!-- Tombol Lewati (Berputar kembali jika di soal ke-5) -->
+<button class="btn-bouncy px-4 sm:px-6 py-2 sm:py-2.5 rounded-2xl bg-sky-100 hover:bg-sky-200 text-sky-800 border border-sky-300 font-extrabold text-xs sm:text-sm flex items-center gap-2 transition cursor-pointer" id="btnSkip" onclick="skipQuestion()">
+<span>⏭️</span>
+<span>Lewati</span>
+</button>
+</footer>
+</main>
+<!-- FOOTER KREDIT PEMBUAT WAJIB -->
+<div class="text-center py-1">
+<div class="inline-flex items-center gap-1.5 px-4 sm:px-6 py-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-pink-200 text-[#1e3a5f] text-xs sm:text-sm font-bold shadow-sm">
+<span>💖</span>
+<span>Game ini dibuat oleh: <span class="text-sky-600 font-extrabold">Cintya Eka Puspita Sari</span></span>
+<span>✨</span>
+</div>
+</div>
+</div>
+<!-- MODAL / POPUP 1: POPUP JAWABAN BENAR (+10 Poin) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs hidden" id="modalSuccess">
+<div class="bg-white rounded-3xl p-6 sm:p-8 max-w-xs sm:max-w-sm w-full text-center shadow-2xl border-4 border-amber-300 transform transition-all scale-100 animate-[bounce_0.6s_ease]">
+<div class="text-4xl sm:text-5xl mb-2 animate-bounce">🎉</div>
+<h3 class="text-2xl sm:text-3xl font-black text-amber-500 mb-1">⭐ Hebat!</h3>
+<p class="text-slate-600 font-bold text-sm mb-3">Jawabanmu tepat sekali!</p>
+<div class="inline-block px-5 py-2 bg-gradient-to-r from-amber-400 to-yellow-300 text-amber-950 font-black text-xl rounded-2xl shadow-md mb-2">
+  +10 Poin 🎉
+</div>
+<p class="text-xs text-slate-400 font-medium">Melanjutkan ke soal berikutnya...</p>
+</div>
+</div>
+<!-- MODAL / POPUP 2: SELESAI LEVEL 1 -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm hidden" id="modalLevel1Done">
+<div class="bg-white rounded-3xl p-6 sm:p-8 max-w-sm sm:max-w-md w-full text-center shadow-2xl border-4 border-teal-400">
+<div class="text-5xl sm:text-6xl mb-3">🎉</div>
+<h3 class="text-2xl sm:text-3xl font-black text-[#1e3a5f] mb-2">Level 1 Selesai!</h3>
+<p class="text-slate-600 font-bold text-sm sm:text-base leading-relaxed mb-4">
+  Kamu berhasil menyelesaikan<br/><span class="text-teal-600 font-black">5 soal pertama</span> dengan luar biasa!
+</p>
+<div class="p-3 bg-amber-50 rounded-2xl border border-amber-200 mb-5">
+<span class="text-xs font-bold text-amber-800 uppercase tracking-wider block">Skor Sementara:</span>
+<span class="text-2xl sm:text-3xl font-black text-amber-600" id="interimScoreText">0 / 50</span>
+</div>
+<button class="btn-bouncy w-full py-3 sm:py-3.5 rounded-2xl bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-white font-extrabold text-base sm:text-lg shadow-lg shadow-teal-500/30 flex items-center justify-center gap-2 cursor-pointer" onclick="startLevel2()">
+<span>➡️</span>
+<span>Lanjut Level 2</span>
+</button>
+</div>
+</div>
+<!-- MODAL / POPUP 3: TOTAL SKOR AKHIR GAME -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden" id="modalGameComplete">
+<div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md sm:max-w-lg w-full text-center shadow-2xl border-4 border-amber-400">
+<div class="text-5xl sm:text-6xl mb-2 animate-bounce">🏆</div>
+<h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-amber-500 mb-1">🎉 HEBAT! 🎉</h2>
+<p class="text-slate-600 font-extrabold text-sm sm:text-base mb-4">
+  Kamu sudah menyelesaikan semua permainan!
+</p>
+<!-- Box Skor Total Akhir -->
+<div class="bg-gradient-to-b from-amber-50 to-orange-50 border-2 border-amber-200 rounded-2xl p-4 sm:p-5 mb-6 shadow-inner">
+<span class="text-amber-500 text-2xl sm:text-3xl block mb-1">⭐</span>
+<span class="text-xs sm:text-sm font-black text-amber-800 uppercase tracking-widest block">TOTAL SKOR</span>
+<div class="text-4xl sm:text-5xl font-black text-[#1e3a5f] mt-1" id="finalScoreDisplay">
+  100 / 100
+</div>
+<p class="text-xs sm:text-sm font-semibold text-slate-500 mt-1" id="finalRatingText">
+  Hebat! Kamu anak yang sangat pintar dan teliti! 🌟
+</p>
+</div>
+<!-- Tombol Aksi Akhir -->
+<div class="flex flex-col gap-3">
+<button class="btn-bouncy w-full py-3 rounded-2xl bg-amber-400 hover:bg-amber-500 text-amber-950 font-extrabold text-sm sm:text-base shadow-md flex items-center justify-center gap-2 cursor-pointer" onclick="restartFullGame()">
+<span>🔄</span>
+<span>Ulangi Game</span>
+</button>
+<a class="btn-bouncy w-full py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-sm sm:text-base border border-slate-300 flex items-center justify-center gap-2" href="dashboard.html">
+<span>🏠</span>
+<span>Kembali</span>
+</a>
+</div>
+</div>
+</div>
+<!-- SCRIPT LOGIKA GAME 2 TERPADU: AUTO-START BGM, SFX INDEPENDEN, SAYUR HIJAU -->
+<script>
+    // --- 1. DATA SOAL RESMI ---
+    // Di Level 1 Soal 4: Sayur Hijau Segar & Lucu (Bayam / Sayur Hijau Mangkok Segar Ceria)
+    const gameData = {
+      level1: [
+        {
+          word: "AYAM",
+          imageName: "Ayam",
+          svg: `<svg viewBox="0 0 160 160" class="w-28 sm:w-36 md:w-44 h-auto drop-shadow-md">
+            <ellipse cx="80" cy="142" rx="55" ry="12" fill="#d1fae5"/>
+            <path d="M 68 120 L 68 140 M 64 140 L 72 140 M 92 120 L 92 140 M 88 140 L 96 140" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/>
+            <path d="M 45 85 C 20 60, 20 100, 48 105" fill="#ef4444" stroke="#dc2626" stroke-width="2"/>
+            <path d="M 40 75 C 10 55, 15 95, 45 95" fill="#3b82f6" stroke="#2563eb" stroke-width="2"/>
+            <path d="M 46 65 C 25 45, 30 75, 52 82" fill="#10b981" stroke="#059669" stroke-width="2"/>
+            <circle cx="80" cy="95" r="38" fill="#fef08a" stroke="#fde047" stroke-width="3"/>
+            <path d="M 70 85 C 60 95, 65 115, 85 112 C 95 110, 95 90, 85 85 Z" fill="#fde047" stroke="#eab308" stroke-width="2"/>
+            <circle cx="108" cy="70" r="22" fill="#fef08a" stroke="#fde047" stroke-width="2.5"/>
+            <path d="M 102 48 C 102 40, 110 40, 112 48 C 115 38, 124 40, 122 52 Z" fill="#ef4444"/>
+            <path d="M 124 78 C 124 86, 118 86, 118 78 Z" fill="#ef4444"/>
+            <polygon points="126,68 142,73 126,78" fill="#f97316"/>
+            <circle cx="114" cy="65" r="4.5" fill="#1e293b"/>
+            <circle cx="116" cy="63" r="1.5" fill="#ffffff"/>
+            <circle cx="106" cy="74" r="5" fill="#fda4af" opacity="0.6"/>
+          </svg>`
+        },
+        {
+          word: "PESAWAT",
+          imageName: "Pesawat",
+          svg: `<svg viewBox="0 0 160 160" class="w-28 sm:w-36 md:w-44 h-auto drop-shadow-md">
+            <ellipse cx="40" cy="120" rx="25" ry="12" fill="#e0f2fe"/>
+            <ellipse cx="120" cy="50" rx="28" ry="14" fill="#e0f2fe"/>
+            <polygon points="65,95 40,118 55,120 85,98" fill="#0284c7"/>
+            <path d="M 30 80 C 30 65, 120 62, 140 76 C 145 80, 140 92, 120 95 C 70 98, 30 95, 30 80 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="3"/>
+            <ellipse cx="134" cy="79" rx="8" ry="12" fill="#bae6fd"/>
+            <ellipse cx="118" cy="74" rx="8" ry="6" fill="#0f172a"/>
+            <ellipse cx="120" cy="73" rx="2.5" ry="2" fill="#ffffff"/>
+            <circle cx="95" cy="80" r="4.5" fill="#ffffff" stroke="#0284c7" stroke-width="2"/>
+            <circle cx="78" cy="80" r="4.5" fill="#ffffff" stroke="#0284c7" stroke-width="2"/>
+            <circle cx="61" cy="80" r="4.5" fill="#ffffff" stroke="#0284c7" stroke-width="2"/>
+            <polygon points="35,76 20,44 38,44 55,76" fill="#f43f5e" stroke="#e11d48" stroke-width="2"/>
+            <polygon points="95,84 65,115 82,118 115,88" fill="#f59e0b" stroke="#d97706" stroke-width="2.5"/>
+          </svg>`
+        },
+        {
+          word: "JERUK",
+          imageName: "Jeruk",
+          svg: `<svg viewBox="0 0 160 160" class="w-28 sm:w-36 md:w-44 h-auto drop-shadow-md">
+            <ellipse cx="80" cy="138" rx="45" ry="10" fill="#fed7aa"/>
+            <path d="M 80 40 C 60 15, 100 10, 115 25 C 105 40, 85 40, 80 40 Z" fill="#22c55e" stroke="#15803d" stroke-width="2.5"/>
+            <path d="M 82 35 C 95 25, 105 23, 112 25" stroke="#15803d" stroke-width="2" stroke-linecap="round"/>
+            <rect x="76" y="32" width="8" height="15" rx="3" fill="#854d0e"/>
+            <circle cx="80" cy="88" r="45" fill="#fb923c" stroke="#ea580c" stroke-width="3.5"/>
+            <circle cx="68" cy="72" r="35" fill="#f97316" opacity="0.2"/>
+            <ellipse cx="60" cy="65" rx="12" ry="7" transform="rotate(-30 60 65)" fill="#ffedd5" opacity="0.6"/>
+            <circle cx="95" cy="85" r="1.5" fill="#c2410c"/>
+            <circle cx="85" cy="105" r="1.5" fill="#c2410c"/>
+            <circle cx="70" cy="100" r="1.5" fill="#c2410c"/>
+            <circle cx="102" cy="100" r="1.5" fill="#c2410c"/>
+            <circle cx="68" cy="85" r="3.5" fill="#431407"/>
+            <circle cx="92" cy="85" r="3.5" fill="#431407"/>
+            <path d="M 74 94 Q 80 100 86 94" stroke="#431407" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <circle cx="62" cy="90" r="4" fill="#fca5a5" opacity="0.7"/>
+            <circle cx="98" cy="90" r="4" fill="#fca5a5" opacity="0.7"/>
+          </svg>`
+        },
+        {
+          word: "SAYUR",
+          imageName: "Sayur Hijau Segar",
+          // Ilustrasi Sayur Hijau Berdaun Segar & Ceria (Bayam / Sawi Hijau dalam Mangkok Ceria)
+          svg: `<svg viewBox="0 0 160 160" class="w-28 sm:w-36 md:w-44 h-auto drop-shadow-md">
+            <ellipse cx="80" cy="144" rx="46" ry="9" fill="#d1fae5"/>
+            <!-- Daun Hijau Kiri Belakang -->
+            <path d="M 45 95 C 28 65, 38 32, 60 28 C 76 25, 80 50, 70 95 Z" fill="#22c55e" stroke="#15803d" stroke-width="2.5"/>
+            <path d="M 52 35 Q 56 62 65 88" stroke="#16a34a" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <!-- Daun Hijau Kanan Belakang -->
+            <path d="M 115 95 C 132 65, 122 32, 100 28 C 84 25, 80 50, 90 95 Z" fill="#22c55e" stroke="#15803d" stroke-width="2.5"/>
+            <path d="M 108 35 Q 104 62 95 88" stroke="#16a34a" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <!-- Daun Hijau Tengah Utama Rimbun -->
+            <path d="M 54 90 C 45 42, 62 18, 80 18 C 98 18, 115 42, 106 90 Z" fill="#4ade80" stroke="#16a34a" stroke-width="3"/>
+            <path d="M 80 20 L 80 92" stroke="#15803d" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M 80 40 Q 66 50 62 58" stroke="#15803d" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M 80 40 Q 94 50 98 58" stroke="#15803d" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M 80 62 Q 68 70 64 78" stroke="#15803d" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M 80 62 Q 92 70 96 78" stroke="#15803d" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <!-- Daun Hijau Manis Depan Kiri & Kanan -->
+            <path d="M 40 85 C 32 70, 48 55, 62 68 C 68 76, 60 92, 50 94 Z" fill="#86efac" stroke="#16a34a" stroke-width="2"/>
+            <path d="M 120 85 C 128 70, 112 55, 98 68 C 92 76, 100 92, 110 94 Z" fill="#86efac" stroke="#16a34a" stroke-width="2"/>
+            <!-- Mangkok Sayur Cantik Warna Kuning Pastel / Oranye Manis -->
+            <path d="M 32 94 C 36 136, 124 136, 128 94 Q 80 98 32 94 Z" fill="#fde047" stroke="#eab308" stroke-width="3"/>
+            <ellipse cx="80" cy="94" rx="48" ry="8" fill="#fef08a" stroke="#eab308" stroke-width="2.5"/>
+            <!-- Wajah Senyum Lucu pada Mangkok Sayur -->
+            <circle cx="68" cy="112" r="3.5" fill="#713f12"/>
+            <circle cx="92" cy="112" r="3.5" fill="#713f12"/>
+            <circle cx="60" cy="115" r="4.5" fill="#fca5a5" opacity="0.8"/>
+            <circle cx="100" cy="115" r="4.5" fill="#fca5a5" opacity="0.8"/>
+            <path d="M 73 118 Q 80 124 87 118" stroke="#713f12" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <text x="114" y="50" font-size="16">✨</text>
+            <text x="32" y="52" font-size="14">🌱</text>
+          </svg>`
+        },
+        {
+          word: "TELINGA",
+          imageName: "Telinga",
+          svg: `<svg viewBox="0 0 160 160" class="w-28 sm:w-36 md:w-44 h-auto drop-shadow-md">
+            <ellipse cx="80" cy="140" rx="40" ry="10" fill="#fde68a"/>
+            <path d="M 65 30 C 110 25, 122 75, 105 105 C 92 128, 65 130, 60 115 C 55 102, 70 95, 75 90 C 85 80, 85 50, 65 52 Z" fill="#fed7aa" stroke="#f97316" stroke-width="3.5"/>
+            <path d="M 78 48 C 95 46, 102 70, 92 90 C 85 102, 74 105, 72 98" stroke="#fb923c" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M 82 72 Q 88 80 82 88" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <text x="110" y="55" font-size="20">✨</text>
+            <text x="40" y="85" font-size="16">🎵</text>
+            <text x="48" y="125" font-size="14">🎶</text>
+          </svg>`
+        }
+      ],
+      level2: [
+        { word: "BATU" },
+        { word: "BAIK" },
+        { word: "KUCING" },
+        { word: "PENSIL" },
+        { word: "BAJU" }
+      ]
+    };
+
+    // --- 2. SOUND SYNTHESIZER: PEMISAHAN BGM (MUSIK LATAR) VS SFX (EFEK SUARA) ---
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.isMusicMuted = false; // Status Mute khusus BGM (default aktif)
+        this.bgInterval = null;
+        this.tempo = 82; // Tempo manis (~82 BPM)
+        this.step = 0;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+      }
+
+      // Marimba Note khusus BGM
+      playMarimbaBGM(freq, duration = 0.55, gainVal = 0.14) {
+        if (this.isMusicMuted) return;
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+
+        try {
+          const now = this.ctx.currentTime;
+          const osc1 = this.ctx.createOscillator();
+          const gain1 = this.ctx.createGain();
+          osc1.type = 'sine';
+          osc1.frequency.setValueAtTime(freq, now);
+
+          const osc2 = this.ctx.createOscillator();
+          const gain2 = this.ctx.createGain();
+          osc2.type = 'triangle';
+          osc2.frequency.setValueAtTime(freq * 3.98, now);
+
+          gain1.gain.setValueAtTime(0.001, now);
+          gain1.gain.linearRampToValueAtTime(gainVal, now + 0.025);
+          gain1.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+          gain2.gain.setValueAtTime(0.001, now);
+          gain2.gain.linearRampToValueAtTime(gainVal * 0.25, now + 0.02);
+          gain2.gain.exponentialRampToValueAtTime(0.0001, now + (duration * 0.6));
+
+          osc1.connect(gain1);
+          osc2.connect(gain2);
+          gain1.connect(this.ctx.destination);
+          gain2.connect(this.ctx.destination);
+
+          osc1.start(now);
+          osc2.start(now);
+          osc1.stop(now + duration);
+          osc2.stop(now + duration);
+        } catch(e) {}
+      }
+
+      // Bass khusus BGM
+      playBassBGM(freq, duration = 0.45, gainVal = 0.08) {
+        if (this.isMusicMuted) return;
+        this.init();
+        if (!this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now);
+
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(gainVal, now + 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + duration);
+        } catch(e) {}
+      }
+
+      // === SFX (EFEK SUARA) INDEPENDEN: SELALU AKTIF MESKI MUSIK BGM DIMATIKAN ===
+      click() {
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, now);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.2, now + 0.015);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.16);
+        } catch(e) {}
+      }
+
+      // SFX Angkat / Lift Up
+      liftLetter() {
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(400, now);
+          osc.frequency.exponentialRampToValueAtTime(620, now + 0.09);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.11);
+        } catch(e) {}
+      }
+
+      // SFX Snap masuk ke slot yang benar
+      snapLetter() {
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(520, now);
+          osc.frequency.exponentialRampToValueAtTime(1040, now + 0.12);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.15);
+        } catch(e) {}
+      }
+
+      // SFX Tolak Huruf Salah (Boing ramah santai)
+      rejectLetter() {
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(320, now);
+          osc.frequency.exponentialRampToValueAtTime(180, now + 0.22);
+          gain.gain.setValueAtTime(0.22, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.27);
+        } catch(e) {}
+      }
+
+      // SFX Sukses Menyusun Kata Lengkap
+      success() {
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        const notes = [
+          { f: 523.25, d: 0.24 },
+          { f: 659.25, d: 0.24 },
+          { f: 783.99, d: 0.24 },
+          { f: 1046.50, d: 0.40 },
+          { f: 1318.51, d: 0.55 }
+        ];
+        notes.forEach((n, idx) => {
+          setTimeout(() => {
+            try {
+              const now = this.ctx.currentTime;
+              const osc = this.ctx.createOscillator();
+              const gain = this.ctx.createGain();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(n.f, now);
+              gain.gain.setValueAtTime(0.001, now);
+              gain.gain.linearRampToValueAtTime(0.25, now + 0.02);
+              gain.gain.exponentialRampToValueAtTime(0.0001, now + n.d);
+              osc.connect(gain);
+              gain.connect(this.ctx.destination);
+              osc.start(now);
+              osc.stop(now + n.d);
+            } catch(e) {}
+          }, idx * 95);
+        });
+      }
+
+      // Background Music Loop
+      startBGM() {
+        if (this.isMusicMuted || this.bgInterval) return;
+        this.init();
+
+        const N = {
+          C3: 130.81, G3: 196.00, A3: 220.00, F3: 174.61,
+          C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
+          C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99, A5: 880.00,
+          REST: 0
+        };
+
+        const melody = [
+          { m: N.C5, b: N.C3 }, { m: N.REST, b: N.REST }, { m: N.E5, b: N.G3 }, { m: N.G5, b: N.REST },
+          { m: N.A5, b: N.A3 }, { m: N.G5, b: N.REST }, { m: N.E5, b: N.C3 }, { m: N.REST, b: N.REST },
+          { m: N.F5, b: N.F3 }, { m: N.A5, b: N.REST }, { m: N.G5, b: N.C3 }, { m: N.E5, b: N.REST },
+          { m: N.D5, b: N.G3 }, { m: N.E5, b: N.REST }, { m: N.C5, b: N.C3 }, { m: N.REST, b: N.REST },
+          { m: N.E5, b: N.C3 }, { m: N.REST, b: N.REST }, { m: N.G5, b: N.G3 }, { m: N.REST, b: N.REST },
+          { m: N.A5, b: N.F3 }, { m: N.C5, b: N.REST }, { m: N.G5, b: N.C3 }, { m: N.REST, b: N.REST },
+          { m: N.F5, b: N.F3 }, { m: N.G5, b: N.REST }, { m: N.E5, b: N.G3 }, { m: N.D5, b: N.REST },
+          { m: N.C5, b: N.C3 }, { m: N.REST, b: N.REST }, { m: N.C5, b: N.C3 }, { m: N.REST, b: N.REST }
+        ];
+
+        const stepDurationMs = (60 / this.tempo) * 1000 * 0.5;
+
+        this.bgInterval = setInterval(() => {
+          if (this.isMusicMuted) return;
+          const note = melody[this.step % melody.length];
+          if (note.m && note.m > 0) this.playMarimbaBGM(note.m, 0.48, 0.13);
+          if (note.b && note.b > 0) this.playBassBGM(note.b, 0.42, 0.08);
+          this.step++;
+        }, stepDurationMs);
+      }
+
+      stopBGM() {
+        if (this.bgInterval) {
+          clearInterval(this.bgInterval);
+          this.bgInterval = null;
+        }
+      }
+
+      // Toggle hanya untuk MUSIK LATAR (SFX tetap jalan terus)
+      toggleMusic() {
+        this.isMusicMuted = !this.isMusicMuted;
+        if (this.isMusicMuted) {
+          this.stopBGM();
+        } else {
+          this.init();
+          this.startBGM();
+        }
+        return !this.isMusicMuted;
+      }
+    }
+
+    const sound = new SoundEngine();
+
+    // Toggle Handler Khusus Musik (BGM)
+    function toggleMusic() {
+      const isMusicPlaying = sound.toggleMusic();
+      const icon = document.getElementById('musicIcon');
+      const text = document.getElementById('musicText');
+      const btn = document.getElementById('btnMusic');
+      const noteBubble = document.getElementById('musicFloatingNote');
+
+      // Mainkan suara klik tombol sfx untuk feedback
+      sound.click();
+
+      if (isMusicPlaying) {
+        icon.textContent = '♫';
+        text.textContent = 'Musik Nyala';
+        if (noteBubble) noteBubble.classList.remove('hidden');
+        btn.classList.remove('bg-slate-400', 'hover:bg-slate-500', 'shadow-none');
+        btn.classList.add('bg-teal-500', 'hover:bg-teal-600', 'shadow-teal-500/30');
+      } else {
+        icon.textContent = '🔇';
+        text.textContent = 'Musik Mati';
+        if (noteBubble) noteBubble.classList.add('hidden');
+        btn.classList.remove('bg-teal-500', 'hover:bg-teal-600', 'shadow-teal-500/30');
+        btn.classList.add('bg-slate-400', 'hover:bg-slate-500', 'shadow-none');
+      }
+    }
+
+    // Auto-Start Handler: langsung mulai dan coba resume saat halaman tampil / interaksi pertama
+    function attemptAutoPlayMusic() {
+      sound.init();
+      if (!sound.isMusicMuted && !sound.bgInterval) {
+        sound.startBGM();
+      }
+    }
+    window.addEventListener('click', attemptAutoPlayMusic, { once: true });
+    window.addEventListener('touchstart', attemptAutoPlayMusic, { once: true });
+    window.addEventListener('keydown', attemptAutoPlayMusic, { once: true });
+
+    // --- 3. STATE GAME SUSUN KATA ---
+    let currentLevel = 1;
+    let currentQuestionIdx = 0;
+    let totalScore = 0;
+    let currentLetters = [];
+    let selectedSlots = [];
+    let targetWord = "";
+    let isQuestionSolved = false;
+    let answeredQuestions = {
+      level1: [false, false, false, false, false],
+      level2: [false, false, false, false, false]
+    };
+
+    // Palet warna playful 3D untuk kartu huruf
+    const letterColors = [
+      { bg: 'bg-amber-100 hover:bg-amber-200 border-amber-300 text-amber-900', shadow: 'shadow-[0_6px_0_#d97706]' },
+      { bg: 'bg-sky-100 hover:bg-sky-200 border-sky-300 text-sky-900', shadow: 'shadow-[0_6px_0_#0284c7]' },
+      { bg: 'bg-rose-100 hover:bg-rose-200 border-rose-300 text-rose-900', shadow: 'shadow-[0_6px_0_#e11d48]' },
+      { bg: 'bg-emerald-100 hover:bg-emerald-200 border-emerald-300 text-emerald-900', shadow: 'shadow-[0_6px_0_#059669]' },
+      { bg: 'bg-purple-100 hover:bg-purple-200 border-purple-300 text-purple-900', shadow: 'shadow-[0_6px_0_#7c3aed]' },
+      { bg: 'bg-teal-100 hover:bg-teal-200 border-teal-300 text-teal-900', shadow: 'shadow-[0_6px_0_#0d9488]' },
+      { bg: 'bg-orange-100 hover:bg-orange-200 border-orange-300 text-orange-900', shadow: 'shadow-[0_6px_0_#ea580c]' }
+    ];
+
+    // --- 4. ENGINE INITIALIZATION & QUESTION LOADER ---
+    function init() {
+      loadQuestion();
+      // Upaya auto-start BGM langsung saat init
+      try {
+        attemptAutoPlayMusic();
+      } catch(e) {}
+    }
+
+    function loadQuestion() {
+      isQuestionSolved = false;
+      const questionList = currentLevel === 1 ? gameData.level1 : gameData.level2;
+      const question = questionList[currentQuestionIdx];
+      targetWord = question.word.toUpperCase();
+
+      const levelBadge = document.getElementById('levelBadge');
+      const questionNumBadge = document.getElementById('questionNumBadge');
+      const levelTitleText = document.getElementById('levelTitleText');
+      const instructionText = document.getElementById('instructionText');
+      const imageDisplayContainer = document.getElementById('imageDisplayContainer');
+      const illustrationBox = document.getElementById('illustrationBox');
+      hideRejectBubble();
+
+      if (currentLevel === 1) {
+        levelBadge.textContent = 'Level 1: Bergambar';
+        levelBadge.className = 'px-3.5 py-1 rounded-full bg-amber-400 text-amber-950 font-extrabold text-xs sm:text-sm tracking-wide shadow-sm';
+        levelTitleText.textContent = 'Level 1 — Susun Kata dari Gambar';
+        instructionText.textContent = '“Lihat gambarnya, angkat atau ketuk huruf untuk menyusun kata yang tepat!”';
+        imageDisplayContainer.classList.remove('hidden');
+        illustrationBox.innerHTML = question.svg || '';
+      } else {
+        levelBadge.textContent = 'Level 2: Tantangan Huruf';
+        levelBadge.className = 'px-3.5 py-1 rounded-full bg-indigo-500 text-white font-extrabold text-xs sm:text-sm tracking-wide shadow-sm';
+        levelTitleText.textContent = 'Level 2 — Susun Kata';
+        instructionText.textContent = '“Angkat huruf-huruf di bawah secara berurutan membentuk kata yang benar!”';
+        imageDisplayContainer.classList.add('hidden');
+      }
+
+      questionNumBadge.textContent = `Soal ${currentQuestionIdx + 1} dari 5`;
+      updateProgressDots();
+      updateScoreUI();
+
+      // Navigasi: tombol Sebelumnya terkunci di soal 1 pada level saat ini
+      document.getElementById('btnPrev').disabled = (currentQuestionIdx === 0);
+
+      // Persiapkan Kotak Jawaban
+      selectedSlots = new Array(targetWord.length).fill(null);
+
+      // Persiapkan Huruf Acak dengan Unique ID
+      const chars = targetWord.split('');
+      const lettersWithMeta = chars.map((ch, idx) => ({
+        id: `${ch}_${idx}_${Math.random().toString(36).substr(2, 6)}`,
+        char: ch,
+        originalIndex: idx,
+        colorClass: letterColors[idx % letterColors.length]
+      }));
+
+      // Acak urutan kartu huruf
+      let shuffled = [...lettersWithMeta];
+      let attempts = 0;
+      do {
+        shuffled.sort(() => Math.random() - 0.5);
+        attempts++;
+      } while (shuffled.map(l => l.char).join('') === targetWord && attempts < 10);
+
+      currentLetters = shuffled;
+
+      renderAnswerSlots();
+      renderLetterPool();
+    }
+
+    // --- 5. RENDER SLOT JAWABAN ---
+    function renderAnswerSlots() {
+      const container = document.getElementById('answerSlotsContainer');
+      container.innerHTML = '';
+
+      const nextExpectedIndex = getNextExpectedSlotIndex();
+
+      selectedSlots.forEach((slot, index) => {
+        const slotEl = document.createElement('div');
+        const isNextTarget = (index === nextExpectedIndex && !isQuestionSolved);
+
+        slotEl.className = `slot-card w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl border-3 flex items-center justify-center font-black text-2xl sm:text-3xl md:text-4xl select-none transition-all ${
+          slot 
+            ? 'bg-amber-300 border-amber-500 text-amber-950 filled shadow-[0_4px_0_#b45309] cursor-pointer hover:bg-amber-200' 
+            : isNextTarget
+              ? 'bg-sky-50/70 border-sky-400 text-sky-800 border-dashed ring-2 ring-sky-300/60 ring-offset-2 animate-pulse'
+              : 'bg-white border-slate-200 text-slate-400 border-dashed'
+        }`;
+        
+        slotEl.textContent = slot ? slot.char : '';
+        slotEl.dataset.slotIndex = index;
+
+        // Drop target untuk drag & drop
+        setupDropZone(slotEl, index);
+
+        if (slot && !isQuestionSolved) {
+          slotEl.title = "Ketuk untuk kembalikan huruf ini ke bawah";
+          slotEl.onclick = () => removeLetterFromSlot(index);
+        } else {
+          slotEl.title = `Kotak huruf ke-${index + 1}`;
+        }
+
+        container.appendChild(slotEl);
+      });
+    }
+
+    function getNextExpectedSlotIndex() {
+      return selectedSlots.findIndex(s => s === null);
+    }
+
+    // --- 6. RENDER POOL HURUF (LIFTABLE / DRAG & DROP & TAP) ---
+    function renderLetterPool() {
+      const container = document.getElementById('lettersPoolContainer');
+      container.innerHTML = '';
+
+      currentLetters.forEach((item) => {
+        const isUsed = selectedSlots.some(s => s && s.id === item.id);
+        const letterBtn = document.createElement('div');
+        letterBtn.id = `letter-card-${item.id}`;
+
+        letterBtn.className = `letter-card w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl sm:rounded-3xl border-3 font-black text-2xl sm:text-3xl md:text-4xl flex items-center justify-center select-none ${
+          isUsed
+            ? 'opacity-20 bg-slate-100 border-slate-200 text-slate-300 cursor-not-allowed transform scale-90 shadow-none pointer-events-none'
+            : `${item.colorClass.bg} ${item.colorClass.shadow} cursor-grab active:cursor-grabbing`
+        }`;
+
+        letterBtn.textContent = item.char;
+        letterBtn.dataset.letterId = item.id;
+        letterBtn.setAttribute('role', 'button');
+        letterBtn.setAttribute('tabindex', isUsed ? '-1' : '0');
+
+        if (!isUsed && !isQuestionSolved) {
+          // Tap / Click langsung untuk mengangkat huruf ke kotak jawaban
+          letterBtn.onclick = (e) => {
+            if (letterBtn.dataset.justDragged === 'true') {
+              letterBtn.dataset.justDragged = 'false';
+              return;
+            }
+            handleLetterSelection(item, letterBtn);
+          };
+
+          // Drag and Drop interaktif (Pointer Events)
+          attachLiftAndDragEvents(letterBtn, item);
+        }
+
+        container.appendChild(letterBtn);
+      });
+    }
+
+    // --- 7. MEKANISME "BISA DIANGKAT" (LIFT & DRAG & DROP RAMAH ANAK) ---
+    function attachLiftAndDragEvents(cardEl, letterItem) {
+      let isDragging = false;
+      let startX = 0;
+      let startY = 0;
+      let ghostEl = null;
+
+      const onPointerDown = (e) => {
+        if (isQuestionSolved) return;
+        if (e.button !== undefined && e.button !== 0) return;
+
+        startX = e.clientX;
+        startY = e.clientY;
+        isDragging = false;
+
+        cardEl.setPointerCapture(e.pointerId);
+
+        const onPointerMove = (ev) => {
+          const dx = ev.clientX - startX;
+          const dy = ev.clientY - startY;
+
+          // Threshold kecil untuk membedakan antara klik biasa dan diangkat (drag)
+          if (!isDragging && (Math.hypot(dx, dy) > 8)) {
+            isDragging = true;
+            cardEl.dataset.justDragged = 'true';
+            sound.liftLetter(); // SFX angkat huruf
+            cardEl.classList.add('is-lifting');
+
+            // Ghost clone melayang mengikuti kursor/jari
+            ghostEl = cardEl.cloneNode(true);
+            ghostEl.id = 'active-drag-ghost';
+            ghostEl.className = `${cardEl.className} drag-ghost opacity-95`;
+            document.body.appendChild(ghostEl);
+          }
+
+          if (isDragging && ghostEl) {
+            ghostEl.style.left = `${ev.clientX}px`;
+            ghostEl.style.top = `${ev.clientY}px`;
+            highlightTargetSlotUnder(ev.clientX, ev.clientY);
+          }
+        };
+
+        const onPointerUp = (ev) => {
+          cardEl.removeEventListener('pointermove', onPointerMove);
+          cardEl.removeEventListener('pointerup', onPointerUp);
+          cardEl.removeEventListener('pointercancel', onPointerUp);
+          try {
+            cardEl.releasePointerCapture(ev.pointerId);
+          } catch(err) {}
+
+          cardEl.classList.remove('is-lifting');
+
+          if (isDragging) {
+            clearSlotHighlights();
+            if (ghostEl) {
+              ghostEl.remove();
+              ghostEl = null;
+            }
+
+            const targetSlot = getSlotUnder(ev.clientX, ev.clientY);
+            if (targetSlot) {
+              handleDropOnSlot(letterItem, cardEl, targetSlot);
+            } else {
+              animateBounceBack(cardEl);
+            }
+
+            setTimeout(() => {
+              cardEl.dataset.justDragged = 'false';
+            }, 100);
+          }
+        };
+
+        cardEl.addEventListener('pointermove', onPointerMove);
+        cardEl.addEventListener('pointerup', onPointerUp);
+        cardEl.addEventListener('pointercancel', onPointerUp);
+      };
+
+      cardEl.addEventListener('pointerdown', onPointerDown);
+    }
+
+    function setupDropZone(slotEl, index) {
+      slotEl.dataset.slotIndex = index;
+    }
+
+    function getSlotUnder(x, y) {
+      const el = document.elementFromPoint(x, y);
+      if (!el) return null;
+      return el.closest('.slot-card');
+    }
+
+    function highlightTargetSlotUnder(x, y) {
+      clearSlotHighlights();
+      const slot = getSlotUnder(x, y);
+      if (slot && !slot.classList.contains('filled')) {
+        slot.classList.add('drag-over');
+      }
+    }
+
+    function clearSlotHighlights() {
+      document.querySelectorAll('.slot-card').forEach(s => s.classList.remove('drag-over'));
+    }
+
+    // --- 8. VALIDASI INSTAN & PENOLAKAN HURUF SALAH SEJAK AWAL ---
+    function handleDropOnSlot(letterItem, cardEl, targetSlotEl) {
+      const slotIndex = parseInt(targetSlotEl.dataset.slotIndex, 10);
+      const nextNeededIndex = getNextExpectedSlotIndex();
+
+      if (slotIndex !== nextNeededIndex) {
+        triggerInstantReject(cardEl, targetSlotEl, "Ayo isi kotak dari yang paling kiri dulu ya! 🌈");
+        return;
+      }
+
+      validateAndApplyLetter(letterItem, cardEl, nextNeededIndex, targetSlotEl);
+    }
+
+    function handleLetterSelection(letterItem, cardEl) {
+      if (isQuestionSolved) return;
+      const nextNeededIndex = getNextExpectedSlotIndex();
+
+      if (nextNeededIndex === -1) {
+        return;
+      }
+
+      const nextSlotEl = document.querySelectorAll('.slot-card')[nextNeededIndex];
+      validateAndApplyLetter(letterItem, cardEl, nextNeededIndex, nextSlotEl);
+    }
+
+    function validateAndApplyLetter(letterItem, cardEl, targetIndex, slotEl) {
+      const expectedChar = targetWord[targetIndex];
+
+      // === VALIDASI HURUF ===
+      if (letterItem.char === expectedChar) {
+        // ✅ HURUF BENAR: SFX Snap & Masukkan ke kotak jawaban
+        sound.snapLetter();
+        selectedSlots[targetIndex] = letterItem;
+        hideRejectBubble();
+
+        renderAnswerSlots();
+        renderLetterPool();
+
+        const isComplete = selectedSlots.every(s => s !== null);
+        if (isComplete) {
+          handleQuestionSuccess();
+        }
+      } else {
+        // ❌ HURUF SALAH: Tolak instan sejak awal (getar boing ramah anak, huruf membal kembali dan langsung bisa diklik lagi tanpa tombol ulangi)
+        triggerInstantReject(cardEl, slotEl, "Bukan huruf ini, coba cari huruf yang lain ya! 😊");
+      }
+    }
+
+    function triggerInstantReject(cardEl, slotEl, message) {
+      // SFX Tolak selalu berbunyi (meski BGM mati)
+      sound.rejectLetter();
+
+      if (cardEl) {
+        cardEl.classList.remove('bounce-back');
+        void cardEl.offsetWidth;
+        cardEl.classList.add('reject-animation');
+        setTimeout(() => {
+          cardEl.classList.remove('reject-animation');
+          animateBounceBack(cardEl);
+        }, 460);
+      }
+
+      if (slotEl) {
+        slotEl.classList.add('border-rose-400', 'bg-rose-50/70');
+        setTimeout(() => {
+          slotEl.classList.remove('border-rose-400', 'bg-rose-50/70');
+        }, 450);
+      }
+
+      showRejectBubble(message);
+    }
+
+    function animateBounceBack(cardEl) {
+      if (!cardEl) return;
+      cardEl.classList.add('bounce-back');
+      setTimeout(() => {
+        cardEl.classList.remove('bounce-back');
+      }, 360);
+    }
+
+    let rejectTimeout = null;
+    function showRejectBubble(text) {
+      const bubble = document.getElementById('rejectBubble');
+      const bubbleText = document.getElementById('rejectBubbleText');
+      if (bubble && bubbleText) {
+        bubbleText.textContent = text;
+        bubble.classList.remove('hidden', 'opacity-0', 'scale-95');
+        bubble.classList.add('opacity-100', 'scale-100');
+
+        if (rejectTimeout) clearTimeout(rejectTimeout);
+        rejectTimeout = setTimeout(() => {
+          hideRejectBubble();
+        }, 2200);
+      }
+    }
+
+    function hideRejectBubble() {
+      const bubble = document.getElementById('rejectBubble');
+      if (bubble) {
+        bubble.classList.add('opacity-0', 'scale-95');
+        setTimeout(() => {
+          bubble.classList.add('hidden');
+        }, 200);
+      }
+    }
+
+    // Membatalkan / Mengeluarkan huruf dari kotak jawaban
+    function removeLetterFromSlot(slotIdx) {
+      if (isQuestionSolved) return;
+      if (!selectedSlots[slotIdx]) return;
+
+      sound.click(); // SFX klik
+      selectedSlots[slotIdx] = null;
+      hideRejectBubble();
+
+      renderAnswerSlots();
+      renderLetterPool();
+    }
+
+    // --- 9. SUKSES PENYELESAIAN KATA (+10 Poin) ---
+    function handleQuestionSuccess() {
+      isQuestionSolved = true;
+      sound.success(); // SFX Sukses meriah
+
+      const currentLevelKey = currentLevel === 1 ? 'level1' : 'level2';
+      if (!answeredQuestions[currentLevelKey][currentQuestionIdx]) {
+        answeredQuestions[currentLevelKey][currentQuestionIdx] = true;
+        totalScore = Math.min(100, totalScore + 10);
+        updateScoreUI();
+      }
+
+      const container = document.getElementById('answerSlotsContainer');
+      container.classList.add('pulse-success');
+      triggerConfettiMini();
+
+      setTimeout(() => {
+        document.getElementById('modalSuccess').classList.remove('hidden');
+        setTimeout(() => {
+          document.getElementById('modalSuccess').classList.add('hidden');
+          container.classList.remove('pulse-success');
+          proceedNext();
+        }, 1300);
+      }, 350);
+    }
+
+    // --- 10. NAVIGASI SOAL & LEVEL ---
+    function proceedNext() {
+      if (currentQuestionIdx < 4) {
+        currentQuestionIdx++;
+        loadQuestion();
+      } else {
+        if (currentLevel === 1) {
+          showLevel1DoneModal();
+        } else {
+          showGameCompleteModal();
+        }
+      }
+    }
+
+    // Tombol Sebelumnya: hanya mundur jika masih di atas soal 1 level ini
+    function prevQuestion() {
+      if (currentQuestionIdx > 0) {
+        sound.click();
+        currentQuestionIdx--;
+        loadQuestion();
+      }
+    }
+
+    // Tombol Lewati: berputar kembali ke soal 1 jika sudah di soal ke-5
+    function skipQuestion() {
+      sound.click();
+      const currentQuestions = currentLevel === 1 ? gameData.level1 : gameData.level2;
+      currentQuestionIdx = (currentQuestionIdx + 1) % currentQuestions.length;
+      loadQuestion();
+    }
+
+    function resetCurrentQuestion() {
+      sound.click();
+      selectedSlots = new Array(targetWord.length).fill(null);
+      currentLetters.sort(() => Math.random() - 0.5);
+      hideRejectBubble();
+      renderAnswerSlots();
+      renderLetterPool();
+    }
+
+    // --- 11. MODAL MANAGEMENT ---
+    function showLevel1DoneModal() {
+      triggerConfettiFull();
+      const modal = document.getElementById('modalLevel1Done');
+      document.getElementById('interimScoreText').textContent = `${totalScore} / 50`;
+      modal.classList.remove('hidden');
+    }
+
+    function startLevel2() {
+      sound.click();
+      document.getElementById('modalLevel1Done').classList.add('hidden');
+      currentLevel = 2;
+      currentQuestionIdx = 0;
+      loadQuestion();
+    }
+
+    function showGameCompleteModal() {
+      triggerConfettiFull();
+      const modal = document.getElementById('modalGameComplete');
+      document.getElementById('finalScoreDisplay').textContent = `${totalScore} / 100`;
+
+      const ratingText = document.getElementById('finalRatingText');
+      if (totalScore >= 90) {
+        ratingText.textContent = "Luar biasa sempurna! Kamu juara kata cilik! 🌟🏆";
+      } else if (totalScore >= 60) {
+        ratingText.textContent = "Hebat sekali! Permainan yang sangat bagus! 🎉";
+      } else {
+        ratingText.textContent = "Bagus sekali sudah berusaha! Yuk coba lagi agar semakin mahir! 💪";
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function restartFullGame() {
+      sound.click();
+      document.getElementById('modalGameComplete').classList.add('hidden');
+      currentLevel = 1;
+      currentQuestionIdx = 0;
+      totalScore = 0;
+      answeredQuestions = {
+        level1: [false, false, false, false, false],
+        level2: [false, false, false, false, false]
+      };
+      loadQuestion();
+    }
+
+    // --- 12. UI HELPERS: DOTS & SCORE ---
+    function updateProgressDots() {
+      const container = document.getElementById('progressDotsContainer');
+      container.innerHTML = '';
+      for (let i = 0; i < 5; i++) {
+        const dot = document.createElement('div');
+        if (i < currentQuestionIdx) {
+          dot.className = "w-3.5 h-3.5 rounded-full bg-teal-500 transition-all";
+        } else if (i === currentQuestionIdx) {
+          dot.className = "w-3.5 h-3.5 rounded-full bg-teal-500 scale-125 ring-2 ring-teal-200 transition-all";
+        } else {
+          dot.className = "w-3.5 h-3.5 rounded-full bg-slate-200 transition-all";
+        }
+        container.appendChild(dot);
+      }
+    }
+
+    function updateScoreUI() {
+      document.getElementById('scoreDisplay').textContent = totalScore;
+    }
+
+    // --- 13. EFEK CONFETTI GEMBIRA ---
+    function triggerConfettiMini() {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 35,
+          spread: 55,
+          origin: { y: 0.6 },
+          colors: ['#f59e0b', '#10b981', '#3b82f6', '#ec4899']
+        });
+      }
+    }
+
+    function triggerConfettiFull() {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 110,
+          spread: 85,
+          origin: { y: 0.5 },
+          colors: ['#f59e0b', '#10b981', '#38bdf8', '#f43f5e', '#a855f7']
+        });
+      }
+    }
+
+    // Inisialisasi Game
+    document.addEventListener('DOMContentLoaded', init);
+</script>
+</body></html>

@@ -1,0 +1,531 @@
+<!DOCTYPE html><html lang="id" style><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Landing Page - Yuk, Bermain Sambil Belajar!</title>
+<!-- Google Fonts: Quicksand & Fredoka -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;family=Quicksand:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            fredoka: ['Fredoka', 'cursive', 'sans-serif'],
+            quicksand: ['Quicksand', 'sans-serif'],
+          },
+          colors: {
+            warmCream: '#fffbf0',
+            sunYellow: '#fdbd24',
+            sunYellowDark: '#f59e0b',
+            mintGreen: '#10b981',
+            mintBright: '#4ade80',
+            tealAccent: '#14b8a6',
+            kidsBlue: '#38bdf8',
+            pastelMint: '#5eead4',
+          },
+          boxShadow: {
+            'kid-card': '0 20px 35px -10px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)',
+          }
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: Custom Styles -->
+<style data-purpose="base-styling">
+    body {
+      font-family: 'Quicksand', sans-serif;
+      overflow-x: hidden;
+    }
+    .font-kids {
+      font-family: 'Fredoka', 'Quicksand', sans-serif;
+    }
+    
+    /* Floating animations for clouds & card */
+    @keyframes gentleFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(0.6deg); }
+    }
+    @keyframes cloudDriftSlow {
+      0%, 100% { transform: translateX(0px); }
+      50% { transform: translateX(24px); }
+    }
+    @keyframes sunSpinSlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .animate-gentle-float {
+      animation: gentleFloat 5s ease-in-out infinite;
+    }
+    .animate-cloud-slow {
+      animation: cloudDriftSlow 14s ease-in-out infinite;
+    }
+    .animate-sun-ray {
+      animation: sunSpinSlow 24s linear infinite;
+    }
+
+    /* Chunky Juicy 3D Button Style */
+    .btn-3d-play {
+      background: linear-gradient(180deg, #ffdf40 0%, #f59e0b 60%, #d97706 100%);
+      box-shadow: 0 10px 0 #b45309, 0 16px 25px rgba(180, 83, 9, 0.35), inset 0 3px 2px rgba(255, 255, 255, 0.8), inset 0 -3px 3px rgba(0, 0, 0, 0.15);
+      transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .btn-3d-play:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 13px 0 #b45309, 0 22px 30px rgba(180, 83, 9, 0.4), inset 0 3px 2px rgba(255, 255, 255, 0.9);
+    }
+    .btn-3d-play:active {
+      transform: translateY(6px) scale(0.98);
+      box-shadow: 0 4px 0 #b45309, 0 8px 12px rgba(180, 83, 9, 0.3), inset 0 2px 2px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+<!-- END: Custom Styles -->
+</head>
+<body class="min-h-screen w-full relative overflow-x-hidden flex flex-col justify-between bg-gradient-to-br from-[#e0f2fe] via-[#fef9c3] to-[#ccfbf1] text-slate-700 selection:bg-amber-200 m-0 p-0">
+<!-- BEGIN: Fullscreen Cheerful Sky Background Elements -->
+<div aria-hidden="true" class="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none">
+<!-- Smiling Sun in Top Right Corner -->
+<div class="absolute -top-12 -right-12 sm:-top-6 sm:-right-6 md:top-2 md:right-4 w-44 h-44 sm:w-60 sm:h-60 md:w-72 md:h-72">
+<!-- Sun Rays Rotating -->
+<div class="absolute inset-0 animate-sun-ray opacity-80">
+<svg class="w-full h-full text-amber-300/70 fill-current" viewBox="0 0 100 100">
+<polygon points="50,0 55,20 50,15 45,20"></polygon>
+<polygon points="50,100 55,80 50,85 45,80"></polygon>
+<polygon points="0,50 20,55 15,50 20,45"></polygon>
+<polygon points="100,50 80,55 85,50 80,45"></polygon>
+<polygon points="15,15 32,28 27,27 28,32"></polygon>
+<polygon points="85,85 68,72 73,73 72,68"></polygon>
+<polygon points="15,85 28,68 27,73 32,72"></polygon>
+<polygon points="85,15 72,32 73,27 68,28"></polygon>
+</svg>
+</div>
+<!-- Sun Face Body -->
+<div class="absolute inset-5 rounded-full bg-gradient-to-tr from-amber-400 via-amber-300 to-yellow-200 shadow-xl shadow-amber-300/40 flex items-center justify-center border-4 border-white/80">
+<span class="text-3xl sm:text-5xl select-none">😊</span>
+</div>
+</div>
+<!-- Soft Rainbow Arch (Top Left) -->
+<div class="absolute -top-16 -left-16 sm:-top-8 sm:-left-8 opacity-60 sm:opacity-85 pointer-events-none">
+<svg height="320" viewBox="0 0 120 120" width="320">
+<circle cx="20" cy="100" fill="none" opacity="0.45" r="80" stroke="#f43f5e" stroke-width="6"></circle>
+<circle cx="20" cy="100" fill="none" opacity="0.45" r="74" stroke="#fb923c" stroke-width="6"></circle>
+<circle cx="20" cy="100" fill="none" opacity="0.45" r="68" stroke="#facc15" stroke-width="6"></circle>
+<circle cx="20" cy="100" fill="none" opacity="0.45" r="62" stroke="#4ade80" stroke-width="6"></circle>
+<circle cx="20" cy="100" fill="none" opacity="0.45" r="56" stroke="#38bdf8" stroke-width="6"></circle>
+<circle cx="20" cy="100" fill="none" opacity="0.45" r="50" stroke="#a855f7" stroke-width="6"></circle>
+</svg>
+</div>
+<!-- Fluffy Floating Clouds -->
+<div class="absolute top-20 left-8 sm:left-40 animate-cloud-slow opacity-90">
+<svg class="drop-shadow-sm" fill="white" height="65" viewBox="0 0 110 60" width="120">
+<path d="M20 50 A 18 18 0 0 1 20 20 A 24 24 0 0 1 65 14 A 22 22 0 0 1 95 32 A 16 16 0 0 1 90 50 Z"></path>
+</svg>
+</div>
+<div class="absolute bottom-24 right-12 sm:right-36 animate-cloud-slow opacity-85" style="animation-delay: -5s;">
+<svg class="drop-shadow-sm" fill="white" height="75" viewBox="0 0 110 60" width="140">
+<path d="M20 50 A 18 18 0 0 1 20 20 A 24 24 0 0 1 65 14 A 22 22 0 0 1 95 32 A 16 16 0 0 1 90 50 Z"></path>
+</svg>
+</div>
+<div class="hidden md:block absolute top-1/2 left-4 animate-cloud-slow opacity-75" style="animation-delay: -3s;">
+<svg class="drop-shadow-sm" fill="white" height="55" viewBox="0 0 110 60" width="100">
+<path d="M20 50 A 18 18 0 0 1 20 20 A 24 24 0 0 1 65 14 A 22 22 0 0 1 95 32 A 16 16 0 0 1 90 50 Z"></path>
+</svg>
+</div>
+<div class="hidden lg:block absolute bottom-1/3 left-1/3 animate-cloud-slow opacity-60" style="animation-delay: -7s;">
+<svg class="drop-shadow-sm" fill="white" height="48" viewBox="0 0 110 60" width="90">
+<path d="M20 50 A 18 18 0 0 1 20 20 A 24 24 0 0 1 65 14 A 22 22 0 0 1 95 32 A 16 16 0 0 1 90 50 Z"></path>
+</svg>
+</div>
+<!-- Sparkly Tiny Stars in Sky -->
+<div class="absolute top-28 right-1/3 text-amber-400 text-2xl animate-pulse" style="animation-duration: 3s;">✨</div>
+<div class="absolute bottom-28 left-16 text-yellow-500 text-2xl animate-pulse" style="animation-duration: 4s;">⭐</div>
+<div class="absolute top-48 left-1/4 text-emerald-500 text-lg animate-pulse" style="animation-duration: 2.5s;">★</div>
+<div class="absolute bottom-1/2 right-16 text-sky-500 text-xl animate-pulse" style="animation-duration: 3.5s;">✨</div>
+<div class="absolute top-16 right-1/4 text-pink-400 text-base animate-pulse" style="animation-duration: 3.2s;">🌟</div>
+</div>
+<!-- END: Fullscreen Cheerful Sky Background Elements -->
+<!-- BEGIN: TopBar -->
+<header class="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 pt-4 sm:pt-6 pb-2 flex items-center justify-between z-20 relative">
+<!-- Brand Pill -->
+<div class="inline-flex items-center gap-2 bg-[#fbb01b] text-amber-950 font-bold px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-base tracking-wide shadow-sm hover:opacity-95 transition-transform cursor-pointer border border-amber-400/60" data-purpose="brand-pill" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.15rem;">
+<span class="inline-block w-4 h-4 rounded-full border-2 border-amber-900 flex items-center justify-center text-[10px] leading-none font-black">★</span>
+<span class="font-kids font-semibold">Taman Bermain Anak TK</span>
+</div>
+<!-- Quick Actions (Musik Interaktif) -->
+<div class="flex items-center gap-2.5">
+<button class="inline-flex items-center gap-1.5 hover:bg-[#0c9064] active:scale-95 transition text-white px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-sm bg-[#0fa976] border border-emerald-300/60 cursor-pointer" data-purpose="audio-toggle-btn" id="audioToggleBtn" title="Nyalakan / Matikan Musik Ceria" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.15rem;">
+<span id="audioIcon" class="">♪</span>
+<span id="audioText" class="">Musik Nyala</span>
+</button>
+</div>
+</header>
+<!-- END: TopBar -->
+<!-- BEGIN: MainContent Area -->
+<main class="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-8 lg:py-10 flex-1 flex items-center z-10 relative">
+<div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+<!-- Left Column: Content & Call To Action -->
+<div class="lg:col-span-6 flex flex-col items-center lg:items-start text-center lg:text-left gap-4 sm:gap-5" style="gap: clamp(1.25rem, 0.5rem + 1.8vw, 2rem);">
+<!-- Category Tag -->
+<div class="inline-flex items-center gap-2 bg-white/90 border border-slate-200/90 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold text-slate-700 shadow-sm backdrop-blur-sm" data-purpose="category-badge" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.25rem;">
+<span class="text-base">🌈</span>
+<span class="">Dunia Petualangan Seru Anak TK</span>
+</div>
+<!-- Headline -->
+<h1 class="font-kids text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-[1.18] font-bold text-slate-800 tracking-tight" style="font-size: clamp(2rem, 1rem + 4vw, 3.8rem); line-height: 1.2;">
+        Yuk, <span class="text-[#a46419]">Bermain</span> Sambil <br class="hidden sm:inline">
+<span class="text-[#207b99]">Belajar!</span>
+</h1>
+<!-- Subheading / Description -->
+<p class="text-sm sm:text-base font-medium text-slate-700 leading-relaxed max-w-lg" style="font-size: clamp(1rem, 0.5rem + 1.3vw, 1.35rem); line-height: 1.6;">
+        Ayo bermain, mencocokkan, menyusun, dan menemukan hal-hal seru bersama teman-teman baru! Ceria setiap hari! ✨
+      </p>
+<!-- Big Chunky 3D Play Button -->
+<div class="pt-3 sm:pt-4 w-full sm:w-auto flex justify-center lg:justify-start">
+<button class="btn-3d-play font-kids relative group inline-flex items-center justify-center gap-3 px-8 sm:px-11 py-4 sm:py-4 rounded-full text-lg sm:text-2xl font-bold text-amber-950 border-2 border-yellow-100 cursor-pointer min-h-[56px] w-full sm:w-auto" data-purpose="cta-play-game" id="btnPlayGame" style="font-size: clamp(1.125rem, 0.8rem + 1vw, 1.5rem); padding: clamp(1rem, 0.6rem + 1vw, 1.25rem) clamp(2rem, 1.2rem + 2vw, 3rem);">
+<!-- Top Gloss Highlight Overlay -->
+<span class="absolute top-1 left-4 right-4 h-3 bg-white/40 rounded-full blur-[0.5px] pointer-events-none"></span>
+<!-- Rounded Play Triangle Icon -->
+<span class="w-8 h-8 rounded-full bg-white text-amber-600 flex items-center justify-center text-sm sm:text-base font-black shadow-inner border border-amber-200 group-hover:scale-110 transition-transform shrink-0">
+            ▶
+          </span>
+<span class="tracking-wide text-amber-950 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">Mulai Bermain</span>
+<span class="text-amber-800 text-lg group-hover:rotate-12 transition-transform">⭐</span>
+</button>
+</div>
+</div>
+<!-- Right Column: Visual Card Showcase -->
+<div class="lg:col-span-6 flex flex-col items-center justify-center relative mt-2 lg:mt-0 w-full">
+<!-- Top Cloud Badge -->
+<div class="relative z-10 -mb-3 bg-white/95 backdrop-blur-sm border border-slate-100 px-4 py-1.5 rounded-full text-xs font-bold text-slate-600 shadow-sm flex items-center gap-1.5" data-purpose="card-bubble-tag" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.4rem 1.1rem;">
+<span class="">☁️</span>
+<span class="">Ceria &amp; Riang</span>
+</div>
+<!-- Photo Frame Card with Gentle Floating Hover Animation -->
+<div class="animate-gentle-float relative w-full max-w-md lg:max-w-lg bg-white rounded-3xl p-3 sm:p-4 shadow-kid-card border-[6px] border-white z-0 transition-transform duration-300 hover:scale-[1.02]" data-purpose="main-photo-frame">
+<!-- Children Photo Image -->
+<div class="w-full aspect-[16/10] overflow-hidden rounded-2xl bg-amber-50 shadow-inner">
+<img alt="Anak-anak TK bermain balok dan membaca buku bersama" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1XNl_aMsF5ifr6ci_sRXzeBVuYbHb1h4q6S6o6LF2ff4iFop_25atHcwvSNYpJqGD-9xcCL6VxqsVmdlhAdJrE9SDDmN-1ysvG_4Leuj_xGKV_4Z-mMVFAqUo-TZ6Ej3vcE4KpZ4I844-zB1Ca8wvnBdciDGmPBbDTlN378gHTIZV2LncW4LUdaAptgGSMgVU4lM-r0CT6cMkyrCUEpyMxhvraBHRB_EFamj2Bw3at8QQLODwDLvzq0SOY">
+</div>
+<!-- Star Icon Badge (Bottom Left of Card) -->
+<div class="absolute -bottom-3 -left-2 w-10 h-10 rounded-xl bg-[#fec83b] border-2 border-white shadow-md flex items-center justify-center text-amber-950 font-bold text-xl" data-purpose="star-badge">
+          ⭐
+        </div>
+</div>
+</div>
+</div>
+</main>
+<!-- END: MainContent Area -->
+<!-- BEGIN: BottomCreditsBar -->
+<footer class="w-full bg-white/70 backdrop-blur-md border-t border-white/60 px-4 sm:px-6 py-3.5 z-20 relative" data-purpose="credits-bar">
+<div class="max-w-7xl mx-auto flex items-center justify-center">
+<div class="inline-flex items-center gap-2 bg-white/90 border border-amber-200/90 px-4 sm:px-6 py-1.5 rounded-full shadow-sm hover:shadow transition-all group max-w-full" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.25rem;">
+<span class="text-amber-500 text-sm sm:text-base group-hover:scale-125 transition-transform shrink-0">💖</span>
+<p class="font-kids text-xs sm:text-sm font-semibold text-slate-700 tracking-wide text-center truncate sm:whitespace-normal">
+        Game ini dibuat oleh : <span class="text-indigo-600 font-bold underline decoration-amber-300 decoration-2">Cintya Eka Puspita Sari</span> <span class="text-amber-500">✨</span>
+</p>
+</div>
+</div>
+</footer>
+<!-- END: BottomCreditsBar -->
+<!-- BEGIN: Celebration Modal & Confetti Canvas -->
+<canvas class="fixed inset-0 pointer-events-none z-50" id="confettiCanvas" width="1280" height="699"></canvas>
+<!-- Modal Sambutan Ceria -->
+<div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-300 opacity-0 pointer-events-none" id="welcomeModal">
+<div class="bg-white rounded-[2rem] border-4 border-amber-300 shadow-2xl p-6 sm:p-8 max-w-sm w-full text-center transform transition-transform duration-300 relative overflow-hidden scale-90" id="modalCard">
+<!-- Top Rainbow Ribbon -->
+<div class="w-full h-3 bg-gradient-to-r from-pink-400 via-amber-300 via-teal-300 to-sky-400 absolute top-0 left-0"></div>
+<div class="text-5xl mb-3 mt-1">🎉</div>
+<h3 class="font-kids text-2xl sm:text-[26px] font-bold text-slate-800 leading-tight mb-2">
+      Selamat Datang!
+    </h3>
+<p class="text-slate-600 text-sm sm:text-base font-semibold mb-6">
+      Yuk kita mulai petualangannya bersama teman-teman! 🚀🌈
+    </p>
+<button class="font-kids w-full py-3.5 px-6 rounded-full text-base font-bold bg-gradient-to-r from-emerald-400 to-teal-500 hover:from-emerald-500 hover:to-teal-600 text-white shadow-lg active:scale-95 transition cursor-pointer border-2 border-white" id="closeModalBtn">
+      Ayo Mulai! ⭐
+    </button>
+
+</div>
+</div>
+<!-- END: Celebration Modal & Confetti Canvas -->
+<!-- BEGIN: InteractiveScripts (Web Audio Synth & Confetti) -->
+<script data-purpose="audio-and-confetti-handler">
+  document.addEventListener('DOMContentLoaded', () => {
+    /* ----------------------------------------------------
+       1. WEB AUDIO API SYNTHESIZER (Jingle & Melody)
+       ---------------------------------------------------- */
+    let audioCtx = null;
+    let isBgmPlaying = false;
+    let bgmInterval = null;
+    let noteIndex = 0;
+
+    // Cheerful pentatonic melody notes (Hz)
+    const melodyNotes = [
+      523.25, // C5
+      659.25, // E5
+      783.99, // G5
+      880.00, // A5
+      1046.50,// C6
+      880.00, // A5
+      783.99, // G5
+      659.25  // E5
+    ];
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContextClass();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    // Play a short sweet chime / note
+    function playNote(freq, type = 'sine', duration = 0.25, gainVal = 0.08) {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+        gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {
+        console.error('Audio play error:', e);
+      }
+    }
+
+    // Celebration Fanfare Jingle for "Mulai Bermain"
+    function playCelebrationFanfare() {
+      const fanfare = [
+        { f: 523.25, d: 0.15, wait: 0 },
+        { f: 659.25, d: 0.15, wait: 120 },
+        { f: 783.99, d: 0.15, wait: 240 },
+        { f: 1046.50, d: 0.45, wait: 380 }
+      ];
+      fanfare.forEach(item => {
+        setTimeout(() => {
+          playNote(item.f, 'triangle', item.d, 0.18);
+        }, item.wait);
+      });
+    }
+
+    // Background playful loop
+    function startBgm() {
+      if (bgmInterval) clearInterval(bgmInterval);
+      getAudioContext();
+      isBgmPlaying = true;
+      noteIndex = 0;
+      
+      // Play note every 280ms
+      bgmInterval = setInterval(() => {
+        const note = melodyNotes[noteIndex % melodyNotes.length];
+        playNote(note, 'sine', 0.22, 0.05);
+        noteIndex++;
+      }, 280);
+
+      updateBgmUi();
+    }
+
+    function stopBgm() {
+      if (bgmInterval) {
+        clearInterval(bgmInterval);
+        bgmInterval = null;
+      }
+      isBgmPlaying = false;
+      updateBgmUi();
+    }
+
+    function updateBgmUi() {
+      const audioBtn = document.getElementById('audioToggleBtn');
+      const audioIcon = document.getElementById('audioIcon');
+      const audioText = document.getElementById('audioText');
+
+      if (isBgmPlaying) {
+        audioIcon.textContent = '♪';
+        audioText.textContent = 'Musik Nyala';
+        audioBtn.className = 'inline-flex items-center gap-1.5 hover:bg-[#0c9064] active:scale-95 transition text-white px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-sm bg-[#0fa976] border border-emerald-300/60 cursor-pointer';
+      } else {
+        audioIcon.textContent = '✕';
+        audioText.textContent = 'Musik Mati';
+        audioBtn.className = 'inline-flex items-center gap-1.5 hover:bg-slate-500 active:scale-95 transition text-white px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-sm bg-slate-400 border border-slate-300 cursor-pointer';
+      }
+    }
+
+    const audioToggleBtn = document.getElementById('audioToggleBtn');
+    if (audioToggleBtn) {
+      audioToggleBtn.addEventListener('click', () => {
+        if (isBgmPlaying) {
+          stopBgm();
+        } else {
+          startBgm();
+        }
+      });
+    }
+
+    /* ----------------------------------------------------
+       2. CONFETTI BURST ANIMATION (HTML5 Canvas)
+       ---------------------------------------------------- */
+    const canvas = document.getElementById('confettiCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let confettiAnimationId = null;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const confettiColors = ['#f43f5e', '#fb923c', '#facc15', '#4ade80', '#38bdf8', '#a855f7', '#ec4899'];
+
+    function createConfettiBurst(originX, originY, count = 80) {
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = Math.random() * 12 + 5;
+        particles.push({
+          x: originX,
+          y: originY,
+          vx: Math.cos(angle) * velocity,
+          vy: Math.sin(angle) * velocity - 4,
+          size: Math.random() * 8 + 6,
+          color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+          rotation: Math.random() * 360,
+          rotationSpeed: Math.random() * 10 - 5,
+          opacity: 1,
+          decay: Math.random() * 0.015 + 0.01,
+          gravity: 0.35,
+          shape: Math.random() > 0.4 ? 'rect' : 'circle'
+        });
+      }
+
+      if (!confettiAnimationId) {
+        animateConfetti();
+      }
+    }
+
+    function animateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += p.gravity;
+        p.vx *= 0.98;
+        p.rotation += p.rotationSpeed;
+        p.opacity -= p.decay;
+
+        if (p.opacity <= 0 || p.y > canvas.height + 20) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.opacity);
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rotation * Math.PI) / 180);
+        ctx.fillStyle = p.color;
+
+        if (p.shape === 'rect') {
+          ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+        } else {
+          ctx.beginPath();
+          ctx.arc(0, 0, p.size / 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      if (particles.length > 0) {
+        confettiAnimationId = requestAnimationFrame(animateConfetti);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confettiAnimationId = null;
+      }
+    }
+
+    /* ----------------------------------------------------
+       3. "MULAI BERMAIN" BUTTON EVENT & MODAL
+       ---------------------------------------------------- */
+    const btnPlayGame = document.getElementById('btnPlayGame');
+    const welcomeModal = document.getElementById('welcomeModal');
+    const modalCard = document.getElementById('modalCard');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+
+    function openModal() {
+      welcomeModal.classList.remove('opacity-0', 'pointer-events-none');
+      welcomeModal.classList.add('opacity-100', 'pointer-events-auto');
+      modalCard.classList.remove('scale-90');
+      modalCard.classList.add('scale-100');
+    }
+
+    function closeModal() {
+      welcomeModal.classList.add('opacity-0', 'pointer-events-none');
+      welcomeModal.classList.remove('opacity-100', 'pointer-events-auto');
+      modalCard.classList.remove('scale-100');
+      modalCard.classList.add('scale-90');
+    }
+
+    if (btnPlayGame) {
+      btnPlayGame.addEventListener('click', (e) => {
+        const rect = btnPlayGame.getBoundingClientRect();
+        const burstX = rect.left + rect.width / 2;
+        const burstY = rect.top + rect.height / 2;
+
+        // Trigger confetti explosion
+        createConfettiBurst(burstX, burstY, 90);
+        
+        // Play celebratory chime
+        playCelebrationFanfare();
+
+        // Also if music wasn't started, activate playful background audio on first play action
+        if (!isBgmPlaying) {
+          setTimeout(() => {
+            startBgm();
+          }, 600);
+        }
+
+        // Show welcome celebratory modal
+        setTimeout(() => {
+          openModal();
+        }, 250);
+      });
+    }
+
+        if (closeModalBtn) {
+      closeModalBtn.addEventListener('click', () => {
+        closeModal();
+        
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 300);
+      });
+    }
+
+    if (welcomeModal) {
+      welcomeModal.addEventListener('click', (e) => {
+        if (e.target === welcomeModal) closeModal();
+      });
+    }
+    });
+</script>
+<!-- END: InteractiveScripts -->
+
+
+
+ 
+</body></html>
