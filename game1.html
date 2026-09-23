@@ -80,6 +80,12 @@
       width: 100%;
       height: 100%;
       z-index: 50;
+      
+    .anchor-dot {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
     }
   </style>
 <meta content="web_standard" name="shell-type"/></head>
@@ -683,21 +689,44 @@
     });
 
     window.addEventListener('pointerup', (e) => {
-      if (!activeStartDot) return;
+  if (!activeStartDot) return;
 
-      const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
-      const targetDot = elemBelow ? elemBelow.closest('.anchor-dot') : null;
+  // Cari titik tujuan berdasarkan posisi jari/mouse
+  const dots = workspace.querySelectorAll('.anchor-dot');
+  let targetDot = null;
+  let closestDistance = Infinity;
 
-      if (targetDot && targetDot !== activeStartDot.dot && !targetDot.classList.contains('is-locked')) {
-        handleConnectionAttempt(activeStartDot, {
-          dot: targetDot,
-          id: targetDot.dataset.id,
-          side: targetDot.dataset.anchor
-        });
-      }
+  dots.forEach(dot => {
+    if (dot === activeStartDot.dot) return;
+    if (dot.classList.contains('is-locked')) return;
 
-      clearActiveState();
+    const rect = dot.getBoundingClientRect();
+
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const distance = Math.sqrt(
+      Math.pow(e.clientX - centerX, 2) +
+      Math.pow(e.clientY - centerY, 2)
+    );
+
+    // Area sentuh diperbesar agar lebih mudah di HP
+    if (distance <= 45 && distance < closestDistance) {
+      closestDistance = distance;
+      targetDot = dot;
+    }
+  });
+
+  if (targetDot) {
+    handleConnectionAttempt(activeStartDot, {
+      dot: targetDot,
+      id: targetDot.dataset.id,
+      side: targetDot.dataset.anchor
     });
+  }
+
+  clearActiveState();
+});
 
     function clearActiveState() {
       if (activeStartDot && activeStartDot.dot) {
