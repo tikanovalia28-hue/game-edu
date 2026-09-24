@@ -86,14 +86,18 @@
 </div>
 <!-- END: Fullscreen Cheerful Sky Background Elements -->
 <!-- BEGIN: TopBar -->
-<header class="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 pt-4 sm:pt-6 pb-2 flex items-center justify-between z-20 relative">
+<header class="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 pt-4 sm:pt-6 pb-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 z-20 relative">
 <!-- Brand Pill -->
 <div class="inline-flex items-center gap-2 bg-[#fbb01b] text-amber-950 font-bold px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-base tracking-wide shadow-sm hover:opacity-95 transition-transform cursor-pointer border border-amber-400/60" data-purpose="brand-pill" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.15rem;">
 <span class="inline-block w-4 h-4 rounded-full border-2 border-amber-900 flex items-center justify-center text-[10px] leading-none font-black">★</span>
 <span class="font-kids font-semibold">Taman Bermain Anak TK</span>
 </div>
 <!-- Quick Actions (Musik Interaktif) -->
-<div class="flex items-center gap-2.5">
+<div class="flex items-center gap-2.5 self-end sm:self-auto">
+<a href="index.html" class="inline-flex items-center gap-1.5 hover:bg-sky-100 active:scale-95 transition text-sky-800 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-sm bg-white border border-sky-200 cursor-pointer order-2" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.15rem;" title="Kembali ke Home">
+<span>🏠</span>
+<span>Kembali</span>
+</a>
 <button class="inline-flex items-center gap-1.5 hover:bg-[#0c9064] active:scale-95 transition text-white px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-sm bg-[#0fa976] border border-emerald-300/60 cursor-pointer" data-purpose="audio-toggle-btn" id="audioToggleBtn" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.15rem;" title="Nyalakan / Matikan Musik Ceria">
 <span class="" id="audioIcon">♪</span>
 <span class="" id="audioText">Musik Nyala</span>
