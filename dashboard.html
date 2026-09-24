@@ -22,7 +22,16 @@
         }
       }
     }
-  }catch(_e){}</script><meta content="web_standard" name="shell-type"><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script></head><body class="min-h-screen w-full relative overflow-x-hidden flex flex-col justify-between bg-gradient-to-br from-[#e0f2fe] via-[#fef9c3] to-[#ccfbf1] text-slate-700 selection:bg-amber-200 m-0 p-0">
+  }catch(_e){}</script><meta content="web_standard" name="shell-type"><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><style id="dashboard-mobile-header-fix">
+@media (max-width: 640px) {
+  header { min-width: 0; }
+  header [data-purpose="brand-pill"] { max-width: 44%; min-width: 0; }
+  header [data-purpose="brand-pill"] span:last-child { overflow: hidden; text-overflow: ellipsis; }
+  header [data-purpose="audio-toggle-btn"], header a[href="index.html"] { white-space: nowrap; }
+  header [data-purpose="audio-toggle-btn"] span:last-child, header a[href="index.html"] span:last-child { display: inline; }
+}
+</style>
+</head><body class="min-h-screen w-full relative overflow-x-hidden flex flex-col justify-between bg-gradient-to-br from-[#e0f2fe] via-[#fef9c3] to-[#ccfbf1] text-slate-700 selection:bg-amber-200 m-0 p-0">
 <!-- BEGIN: Fullscreen Cheerful Sky Background Elements -->
 <div aria-hidden="true" class="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none">
 <!-- Smiling Sun in Top Right Corner -->
@@ -88,17 +97,17 @@
 <!-- BEGIN: TopBar -->
 <header class="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 pt-4 sm:pt-6 pb-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 z-20 relative">
 <!-- Brand Pill -->
-<div class="inline-flex items-center gap-2 bg-[#fbb01b] text-amber-950 font-bold px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-base tracking-wide shadow-sm hover:opacity-95 transition-transform cursor-pointer border border-amber-400/60" data-purpose="brand-pill" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.15rem;">
+<div class="inline-flex items-center gap-1.5 sm:gap-2 bg-[#fbb01b] text-amber-950 font-bold px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-base tracking-wide shadow-sm hover:opacity-95 transition-transform cursor-pointer border border-amber-400/60 min-w-0 shrink" data-purpose="brand-pill" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.15rem;">
 <span class="inline-block w-4 h-4 rounded-full border-2 border-amber-900 flex items-center justify-center text-[10px] leading-none font-black">★</span>
-<span class="font-kids font-semibold">Taman Bermain Anak TK</span>
+<span class="font-kids font-semibold whitespace-nowrap truncate">Taman Bermain Anak TK</span>
 </div>
 <!-- Quick Actions (Musik Interaktif) -->
-<div class="flex items-center gap-2.5 self-end sm:self-auto">
-<a href="index.html" class="inline-flex items-center gap-1.5 hover:bg-sky-100 active:scale-95 transition text-sky-800 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-sm bg-white border border-sky-200 cursor-pointer order-2" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.15rem;" title="Kembali ke Home">
+<div class="flex items-center justify-end gap-1.5 sm:gap-2.5 shrink-0 ml-auto">
+<a href="index.html" class="inline-flex items-center gap-1 hover:bg-sky-100 active:scale-95 transition text-sky-800 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-sm bg-white border border-sky-200 cursor-pointer order-2 shrink-0" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.15rem;" title="Kembali ke Home">
 <span>🏠</span>
 <span>Kembali</span>
 </a>
-<button class="inline-flex items-center gap-1.5 hover:bg-[#0c9064] active:scale-95 transition text-white px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-sm bg-[#0fa976] border border-emerald-300/60 cursor-pointer" data-purpose="audio-toggle-btn" id="audioToggleBtn" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.15rem;" title="Nyalakan / Matikan Musik Ceria">
+<button class="inline-flex items-center gap-1 hover:bg-[#0c9064] active:scale-95 transition text-white px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-sm bg-[#0fa976] border border-emerald-300/60 cursor-pointer shrink-0" data-purpose="audio-toggle-btn" id="audioToggleBtn" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.15rem;" title="Nyalakan / Matikan Musik Ceria">
 <span class="" id="audioIcon">♪</span>
 <span class="" id="audioText">Musik Nyala</span>
 </button>
