@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Admin - Taman Bermain Anak TK</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body{font-family:'Quicksand',sans-serif;}
+    .font-kids{font-family:'Fredoka','Quicksand',sans-serif;}
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-sky-100 via-yellow-50 to-teal-100 flex items-center justify-center p-5">
+  <div class="fixed inset-0 pointer-events-none overflow-hidden">
+    <div class="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-yellow-300/50"></div>
+    <div class="absolute -bottom-16 -left-10 w-56 h-56 rounded-full bg-pink-200/50"></div>
+    <div class="absolute top-20 left-12 text-4xl">☁️</div>
+    <div class="absolute bottom-20 right-12 text-4xl">✨</div>
+  </div>
+
+  <main class="relative w-full max-w-md">
+    <div class="bg-white/95 backdrop-blur rounded-[2rem] shadow-2xl border-4 border-white p-6 sm:p-8">
+      <div class="text-center mb-7">
+        <div class="mx-auto w-16 h-16 rounded-2xl bg-indigo-100 flex items-center justify-center text-3xl shadow-sm">🔐</div>
+        <h1 class="font-kids text-3xl font-bold text-slate-800 mt-4">Masuk Admin</h1>
+        <p class="text-sm font-semibold text-slate-500 mt-1">Taman Bermain Anak TK</p>
+      </div>
+
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label for="email" class="block text-sm font-bold text-slate-700 mb-1.5">Email Admin</label>
+          <input id="email" type="email" autocomplete="username" required placeholder="admin@tamantk.com" class="w-full px-4 py-3 rounded-2xl border-2 border-sky-100 bg-sky-50/50 outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 font-semibold text-slate-700">
+        </div>
+        <div>
+          <label for="password" class="block text-sm font-bold text-slate-700 mb-1.5">Password</label>
+          <input id="password" type="password" autocomplete="current-password" required placeholder="Masukkan password" class="w-full px-4 py-3 rounded-2xl border-2 border-sky-100 bg-sky-50/50 outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 font-semibold text-slate-700">
+        </div>
+
+        <p id="loginError" class="hidden rounded-xl bg-rose-50 border border-rose-200 text-rose-600 px-4 py-3 text-sm font-semibold"></p>
+
+        <button id="loginButton" type="submit" class="w-full py-3.5 rounded-full bg-gradient-to-r from-indigo-500 to-sky-500 text-white font-kids text-lg font-bold shadow-lg hover:from-indigo-600 hover:to-sky-600 active:scale-[0.98] transition">
+          Masuk ke Dashboard Admin 🔑
+        </button>
+      </form>
+
+      <a href="index.html" class="block text-center mt-5 text-sm font-bold text-slate-500 hover:text-indigo-600">← Kembali ke halaman utama</a>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpNQloPwRRwSCDf2K6wMrwRc4W9dV8TXU",
+      authDomain: "gameedukasi-f7c5a.firebaseapp.com",
+      projectId: "gameedukasi-f7c5a",
+      storageBucket: "gameedukasi-f7c5a.firebasestorage.app",
+      messagingSenderId: "342308052786",
+      appId: "1:342308052786:web:d8f63eac16d94d00c1012b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const form = document.getElementById('loginForm');
+    const button = document.getElementById('loginButton');
+    const errorBox = document.getElementById('loginError');
+
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.classList.remove('hidden');
+    }
+
+    // Jika admin sudah login dan UID-nya terdaftar sebagai admin, langsung masuk.
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) return;
+      try {
+        const snap = await getDoc(doc(db, 'admins', user.uid));
+        if (snap.exists() && snap.data().isAdmin === true) {
+          window.location.replace('admin.html');
+        } else {
+          await signOut(auth);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      errorBox.classList.add('hidden');
+      button.disabled = true;
+      button.textContent = 'Memeriksa akun...';
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      try {
+        const credential = await signInWithEmailAndPassword(auth, email, password);
+        const adminSnap = await getDoc(doc(db, 'admins', credential.user.uid));
+
+        if (!adminSnap.exists() || adminSnap.data().isAdmin !== true) {
+          await signOut(auth);
+          showError('Akun ini bukan akun Admin.');
+          return;
+        }
+
+        window.location.href = 'admin.html';
+      } catch (error) {
+        console.error('Login admin gagal:', error);
+        if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+          showError('Email atau password salah.');
+        } else if (error.code === 'auth/too-many-requests') {
+          showError('Terlalu banyak percobaan. Coba lagi beberapa saat.');
+        } else {
+          showError('Login gagal. Pastikan akun Admin sudah dibuat di Firebase.');
+        }
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Masuk ke Dashboard Admin 🔑';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -344,8 +344,28 @@
 </div>
 <!-- SCRIPT LOGIKA GAME 2 TERPADU: AUTO-START BGM, SFX INDEPENDEN, SAYUR HIJAU -->
 <script>
-    // --- 1. DATA SOAL RESMI ---
+    // --- DATA PEMAIN & GAME YANG SEDANG DIMAINKAN ---
+    const gameSession = JSON.parse(localStorage.getItem('currentGameSession') || '{}');
+
+    const playerName = gameSession.playerName || localStorage.getItem('playerName') || 'Teman';
+    const selectedGame = 'Menyusun Huruf';
+    
+    const gameStartedAt = new Date().toISOString();
+
+    gameSession.startedAt = gameStartedAt;
+
+    localStorage.setItem(
+      'currentGameSession',
+      JSON.stringify(gameSession)
+    );
+
+    console.log('Nama pemain:', playerName);
+    console.log('Game yang dipilih:', selectedGame);
+    console.log('Waktu mulai:', gameStartedAt);
+
     // Di Level 1 Soal 4: Sayur Hijau Segar & Lucu (Bayam / Sayur Hijau Mangkok Segar Ceria)
+    
+    // --- 1. DATA SOAL RESMI ---
     const gameData = {
       level1: [
         {
@@ -755,6 +775,39 @@
     window.addEventListener('click', attemptAutoPlayMusic, { once: true });
     window.addEventListener('touchstart', attemptAutoPlayMusic, { once: true });
     window.addEventListener('keydown', attemptAutoPlayMusic, { once: true });
+
+    // Data waktu selesai dan durasi
+  function saveGameCompletion() {
+  const finishedAt = new Date().toISOString();
+
+  const session = JSON.parse(
+    localStorage.getItem('currentGameSession') || '{}'
+  );
+
+  session.finishedAt = finishedAt;
+
+  if (session.startedAt) {
+    const startTime = new Date(session.startedAt).getTime();
+    const endTime = new Date(finishedAt).getTime();
+
+    session.duration = endTime - startTime;
+  }
+
+    session.score = totalScore;
+
+  localStorage.setItem(
+    'currentGameSession',
+    JSON.stringify(session)
+  );
+
+  console.log('Waktu selesai:', finishedAt);
+  console.log('Durasi (ms):', session.duration);
+  console.log('Skor:', session.score);
+
+  if (window.saveGameToFirebase) {
+    window.saveGameToFirebase(session);
+  }
+}
 
     // --- 3. STATE GAME SUSUN KATA ---
     let currentLevel = 1;
@@ -1235,6 +1288,7 @@
 
     function showGameCompleteModal() {
       triggerConfettiFull();
+      saveGameCompletion();
       const modal = document.getElementById('modalGameComplete');
       document.getElementById('finalScoreDisplay').textContent = `${totalScore} / 100`;
 
@@ -1309,5 +1363,45 @@
 
     // Inisialisasi Game
     document.addEventListener('DOMContentLoaded', init);
+</script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    addDoc
+  } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBpNQloPwRRwSCDf2K6wMrwRc4W9dV8TXU",
+    authDomain: "gameedukasi-f7c5a.firebaseapp.com",
+    projectId: "gameedukasi-f7c5a",
+    storageBucket: "gameedukasi-f7c5a.firebasestorage.app",
+    messagingSenderId: "342308052786",
+    appId: "1:342308052786:web:d8f63eac16d94d00c1012b"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+   window.saveGameToFirebase = async function (session) {
+    try {
+      console.log("DATA YANG DIKIRIM KE FIREBASE:", session);
+      await addDoc(collection(db, "gameResults"), {
+        playerName: session.playerName || "Teman",
+        gameName: session.gameName || "Mencari Jejak",
+        startedAt: session.startedAt || null,
+        finishedAt: session.finishedAt || null,
+        duration: session.duration || 0,
+        score: session.score || 0
+      });
+
+      console.log("Data permainan berhasil disimpan ke Firebase!");
+    } catch (error) {
+      console.error("Gagal menyimpan ke Firebase:", error);
+    }
+  };
+
+  console.log("Firebase berhasil terhubung!");
 </script>
 </body></html>

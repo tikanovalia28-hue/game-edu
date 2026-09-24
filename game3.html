@@ -771,13 +771,10 @@
 <!-- Action Buttons: Reset & Kembali -->
 <div class="flex flex-col sm:flex-row items-center gap-3 w-full mt-2 font-rubik">
 <button class="w-full sm:flex-1 py-3 bg-amber-100 hover:bg-amber-200 border border-amber-300 text-amber-900 font-bold rounded-2xl shadow transition-all active:scale-95 flex items-center justify-center gap-1.5 btn-bouncy" onclick="restartEntireGame()">
-<span class="material-symbols-outlined">restart_alt</span>
 <span class="">🔄 MULAI ULANG</span>
 </button>
 <a class="w-full sm:flex-1 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 hover:brightness-105 text-white font-bold rounded-2xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-1.5 btn-bouncy" href="dashboard.html">
-<span class="material-symbols-outlined">home</span>
-<span class="">🏠 
-    KEMBALI</span>
+<span class="">🏠 KEMBALI</span>
 </a>
 </div>
 </div>
@@ -786,6 +783,57 @@
      SCRIPTS & GAME ENGINE
      ========================================== -->
 <script>
+    // --- DATA PEMAIN & GAME YANG SEDANG DIMAINKAN ---
+    const gameSession = JSON.parse(localStorage.getItem('currentGameSession') || '{}');
+
+    const playerName = gameSession.playerName || localStorage.getItem('playerName') || 'Teman';
+    const selectedGame = 'Mencari Jejak';
+
+    const gameStartedAt = new Date().toISOString();
+
+    gameSession.startedAt = gameStartedAt;
+
+    localStorage.setItem(
+      'currentGameSession',
+      JSON.stringify(gameSession)
+    );
+
+    console.log('Nama pemain:', playerName);
+    console.log('Game yang dipilih:', selectedGame);
+    console.log('Waktu mulai:', gameStartedAt);
+
+    // --- DATA WAKTU SELESAI DAN DURASI ---
+  function saveGameCompletion() {
+  const finishedAt = new Date().toISOString();
+
+  const session = JSON.parse(
+    localStorage.getItem('currentGameSession') || '{}'
+  );
+
+  session.finishedAt = finishedAt;
+
+  if (session.startedAt) {
+    const startTime = new Date(session.startedAt).getTime();
+    const endTime = new Date(finishedAt).getTime();
+
+    session.duration = endTime - startTime;
+  }
+
+  session.score = STATE.score;
+
+  localStorage.setItem(
+    'currentGameSession',
+    JSON.stringify(session)
+  );
+
+  console.log('Waktu selesai:', finishedAt);
+  console.log('Durasi (ms):', session.duration);
+  console.log('Skor:', session.score);
+
+if (window.saveGameToFirebase) {
+  window.saveGameToFirebase(session);
+}
+}
     /* ==========================================================================
        1. SOUND SYNTHESIZER
        ========================================================================== */
@@ -1958,6 +2006,7 @@
           setTimeout(() => {
             STATE.score = 100;
             updateHeaderAndStatusBar();
+            saveGameCompletion();
             triggerGrandVictory();
             STATE.isBusy = false;
           }, 600);
@@ -1991,7 +2040,7 @@
     function goToNextLevel() {
       if (STATE.level < 3) {
         goToLevel(STATE.level + 1);
-      }
+      } 
     }
 
     function proceedToNextLevel() {
@@ -2030,6 +2079,44 @@
       } catch(e) {}
     });
   </script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    addDoc
+  } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyBpNQloPwRRwSCDf2K6wMrwRc4W9dV8TXU",
+    authDomain: "gameedukasi-f7c5a.firebaseapp.com",
+    projectId: "gameedukasi-f7c5a",
+    storageBucket: "gameedukasi-f7c5a.firebasestorage.app",
+    messagingSenderId: "342308052786",
+    appId: "1:342308052786:web:d8f63eac16d94d00c1012b"
+  };
 
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+   window.saveGameToFirebase = async function (session) {
+    try {
+      console.log("DATA YANG DIKIRIM KE FIREBASE:", session);
+      await addDoc(collection(db, "gameResults"), {
+        playerName: session.playerName || "Teman",
+        gameName: session.gameName || "Mencari Jejak",
+        startedAt: session.startedAt || null,
+        finishedAt: session.finishedAt || null,
+        duration: session.duration || 0,
+        score: session.score || 0
+      });
+
+      console.log("Data permainan berhasil disimpan ke Firebase!");
+    } catch (error) {
+      console.error("Gagal menyimpan ke Firebase:", error);
+    }
+  };
+
+  console.log("Firebase berhasil terhubung!");
+</script>
 </body></html>

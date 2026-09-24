@@ -147,74 +147,158 @@
 </div>
 <!-- END: Fullscreen Cheerful Sky Background Elements -->
 <!-- BEGIN: TopBar -->
-<header class="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 pt-4 sm:pt-6 pb-2 flex items-center justify-between z-20 relative">
+<header class="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 pt-4 sm:pt-6 pb-2 min-h-[112px] sm:min-h-0 flex items-start sm:items-center justify-between z-20 relative">
 <!-- Brand Pill -->
 <div class="inline-flex items-center gap-2 bg-[#fbb01b] text-amber-950 font-bold px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-base tracking-wide shadow-sm hover:opacity-95 transition-transform cursor-pointer border border-amber-400/60" data-purpose="brand-pill" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.15rem;">
 <span class="inline-block w-4 h-4 rounded-full border-2 border-amber-900 flex items-center justify-center text-[10px] leading-none font-black">★</span>
 <span class="font-kids font-semibold">Taman Bermain Anak TK</span>
 </div>
-<!-- Quick Actions (Musik Interaktif) -->
-<div class="flex items-center gap-2.5">
-<button class="inline-flex items-center gap-1.5 hover:bg-[#0c9064] active:scale-95 transition text-white px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-sm bg-[#0fa976] border border-emerald-300/60 cursor-pointer" data-purpose="audio-toggle-btn" id="audioToggleBtn" title="Nyalakan / Matikan Musik Ceria" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.15rem;">
-<span id="audioIcon" class="">♪</span>
-<span id="audioText" class="">Musik Nyala</span>
-</button>
+<!-- Quick Actions: tetap dekat, tetapi ditumpuk rapi di HP -->
+<div class="absolute top-4 right-4 sm:top-6 sm:right-8 lg:right-12 flex flex-col sm:flex-row items-end sm:items-center gap-2 sm:gap-2.5">
+  <a href="loginAdmin.html"
+     class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap hover:bg-indigo-600 active:scale-95 transition text-white rounded-full font-semibold shadow-sm bg-indigo-500 border border-indigo-300/60 cursor-pointer px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm"
+     title="Masuk sebagai Admin">
+    <span>🔐</span>
+    <span>Masuk Admin</span>
+  </a>
+  <button class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap hover:bg-[#0c9064] active:scale-95 transition text-white rounded-full font-semibold shadow-sm bg-[#0fa976] border border-emerald-300/60 cursor-pointer px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm" data-purpose="audio-toggle-btn" id="audioToggleBtn" title="Nyalakan / Matikan Musik Ceria">
+    <span id="audioIcon" class="">♪</span>
+    <span id="audioText" class="">Musik Nyala</span>
+  </button>
 </div>
 </header>
 <!-- END: TopBar -->
 <!-- BEGIN: MainContent Area -->
 <main class="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-8 lg:py-10 flex-1 flex items-center z-10 relative">
-<div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-<!-- Left Column: Content & Call To Action -->
-<div class="lg:col-span-6 flex flex-col items-center lg:items-start text-center lg:text-left gap-4 sm:gap-5" style="gap: clamp(1.25rem, 0.5rem + 1.8vw, 2rem);">
-<!-- Category Tag -->
-<div class="inline-flex items-center gap-2 bg-white/90 border border-slate-200/90 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold text-slate-700 shadow-sm backdrop-blur-sm" data-purpose="category-badge" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.5rem 1.25rem;">
-<span class="text-base">🌈</span>
-<span class="">Dunia Petualangan Seru Anak TK</span>
-</div>
-<!-- Headline -->
-<h1 class="font-kids text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-[1.18] font-bold text-slate-800 tracking-tight" style="font-size: clamp(2rem, 1rem + 4vw, 3.8rem); line-height: 1.2;">
-        Yuk, <span class="text-[#a46419]">Bermain</span> Sambil <br class="hidden sm:inline">
-<span class="text-[#207b99]">Belajar!</span>
-</h1>
-<!-- Subheading / Description -->
-<p class="text-sm sm:text-base font-medium text-slate-700 leading-relaxed max-w-lg" style="font-size: clamp(1rem, 0.5rem + 1.3vw, 1.35rem); line-height: 1.6;">
+
+  <div class="w-full grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-10 lg:gap-14 xl:gap-20 items-center">
+
+    <!-- LEFT COLUMN -->
+    <div class="w-full flex flex-col items-center lg:items-start text-center lg:text-left gap-4 sm:gap-5 order-2 lg:order-1">
+      
+      <!-- Headline -->
+      <h1
+        class="font-kids font-bold text-slate-800 tracking-tight w-full max-w-2xl"
+        style="font-size: clamp(2.2rem, 1.4rem + 3.5vw, 4rem); line-height: 1.12;"
+      >
+        Yuk, <span class="text-[#a46419]">Bermain</span> Sambil
+        <span class="text-[#207b99]">Belajar!</span>
+      </h1>
+
+      <!-- Subheading / Description -->
+      <p
+        class="w-full max-w-xl text-sm sm:text-base font-medium text-slate-700 leading-relaxed"
+        style="font-size: clamp(1rem, 0.7rem + 0.8vw, 1.25rem); line-height: 1.6;"
+      >
         Ayo bermain, mencocokkan, menyusun, dan menemukan hal-hal seru bersama teman-teman baru! Ceria setiap hari! ✨
       </p>
-<!-- Big Chunky 3D Play Button -->
-<div class="pt-3 sm:pt-4 w-full sm:w-auto flex justify-center lg:justify-start">
-<button class="btn-3d-play font-kids relative group inline-flex items-center justify-center gap-3 px-8 sm:px-11 py-4 sm:py-4 rounded-full text-lg sm:text-2xl font-bold text-amber-950 border-2 border-yellow-100 cursor-pointer min-h-[56px] w-full sm:w-auto" data-purpose="cta-play-game" id="btnPlayGame" style="font-size: clamp(1.125rem, 0.8rem + 1vw, 1.5rem); padding: clamp(1rem, 0.6rem + 1vw, 1.25rem) clamp(2rem, 1.2rem + 2vw, 3rem);">
-<!-- Top Gloss Highlight Overlay -->
-<span class="absolute top-1 left-4 right-4 h-3 bg-white/40 rounded-full blur-[0.5px] pointer-events-none"></span>
-<!-- Rounded Play Triangle Icon -->
-<span class="w-8 h-8 rounded-full bg-white text-amber-600 flex items-center justify-center text-sm sm:text-base font-black shadow-inner border border-amber-200 group-hover:scale-110 transition-transform shrink-0">
+
+      <!-- Name Input -->
+      <div class="w-full max-w-md">
+
+        <label
+          for="playerName"
+          class="block font-kids text-base sm:text-lg font-bold text-slate-700 mb-2"
+        >
+          👋 Masukkan nama kamu
+        </label>
+
+        <input
+          type="text"
+          id="playerName"
+          placeholder="Tulis nama kamu di sini..."
+          maxlength="30"
+          class="w-full px-5 py-3.5 rounded-2xl bg-white/95 border-2 border-sky-200 shadow-sm outline-none text-slate-700 font-semibold text-base sm:text-lg focus:border-sky-400 focus:ring-4 focus:ring-sky-100 transition"
+        >
+
+        <p
+          id="nameError"
+          class="hidden text-red-500 text-sm font-semibold mt-2"
+        >
+          Yuk, isi nama dulu 😊
+        </p>
+
+      </div>
+
+      <!-- Big Chunky 3D Play Button -->
+      <div class="w-full max-w-md flex justify-center lg:justify-start pt-1 sm:pt-2">
+
+        <button
+          class="btn-3d-play font-kids relative group inline-flex items-center justify-center gap-3 rounded-full text-lg sm:text-2xl font-bold text-amber-950 border-2 border-yellow-100 cursor-pointer min-h-[56px] w-full"
+          data-purpose="cta-play-game"
+          id="btnPlayGame"
+          style="font-size: clamp(1.125rem, 0.8rem + 1vw, 1.5rem); padding: clamp(1rem, 0.6rem + 1vw, 1.25rem) clamp(2rem, 1.2rem + 2vw, 3rem);"
+        >
+
+          <!-- Top Gloss Highlight -->
+          <span class="absolute top-1 left-4 right-4 h-3 bg-white/40 rounded-full blur-[0.5px] pointer-events-none"></span>
+
+          <!-- Play Icon -->
+          <span class="w-8 h-8 rounded-full bg-white text-amber-600 flex items-center justify-center text-sm sm:text-base font-black shadow-inner border border-amber-200 group-hover:scale-110 transition-transform shrink-0">
             ▶
           </span>
-<span class="tracking-wide text-amber-950 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">Mulai Bermain</span>
-<span class="text-amber-800 text-lg group-hover:rotate-12 transition-transform">⭐</span>
-</button>
-</div>
-</div>
-<!-- Right Column: Visual Card Showcase -->
-<div class="lg:col-span-6 flex flex-col items-center justify-center relative mt-2 lg:mt-0 w-full">
-<!-- Top Cloud Badge -->
-<div class="relative z-10 -mb-3 bg-white/95 backdrop-blur-sm border border-slate-100 px-4 py-1.5 rounded-full text-xs font-bold text-slate-600 shadow-sm flex items-center gap-1.5" data-purpose="card-bubble-tag" style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.4rem 1.1rem;">
-<span class="">☁️</span>
-<span class="">Ceria &amp; Riang</span>
-</div>
-<!-- Photo Frame Card with Gentle Floating Hover Animation -->
-<div class="animate-gentle-float relative w-full max-w-md lg:max-w-lg bg-white rounded-3xl p-3 sm:p-4 shadow-kid-card border-[6px] border-white z-0 transition-transform duration-300 hover:scale-[1.02]" data-purpose="main-photo-frame">
-<!-- Children Photo Image -->
-<div class="w-full aspect-[16/10] overflow-hidden rounded-2xl bg-amber-50 shadow-inner">
-<img alt="Anak-anak TK bermain balok dan membaca buku bersama" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1XNl_aMsF5ifr6ci_sRXzeBVuYbHb1h4q6S6o6LF2ff4iFop_25atHcwvSNYpJqGD-9xcCL6VxqsVmdlhAdJrE9SDDmN-1ysvG_4Leuj_xGKV_4Z-mMVFAqUo-TZ6Ej3vcE4KpZ4I844-zB1Ca8wvnBdciDGmPBbDTlN378gHTIZV2LncW4LUdaAptgGSMgVU4lM-r0CT6cMkyrCUEpyMxhvraBHRB_EFamj2Bw3at8QQLODwDLvzq0SOY">
-</div>
-<!-- Star Icon Badge (Bottom Left of Card) -->
-<div class="absolute -bottom-3 -left-2 w-10 h-10 rounded-xl bg-[#fec83b] border-2 border-white shadow-md flex items-center justify-center text-amber-950 font-bold text-xl" data-purpose="star-badge">
+
+          <!-- Button Text -->
+          <span class="tracking-wide text-amber-950 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
+            Mulai Bermain
+          </span>
+
+          <!-- Star -->
+          <span class="text-amber-800 text-lg group-hover:rotate-12 transition-transform">
+            ⭐
+          </span>
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- RIGHT COLUMN -->
+    <div class="w-full flex flex-col items-center justify-center relative mt-4 lg:mt-0 order-1 lg:order-2">
+      
+      <!-- Top Cloud Badge -->
+      <div
+        class="relative z-10 -mb-3 bg-white/95 backdrop-blur-sm border border-slate-100 px-4 py-1.5 rounded-full text-xs font-bold text-slate-600 shadow-sm flex items-center gap-1.5"
+        data-purpose="card-bubble-tag"
+        style="font-size: clamp(0.9rem, 0.6rem + 0.8vw, 1.125rem); padding: 0.4rem 1.1rem;"
+      >
+        <span>☁️</span>
+        <span>Ceria &amp; Riang</span>
+      </div>
+
+      <!-- Photo Frame Card -->
+      <div
+        class="animate-gentle-float relative w-full max-w-xl lg:max-w-2xl bg-white rounded-3xl p-3 sm:p-4 shadow-kid-card border-[6px] border-white z-0 transition-transform duration-300 hover:scale-[1.02]"
+        data-purpose="main-photo-frame"
+      >
+
+        <!-- Children Photo Image -->
+        <div class="w-full aspect-[16/10] overflow-hidden rounded-2xl bg-amber-50 shadow-inner">
+
+          <img
+            src="Gambar/Anak-anak TK bermain balok dan membaca buku bersama.jpg"
+            alt="Anak-anak TK bermain balok dan membaca buku bersama"
+            class="w-full h-full object-cover"
+          >
+
+        </div>
+
+        <!-- Star Icon Badge -->
+        <div
+          class="absolute -bottom-3 -left-2 w-10 h-10 rounded-xl bg-[#fec83b] border-2 border-white shadow-md flex items-center justify-center text-amber-950 font-bold text-xl"
+          data-purpose="star-badge"
+        >
           ⭐
         </div>
-</div>
-</div>
-</div>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </main>
 <!-- END: MainContent Area -->
 <!-- BEGIN: BottomCreditsBar -->
@@ -356,11 +440,11 @@
       if (isBgmPlaying) {
         audioIcon.textContent = '♪';
         audioText.textContent = 'Musik Nyala';
-        audioBtn.className = 'inline-flex items-center gap-1.5 hover:bg-[#0c9064] active:scale-95 transition text-white px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-sm bg-[#0fa976] border border-emerald-300/60 cursor-pointer';
+        audioBtn.className = 'inline-flex items-center justify-center gap-1.5 whitespace-nowrap hover:bg-[#0c9064] active:scale-95 transition text-white rounded-full font-semibold shadow-sm bg-[#0fa976] border border-emerald-300/60 cursor-pointer px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm';
       } else {
         audioIcon.textContent = '✕';
         audioText.textContent = 'Musik Mati';
-        audioBtn.className = 'inline-flex items-center gap-1.5 hover:bg-slate-500 active:scale-95 transition text-white px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-sm bg-slate-400 border border-slate-300 cursor-pointer';
+        audioBtn.className = 'inline-flex items-center justify-center gap-1.5 whitespace-nowrap hover:bg-slate-500 active:scale-95 transition text-white rounded-full font-semibold shadow-sm bg-slate-400 border border-slate-300 cursor-pointer px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm';
       }
     }
 
@@ -480,31 +564,56 @@
       modalCard.classList.add('scale-90');
     }
 
-    if (btnPlayGame) {
-      btnPlayGame.addEventListener('click', (e) => {
-        const rect = btnPlayGame.getBoundingClientRect();
-        const burstX = rect.left + rect.width / 2;
-        const burstY = rect.top + rect.height / 2;
+    const playerNameInput = document.getElementById('playerName');
+const nameError = document.getElementById('nameError');
 
-        // Trigger confetti explosion
-        createConfettiBurst(burstX, burstY, 90);
-        
-        // Play celebratory chime
-        playCelebrationFanfare();
+if (btnPlayGame) {
+  btnPlayGame.addEventListener('click', (e) => {
 
-        // Also if music wasn't started, activate playful background audio on first play action
-        if (!isBgmPlaying) {
-          setTimeout(() => {
-            startBgm();
-          }, 600);
-        }
+    // Ambil nama dari input
+    const playerName = playerNameInput.value.trim();
 
-        // Show welcome celebratory modal
-        setTimeout(() => {
-          openModal();
-        }, 250);
-      });
+    // Cek apakah nama sudah diisi
+    if (!playerName) {
+      nameError.classList.remove('hidden');
+      playerNameInput.focus();
+
+      // Efek kecil supaya input terlihat
+      playerNameInput.classList.add('border-red-400');
+
+      return;
     }
+
+    // Hilangkan pesan error jika sebelumnya muncul
+    nameError.classList.add('hidden');
+    playerNameInput.classList.remove('border-red-400');
+
+    // Simpan nama pemain di browser
+    localStorage.setItem('playerName', playerName);
+
+    const rect = btnPlayGame.getBoundingClientRect();
+    const burstX = rect.left + rect.width / 2;
+    const burstY = rect.top + rect.height / 2;
+
+    // Trigger confetti explosion
+    createConfettiBurst(burstX, burstY, 90);
+
+    // Play celebratory chime
+    playCelebrationFanfare();
+
+    // Jika musik belum menyala, aktifkan
+    if (!isBgmPlaying) {
+      setTimeout(() => {
+        startBgm();
+      }, 600);
+    }
+
+    // Tampilkan modal sambutan
+    setTimeout(() => {
+      openModal();
+    }, 250);
+    });
+  }
 
         if (closeModalBtn) {
       closeModalBtn.addEventListener('click', () => {

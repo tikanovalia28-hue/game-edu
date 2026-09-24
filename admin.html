@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="id" style=""><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="web_dashboard" name="shell-type"/>
+<title>Portal Admin Taman TK - Edukasi Anak</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&amp;family=Rubik:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#02677f",
+            "on-primary": "#ffffff",
+            "primary-container": "#7ec8e3",
+            "on-primary-container": "#005468",
+            "primary-fixed": "#b7eaff",
+            "on-primary-fixed": "#001f28",
+            "primary-fixed-dim": "#87d1ec",
+            "secondary": "#6d5e00",
+            "on-secondary": "#ffffff",
+            "secondary-container": "#fbe04d",
+            "on-secondary-container": "#716200",
+            "secondary-fixed": "#fee350",
+            "tertiary": "#874f4c",
+            "on-tertiary": "#ffffff",
+            "tertiary-container": "#f3aca7",
+            "on-tertiary-container": "#723e3b",
+            "tertiary-fixed": "#ffdad7",
+            "surface": "#f5fafa",
+            "on-surface": "#171d1d",
+            "surface-dim": "#d6dbdb",
+            "surface-bright": "#f5fafa",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#eff5f5",
+            "surface-container": "#eaefef",
+            "surface-container-high": "#e4e9e9",
+            "surface-container-highest": "#dee3e3",
+            "on-surface-variant": "#3f484c",
+            "outline": "#6f787d",
+            "outline-variant": "#bfc8cd",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "on-error": "#ffffff",
+            "on-error-container": "#93000a",
+            "inverse-surface": "#2c3132",
+            "inverse-on-surface": "#edf2f2",
+            "background": "#f5fafa",
+            "on-background": "#171d1d"
+          },
+          borderRadius: {
+            "DEFAULT": "1rem",
+            "lg": "1.25rem",
+            "xl": "1.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "headline-xl": ["Rubik", "sans-serif"],
+            "headline-lg": ["Rubik", "sans-serif"],
+            "headline-md": ["Rubik", "sans-serif"],
+            "body-lg": ["Quicksand", "sans-serif"],
+            "body-md": ["Quicksand", "sans-serif"],
+            "body-sm": ["Quicksand", "sans-serif"],
+            "label-lg": ["Quicksand", "sans-serif"],
+            "label-md": ["Quicksand", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    @layer base {
+      html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #f5fafa;
+        color: #171d1d;
+        font-family: 'Quicksand', sans-serif;
+      }
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #bfc8cd;
+      border-radius: 9999px;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    }
+    .filled-icon {
+      font-variation-settings: 'FILL' 1;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased min-h-screen flex flex-col">
+<!-- Mobile Drawer Backdrop -->
+<div class="fixed inset-0 bg-inverse-surface/40 backdrop-blur-sm z-50 hidden transition-opacity" id="mobileDrawerBackdrop"></div>
+<!-- Mobile Sidebar Drawer -->
+<aside class="fixed top-0 left-0 bottom-0 w-72 bg-surface-container-lowest z-50 p-6 flex flex-col justify-between transform -translate-x-full transition-transform duration-300 shadow-2xl md:hidden overflow-y-auto" id="mobileDrawer">
+<div class="flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-DEFAULT bg-primary-container text-on-primary-container flex items-center justify-center font-bold shadow-sm">
+<span class="material-symbols-outlined text-[22px]">toys</span>
+</div>
+<div>
+<span class="font-headline-md font-bold text-primary block leading-none text-xl">Taman TK</span>
+<span class="font-body-sm text-xs text-on-surface-variant block mt-1 font-medium">Portal Edukasi Anak</span>
+</div>
+</div>
+<button aria-label="Tutup Menu" class="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-on-surface-variant hover:bg-surface-container rounded-full" id="closeMobileDrawerBtn" type="button">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Navigasi 4 Menu Utama Saja (Mobile) -->
+<nav class="flex flex-col gap-1.5" id="mobileNavMenu">
+<button class="nav-item flex items-center gap-3 px-4 py-3 rounded-DEFAULT bg-primary-container text-on-primary-container font-bold text-left transition-all shadow-[0_1px_8px_rgba(126,200,227,0.25)]" data-view="dashboard" type="button">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+<span class="font-label-lg">Dashboard</span>
+</button>
+<button class="nav-item flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-semibold text-left transition-all" data-view="katalog" type="button">
+<span class="material-symbols-outlined text-[20px]">extension</span>
+<span class="font-label-lg">Katalog Permainan</span>
+</button>
+<button class="nav-item flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-semibold text-left transition-all" data-view="data-anak" type="button">
+<span class="material-symbols-outlined text-[20px]">groups</span>
+<span class="font-label-lg">Data Anak</span>
+</button>
+<button class="nav-item flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-semibold text-left transition-all" data-view="laporan" type="button">
+<span class="material-symbols-outlined text-[20px]">monitoring</span>
+<span class="font-label-lg">Laporan Aktivitas</span>
+</button></nav>
+</div>
+<!-- Tombol Keluar di Bawah -->
+<div class="pt-4 border-t border-surface-container-high">
+<button class="w-full flex items-center gap-3 px-4 py-3 min-h-[44px] rounded-DEFAULT text-error hover:bg-error-container hover:text-on-error-container font-semibold transition-all" onclick="handleLogout()" type="button">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="font-label-lg">Keluar</span>
+</button>
+</div>
+</aside>
+<!-- Desktop Sidebar: Lebar 256px tetap -->
+<aside class="hidden md:flex fixed left-0 top-0 h-full w-64 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex-col justify-between py-6 px-4">
+<div class="flex flex-col gap-6">
+<div class="flex items-center gap-3 px-3">
+<div class="w-10 h-10 rounded-DEFAULT bg-primary-container text-on-primary-container flex items-center justify-center font-bold shadow-sm">
+<span class="material-symbols-outlined text-[24px]">toys</span>
+</div>
+<div>
+<span class="font-headline-md font-bold text-primary block leading-none text-xl">Portal Admin</span>
+<span class="font-body-sm text-xs text-on-surface-variant block mt-1 font-medium">Portal Pengelola Game</span>
+</div>
+</div>
+<!-- 4 Menu Fungsional Utama (Desktop) -->
+<nav class="flex flex-col gap-1.5" id="desktopNavMenu">
+<button class="nav-item flex items-center gap-3 px-4 py-3 rounded-DEFAULT bg-primary-container text-on-primary-container font-bold text-left transition-all shadow-[0_1px_8px_rgba(126,200,227,0.25)]" data-view="dashboard" type="button">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+<span class="font-label-lg">Dashboard</span>
+</button>
+<button class="nav-item flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-semibold text-left transition-all" data-view="katalog" type="button">
+<span class="material-symbols-outlined text-[20px]">extension</span>
+<span class="font-label-lg">Katalog Permainan</span>
+</button>
+<button class="nav-item flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-semibold text-left transition-all" data-view="data-anak" type="button">
+<span class="material-symbols-outlined text-[20px]">groups</span>
+<span class="font-label-lg">Data Anak</span>
+</button>
+<button class="nav-item flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-semibold text-left transition-all" data-view="laporan" type="button">
+<span class="material-symbols-outlined text-[20px]">monitoring</span>
+<span class="font-label-lg">Laporan Aktivitas</span>
+</button></nav>
+</div>
+<!-- Keluar di bagian paling bawah -->
+<div class="px-2 pt-4 border-t border-surface-container-high">
+<button class="w-full flex items-center gap-3 px-3.5 py-3 rounded-DEFAULT text-error hover:bg-error-container hover:text-on-error-container font-semibold transition-all" onclick="handleLogout()" type="button">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="font-label-lg">Keluar</span>
+</button>
+</div>
+</aside>
+<!-- Konten Utama (Offset kiri 256px di desktop) -->
+<div class="md:pl-64 flex flex-col flex-1 min-h-screen">
+<!-- Top Header Bar -->
+<header class="sticky top-0 h-16 bg-surface-container-lowest/90 backdrop-blur-md shadow-sm z-30 flex items-center justify-between px-4 sm:px-6 lg:px-8">
+<div class="flex items-center gap-3">
+<button aria-label="Buka Menu" class="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-DEFAULT bg-surface-container text-on-surface hover:bg-surface-container-high md:hidden" id="openMobileDrawerBtn" type="button">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 sm:gap-3">
+<button type="button" onclick="backToGame()" class="inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-full bg-primary-container text-on-primary-container font-bold text-xs sm:text-sm hover:opacity-90 transition">
+  <span class="material-symbols-outlined text-[18px]">sports_esports</span>
+  <span class="hidden sm:inline">Kembali ke Permainan</span>
+</button>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<span class="font-body-sm text-xs text-on-surface-variant block">Admin</span>
+</div>
+<div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold shadow-sm">
+<span class="material-symbols-outlined text-[18px]">person</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Container -->
+<main class="flex-1 w-full px-4 sm:px-6 lg:px-8 py-6 bg-surface max-w-7xl mx-auto">
+<!-- VIEW 1: DASHBOARD (Default Active) -->
+<div class="view-panel flex flex-col gap-6" id="viewDashboard">
+<!-- WELCOME BANNER (Besar & Lapang sesuai Screen 4) -->
+<div class="relative overflow-hidden rounded-xl bg-gradient-to-r from-primary-fixed/85 via-surface-container-lowest to-surface-container-low p-6 sm:p-8 lg:p-10 shadow-sm border border-primary-fixed/70">
+<div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 lg:gap-10">
+<div class="max-w-2xl text-center md:text-left flex-1">
+<span class="inline-block px-3.5 py-1 rounded-full bg-surface-container-lowest text-primary text-xs font-bold mb-3 shadow-xs border border-primary-fixed/50">
+  Sentra Bermain &amp; Kognitif Anak
+</span>
+<h2 class="font-headline-xl text-2xl sm:text-3xl lg:text-4xl font-bold text-on-surface mb-3 tracking-tight">
+  Selamat Datang, Guru &amp; Admin! 👋
+</h2>
+<p class="font-body-md text-sm sm:text-base text-on-surface-variant leading-relaxed">
+  Pantau hasil latihan konsentrasi, ketangkasan menyusun huruf, serta pemecahan labirin secara terpadu untuk memantau aktivitas dan perkembangan anak.
+</p>
+</div>
+<!-- Ilustrasi Playful SVG Proporsional B-A-C dan Bintang -->
+<div class="relative flex-shrink-0 flex items-center justify-center w-64 sm:w-72 lg:w-80 h-36 sm:h-40">
+<svg class="w-full h-full drop-shadow-sm" fill="none" viewbox="0 0 280 150" xmlns="http://www.w3.org/2000/svg">
+<!-- Bayangan Dasar -->
+<ellipse cx="140" cy="132" fill="#dee3e3" fill-opacity="0.8" rx="120" ry="16"></ellipse>
+<!-- Balok A (Kiri) -->
+<g transform="translate(30, 62)">
+<rect fill="#fee350" height="52" rx="14" width="52"></rect>
+<rect fill="#fbe04d" height="40" rx="10" width="40" x="6" y="6"></rect>
+<text fill="#716200" font-family="Rubik" font-size="26" font-weight="bold" text-anchor="middle" x="26" y="34">A</text>
+</g>
+<!-- Balok B (Tengah Atas) -->
+<g transform="translate(85, 26)">
+<rect fill="#7ec8e3" height="58" rx="14" width="58"></rect>
+<rect fill="#b7eaff" height="46" rx="10" width="46" x="6" y="6"></rect>
+<text fill="#005468" font-family="Rubik" font-size="30" font-weight="bold" text-anchor="middle" x="29" y="38">B</text>
+</g>
+<!-- Balok C (Kanan) -->
+<g transform="translate(150, 66)">
+<rect fill="#f3aca7" height="48" rx="12" width="48"></rect>
+<rect fill="#ffdad7" height="38" rx="9" width="38" x="5" y="5"></rect>
+<text fill="#723e3b" font-family="Rubik" font-size="24" font-weight="bold" text-anchor="middle" x="24" y="31">C</text>
+</g>
+<!-- Friendly Star Tersenyum Ceria -->
+<g transform="translate(208, 16)">
+<path d="M18 0L23.4 10.8L35.4 12.6L26.6 21L28.8 33L18 27.3L7.2 33L9.4 21L0.6 12.6L12.6 10.8L18 0Z" fill="#fee350"></path>
+<circle cx="13" cy="15" fill="#716200" r="2"></circle>
+<circle cx="23" cy="15" fill="#716200" r="2"></circle>
+<path d="M14 20 Q18 24 22 20" stroke="#716200" stroke-linecap="round" stroke-width="2"></path>
+</g>
+</svg>
+</div>
+</div>
+</div>
+<!-- 4 STATISTIC CARDS (Otomatis Dikalkulasi dari Koleksi Firestore) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5" id="statsGrid">
+<!-- Card 1: Total Murid Aktif -->
+<div class="bg-surface-container-lowest p-5 rounded-lg shadow-sm border border-outline-variant/30 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-xs font-bold text-on-surface-variant uppercase tracking-wider">Total Murid Aktif</span>
+<div class="w-11 h-11 rounded-full bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">face_6</span>
+</div>
+</div>
+<div class="mt-4">
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-3xl font-bold text-on-surface leading-none" id="statUniqueKids">0</span>
+<span class="font-label-md text-xs text-on-surface-variant font-semibold">murid unik</span>
+</div>
+<div class="mt-2 flex items-center gap-1.5 text-primary font-body-sm text-xs">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span class="">Terdata di gameResults</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Permainan Selesai -->
+<div class="bg-surface-container-lowest p-5 rounded-lg shadow-sm border border-outline-variant/30 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-xs font-bold text-on-surface-variant uppercase tracking-wider">Permainan Selesai</span>
+<div class="w-11 h-11 rounded-full bg-primary-container/40 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">sports_esports</span>
+</div>
+</div>
+<div class="mt-4">
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-3xl font-bold text-on-surface leading-none" id="statFinishedGames">0</span>
+<span class="font-label-md text-xs text-on-surface-variant font-semibold">sesi tuntas</span>
+</div>
+<div class="mt-2 flex items-center gap-1.5 text-primary font-body-sm text-xs">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span class=""><span id="statCompletion">0% sesi tuntas</span></span>
+</div>
+</div>
+</div>
+<!-- Card 3: Rata-rata Skor -->
+<div class="bg-surface-container-lowest p-5 rounded-lg shadow-sm border border-outline-variant/30 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-xs font-bold text-on-surface-variant uppercase tracking-wider">Rata-rata Skor</span>
+<div class="w-11 h-11 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[24px] filled-icon">hotel_class</span>
+</div>
+</div>
+<div class="mt-4">
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-3xl font-bold text-on-surface leading-none" id="statAverageScore">0</span>
+<span class="font-label-md text-xs text-on-surface-variant font-semibold">/ 100</span>
+</div>
+<div class="mt-2 flex items-center gap-1.5 text-secondary font-body-sm text-xs font-bold">
+<span class="material-symbols-outlined text-[16px]">workspace_premium</span>
+<span class="" id="statPredicateText">Predikat Cerdas &amp; Mandiri</span>
+</div>
+</div>
+</div>
+<!-- Card 4: Total Waktu Belajar -->
+<div class="bg-surface-container-lowest p-5 rounded-lg shadow-sm border border-outline-variant/30 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-xs font-bold text-on-surface-variant uppercase tracking-wider">Total Waktu Belajar</span>
+<div class="w-11 h-11 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[24px]">schedule</span>
+</div>
+</div>
+<div class="mt-4">
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-2xl sm:text-3xl font-bold text-on-surface leading-none" id="statTotalDuration">0m</span>
+</div>
+<div class="mt-2 flex items-center gap-1.5 text-tertiary font-body-sm text-xs">
+<span class="material-symbols-outlined text-[16px]">timelapse</span>
+<span class="">Akumulasi durasi aktif</span>
+</div>
+</div>
+</div>
+</div>
+<!-- GRAFIK AKTIVITAS PERMAINAN (Real-time Filtered Bar Chart) -->
+<div class="bg-surface-container-lowest rounded-lg p-5 sm:p-6 shadow-sm border border-outline-variant/30">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+<div>
+<h3 class="font-headline-md text-lg sm:text-xl font-bold text-on-surface">Aktivitas Permainan Harian</h3>
+<p class="font-body-sm text-xs text-on-surface-variant">Frekuensi penyelesaian game edukatif anak dalam periode yang dipilih</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1.5 text-xs font-bold text-on-surface-variant">
+<span class="w-3 h-3 rounded-full bg-primary inline-block"></span>
+<span class="">Sesi Tuntas</span>
+</div>
+</div>
+</div>
+<!-- Dynamic Bar Chart Grid -->
+<div class="w-full relative pt-2 pb-2">
+<div class="flex items-end justify-between gap-2 sm:gap-6 h-56 border-b border-surface-variant pb-2 relative" id="chartContainer"></div>
+<div class="flex justify-between items-center pt-2 text-[11px] font-semibold text-on-surface-variant">
+<span class="">Rendah (0)</span>
+<span class="">Sedang (10)</span>
+<span class="">Tinggi (20+)</span>
+</div>
+</div>
+</div>
+<!-- RIWAYAT PERMAINAN TERBARU + FILTER & PENCARIAN -->
+<div class="bg-surface-container-lowest rounded-lg p-5 sm:p-6 shadow-sm border border-outline-variant/30 flex flex-col gap-5">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+<div>
+<h3 class="font-headline-md text-lg sm:text-xl font-bold text-on-surface">Riwayat Permainan</h3>
+<p class="font-body-sm text-xs text-on-surface-variant">Catatan penyelesaian game secara langsung dari dokumen Firestore</p>
+</div>
+<!-- FILTERS: Search, Game Filter, Period Filter -->
+<div class="flex flex-wrap items-center gap-2.5">
+<!-- Search Input -->
+<div class="relative flex-1 sm:w-60 min-w-[200px]">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-[18px] text-outline">search</span>
+<input class="w-full pl-9 pr-4 py-2 min-h-[42px] bg-surface-container-low text-on-surface rounded-full text-xs font-medium border-0 focus:ring-2 focus:ring-primary outline-none transition-all" id="searchInput" placeholder="Cari nama anak atau permainan..." type="text"/>
+</div>
+<!-- Filter Permainan -->
+<div class="relative">
+<select class="appearance-none bg-surface-container-low pl-3 pr-8 py-2 min-h-[42px] rounded-full text-xs font-semibold text-on-surface border-0 focus:ring-2 focus:ring-primary outline-none cursor-pointer" id="gameFilter">
+<option value="all">Semua Permainan</option>
+<option value="Memasangkan Permainan Tradisional">Memasangkan Permainan Tradisional</option>
+<option value="Menyusun Huruf">Menyusun Huruf</option>
+<option value="Mencari Jejak">Mencari Jejak</option>
+</select>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant absolute right-2.5 top-3 pointer-events-none">filter_list</span>
+</div>
+<!-- Filter Periode -->
+<div class="relative">
+<select class="appearance-none bg-surface-container-low pl-3 pr-8 py-2 min-h-[42px] rounded-full text-xs font-semibold text-on-surface border-0 focus:ring-2 focus:ring-primary outline-none cursor-pointer" id="periodFilter">
+<option value="7">7 Hari Terakhir</option>
+<option value="3">3 Hari Terakhir</option>
+<option value="14">14 Hari Terakhir</option>
+<option value="30">30 Hari Terakhir</option>
+<option value="all">Semua Waktu</option>
+</select>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant absolute right-2.5 top-3 pointer-events-none">calendar_month</span>
+</div>
+</div>
+</div>
+<!-- STATE CONTAINER: Dynamic Data Content -->
+<div class="flex flex-col gap-4" id="dataContentContainer">
+<!-- Desktop Table View (Hidden on mobile) -->
+<div class="overflow-x-auto hidden md:block">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-bold text-xs uppercase tracking-wider rounded-DEFAULT">
+<th class="py-3 px-4 rounded-l-DEFAULT">Anak</th>
+<th class="py-3 px-4">Permainan</th>
+<th class="py-3 px-4">Skor &amp; Predikat</th>
+<th class="py-3 px-4">Waktu Mulai</th>
+<th class="py-3 px-4">Durasi</th>
+<th class="py-3 px-4">Status</th>
+<th class="py-3 px-4 rounded-r-DEFAULT text-right">Aksi</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high text-sm font-medium" id="tableBodyDesktop"></tbody>
+</table>
+</div>
+<!-- Mobile Card List View (Visible on mobile/tablet) -->
+<div class="flex flex-col gap-3 md:hidden" id="cardListMobile"></div>
+</div>
+<!-- SKELETON LOADING STATE -->
+<div class="hidden flex-col gap-3 py-2" id="skeletonContainer">
+<div class="h-12 bg-surface-container-high animate-pulse rounded-DEFAULT w-full"></div>
+<div class="h-16 bg-surface-container animate-pulse rounded-DEFAULT w-full"></div>
+<div class="h-16 bg-surface-container animate-pulse rounded-DEFAULT w-full"></div>
+</div>
+<!-- EMPTY STATE (0 Data) -->
+<div class="hidden flex-col items-center justify-center py-12 text-center" id="emptyContainer">
+<div class="w-16 h-16 rounded-full bg-surface-container-low flex items-center justify-center text-primary mb-3">
+<span class="material-symbols-outlined text-[36px]">sentiment_satisfied</span>
+</div>
+<h4 class="font-headline-md text-base sm:text-lg font-bold text-on-surface">Belum Ada Riwayat Permainan</h4>
+<p class="font-body-md text-xs sm:text-sm text-on-surface-variant max-w-sm mt-1">
+  Tidak ditemukan data pada koleksi Firestore sesuai filter yang dipilih. Silakan reset filter.
+</p>
+<button class="mt-4 px-5 py-2.5 min-h-[44px] rounded-full bg-primary text-on-primary font-bold text-xs shadow-sm hover:opacity-95" onclick="resetFilters()" type="button">
+  Reset Semua Filter
+</button>
+</div>
+<!-- ERROR STATE -->
+<div class="hidden flex-col items-center justify-center py-12 text-center" id="errorContainer">
+<div class="w-16 h-16 rounded-full bg-error-container text-on-error-container flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-[36px]">cloud_off</span>
+</div>
+<h4 class="font-headline-md text-base sm:text-lg font-bold text-error">Gagal Mengambil Data Firestore</h4>
+<p class="font-body-md text-xs sm:text-sm text-on-surface-variant max-w-sm mt-1">
+  Koneksi ke dokumen koleksi gameResults terputus atau terjadi timeout.
+</p>
+<button class="mt-4 inline-flex items-center gap-2 px-5 py-2.5 min-h-[44px] rounded-full bg-primary text-on-primary font-bold text-xs shadow-sm" onclick="renderTableAndCards()" type="button">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+  Coba Lagi
+</button>
+</div>
+<!-- PAGINATION -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-surface-container-high" id="paginationBar"><span class="font-body-sm text-xs text-on-surface-variant" id="paginationInfo">Menampilkan 1 - 6 dari 6 total permainan</span></div>
+</div>
+</div>
+<!-- VIEW 2: KATALOG PERMAINAN (3 game resmi berstatus Aktif) -->
+<div class="view-panel flex-col gap-6 hidden" id="viewKatalog">
+<div class="bg-surface-container-lowest rounded-lg p-6 shadow-sm border border-outline-variant/30">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6"><div><h3 class="font-headline-md text-xl font-bold text-on-surface">Katalog Permainan</h3><p class="font-body-sm text-xs text-on-surface-variant">Tiga permainan yang tersedia di website Taman Bermain Anak TK.</p></div><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed font-bold text-xs"><span class="w-2 h-2 rounded-full bg-primary"></span>3 Permainan</span></div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+<div class="bg-surface-container-low p-5 rounded-lg flex flex-col justify-between border border-primary-container/30 min-h-[250px]"><div><div class="w-12 h-12 rounded-DEFAULT bg-primary-container text-on-primary-container flex items-center justify-center mb-4"><span class="material-symbols-outlined text-[28px]">extension</span></div><span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-bold text-[11px]">Permainan 1</span><h4 class="font-headline-md text-base font-bold text-on-surface mt-2">Memasangkan Permainan Tradisional</h4><p class="font-body-sm text-xs text-on-surface-variant mt-2 leading-relaxed">Anak memasangkan gambar permainan tradisional dengan nama yang sesuai. Permainan menggunakan kegiatan drag-and-drop.</p></div><div class="mt-4 pt-3 border-t border-surface-container-high text-xs text-on-surface-variant">Skor maksimal: <strong>100</strong></div></div>
+<div class="bg-surface-container-low p-5 rounded-lg flex flex-col justify-between border border-secondary-container/30 min-h-[250px]"><div><div class="w-12 h-12 rounded-DEFAULT bg-secondary-fixed text-secondary flex items-center justify-center mb-4"><span class="material-symbols-outlined text-[28px]">spellcheck</span></div><span class="px-2 py-0.5 rounded-full bg-secondary/10 text-secondary font-bold text-[11px]">Permainan 2</span><h4 class="font-headline-md text-base font-bold text-on-surface mt-2">Menyusun Huruf</h4><p class="font-body-sm text-xs text-on-surface-variant mt-2 leading-relaxed">Anak menyusun huruf yang tersedia menjadi kata sesuai soal. Permainan dibagi menjadi dua level dan setiap level berisi beberapa soal.</p></div><div class="mt-4 pt-3 border-t border-surface-container-high text-xs text-on-surface-variant">Skor maksimal: <strong>100</strong></div></div>
+<div class="bg-surface-container-low p-5 rounded-lg flex flex-col justify-between border border-tertiary-container/30 min-h-[250px]"><div><div class="w-12 h-12 rounded-DEFAULT bg-tertiary-fixed text-tertiary flex items-center justify-center mb-4"><span class="material-symbols-outlined text-[28px]">route</span></div><span class="px-2 py-0.5 rounded-full bg-tertiary/10 text-tertiary font-bold text-[11px]">Permainan 3</span><h4 class="font-headline-md text-base font-bold text-on-surface mt-2">Mencari Jejak</h4><p class="font-body-sm text-xs text-on-surface-variant mt-2 leading-relaxed">Anak mengikuti jejak menuju tujuan sambil menjawab soal pada setiap level. Tantangan dapat berbeda sesuai level permainan.</p></div><div class="mt-4 pt-3 border-t border-surface-container-high text-xs text-on-surface-variant">Skor maksimal: <strong>100</strong></div></div>
+</div>
+</div>
+</div>
+<!-- VIEW 3: DATA ANAK -->
+<div class="view-panel flex-col gap-6 hidden" id="viewDataAnak">
+<div class="bg-surface-container-lowest rounded-lg p-6 shadow-sm border border-outline-variant/30">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+<div>
+<h3 class="font-headline-md text-xl font-bold text-on-surface">Data Anak</h3>
+<p class="font-body-sm text-xs text-on-surface-variant">Data anak dihitung dari nama unik yang tersimpan pada riwayat permainan Firebase.</p>
+</div>
+<span class="text-xs font-bold text-primary px-3 py-1 bg-primary-fixed rounded-full">
+  Real-time Firestore
+</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-bold text-xs uppercase tracking-wider rounded-DEFAULT">
+<th class="py-3 px-4 rounded-l-DEFAULT">Nama Murid</th>
+<th class="py-3 px-4">Total Permainan</th>
+<th class="py-3 px-4">Rata-rata Skor</th>
+<th class="py-3 px-4">Total Durasi</th>
+<th class="py-3 px-4 rounded-r-DEFAULT text-right">Aksi</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high text-sm font-medium" id="kidsTableBody"></tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- VIEW 4: LAPORAN AKTIVITAS -->
+<div class="view-panel flex-col gap-6 hidden" id="viewLaporan">
+<div class="bg-surface-container-lowest rounded-lg p-6 shadow-sm border border-outline-variant/30">
+<div class="mb-6">
+<h3 class="font-headline-md text-xl font-bold text-on-surface">Laporan Aktivitas</h3>
+<p class="font-body-sm text-xs text-on-surface-variant mt-1">Ringkasan yang dihitung langsung dari data permainan di Firebase.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+<div class="p-4 rounded-lg bg-surface-container-low border border-surface-container-high">
+<span class="text-xs font-bold text-on-surface-variant uppercase">Tingkat Ketuntasan</span>
+<div class="font-headline-xl text-3xl font-bold text-primary mt-2" id="reportCompletion">0%</div>
+<p class="text-xs text-on-surface-variant mt-1">Persentase sesi yang memiliki waktu selesai.</p>
+</div>
+<div class="p-4 rounded-lg bg-surface-container-low border border-surface-container-high">
+<span class="text-xs font-bold text-on-surface-variant uppercase">Rata-rata Durasi</span>
+<div class="font-headline-xl text-3xl font-bold text-secondary mt-2" id="reportAvgDuration">0m 00s</div>
+<p class="text-xs text-on-surface-variant mt-1">Rata-rata durasi dari sesi yang sudah selesai.</p>
+</div>
+<div class="p-4 rounded-lg bg-surface-container-low border border-surface-container-high">
+<span class="text-xs font-bold text-on-surface-variant uppercase">Rata-rata Skor</span>
+<div class="font-headline-xl text-3xl font-bold text-tertiary mt-2" id="reportAvgScore">0 / 100</div>
+<p class="text-xs text-on-surface-variant mt-1">Rata-rata skor dari sesi yang sudah selesai.</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-lg p-6 shadow-sm border border-outline-variant/30">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+<div>
+<h3 class="font-headline-md text-lg font-bold text-on-surface">Ringkasan per Permainan</h3>
+<p class="font-body-sm text-xs text-on-surface-variant">Jumlah sesi, pemain unik, dan skor rata-rata untuk setiap game.</p>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead><tr class="bg-surface-container-low text-on-surface-variant font-bold text-xs uppercase">
+<th class="py-3 px-4">Permainan</th><th class="py-3 px-4">Sesi</th><th class="py-3 px-4">Anak</th><th class="py-3 px-4">Rata-rata Skor</th><th class="py-3 px-4">Selesai</th>
+</tr></thead>
+<tbody class="divide-y divide-surface-container-high text-sm" id="reportGameBody"></tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="achievementGrid"></div>
+</div>
+</div></main>
+<!-- FOOTER KREDIT PENGEMBANG -->
+<footer class="w-full bg-surface-container-lowest border-t border-surface-container-high py-4 px-4 sm:px-6 mt-auto">
+<div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center text-center gap-1.5 text-xs text-on-surface-variant font-medium">
+<span class="">Admin Portal Taman Bermain Anak TK  • Dibuat oleh <strong>Cintya Eka Puspita Sari ✨</strong></span>
+</div>
+</footer>
+</div>
+<!-- MODAL 1: DETAIL SESI PERMAINAN -->
+<div class="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-sm flex items-center justify-center p-4 hidden" id="sessionDetailModal">
+<div class="bg-surface-container-lowest rounded-lg max-w-md w-full p-6 shadow-xl relative animate-in fade-in duration-200 border border-outline-variant/30">
+<div class="flex items-center justify-between pb-3 border-b border-surface-container-high">
+<div class="flex items-center gap-2 text-primary font-headline-md font-bold text-lg">
+<span class="material-symbols-outlined">stars</span>
+<span class="">Detail Hasil Sesi</span>
+</div>
+<button aria-label="Tutup Detail" class="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container" onclick="closeSessionDetailModal()" type="button">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="mt-4 flex flex-col gap-3">
+<div class="bg-surface-container-low p-4 rounded-DEFAULT text-center">
+<div class="w-14 h-14 rounded-full bg-primary-container text-on-primary-container mx-auto flex items-center justify-center text-2xl font-bold mb-2">
+  ⭐
+</div>
+<h4 class="font-headline-md text-lg font-bold text-on-surface" id="modalDetailName">-</h4>
+<p class="font-body-sm text-xs text-primary font-bold mt-0.5" id="modalDetailGame">-</p>
+</div>
+<div class="grid grid-cols-2 gap-2 text-center">
+<div class="bg-surface-container p-3 rounded-DEFAULT">
+<span class="block text-[11px] font-bold text-on-surface-variant uppercase">Perolehan Nilai</span>
+<span class="block font-headline-xl text-2xl font-bold text-primary" id="modalDetailScore">0</span>
+</div>
+<div class="bg-surface-container p-3 rounded-DEFAULT">
+<span class="block text-[11px] font-bold text-on-surface-variant uppercase">Lama Bermain</span>
+<span class="block font-headline-md text-base font-bold text-on-surface mt-1" id="modalDetailDuration">0m 00s</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-3 rounded-DEFAULT text-xs flex flex-col gap-1.5 text-on-surface-variant">
+<div class="flex justify-between">
+<span class="">Waktu Mulai:</span>
+<span class="font-bold text-on-surface" id="modalDetailStart">-</span>
+</div>
+<div class="flex justify-between">
+<span class="">Waktu Selesai:</span>
+<span class="font-bold text-on-surface" id="modalDetailFinish">-</span>
+</div>
+<div class="flex justify-between">
+<span class="">Status Sesi:</span>
+<span class="font-bold text-primary" id="modalDetailStatus">-</span>
+</div>
+<div class="flex justify-between pt-1 border-t border-surface-container-high">
+<span class="">Firestore ID:</span>
+<code class="font-mono text-[11px] text-primary" id="modalDetailDocId">-</code>
+</div>
+</div>
+</div>
+<div class="mt-5 flex justify-end">
+<button class="px-5 py-2.5 min-h-[44px] rounded-full bg-primary text-on-primary font-bold text-xs shadow-sm hover:opacity-95" onclick="closeSessionDetailModal()" type="button">
+  Tutup Rincian
+</button>
+</div>
+</div>
+</div>
+<!-- MODAL 2: DETAIL PROFIL ANAK (Pada Tab Data Anak) -->
+<div class="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-sm flex items-center justify-center p-4 hidden" id="childDetailModal">
+<div class="bg-surface-container-lowest rounded-lg max-w-lg w-full p-6 shadow-xl relative animate-in fade-in duration-200 border border-outline-variant/30">
+<div class="flex items-center justify-between pb-3 border-b border-surface-container-high">
+<div class="flex items-center gap-2 text-primary font-headline-md font-bold text-lg">
+<span class="material-symbols-outlined">person</span>
+<span class="">Profil &amp; Riwayat Murid</span>
+</div>
+<button aria-label="Tutup Profil" class="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container" onclick="closeChildDetailModal()" type="button">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="mt-4 flex flex-col gap-4">
+<div class="flex items-center gap-3 bg-surface-container-low p-3.5 rounded-DEFAULT">
+<div class="w-12 h-12 rounded-full bg-primary-container text-on-primary-container font-bold text-lg flex items-center justify-center" id="childModalAvatar">CC</div>
+<div>
+<h4 class="font-headline-md text-base font-bold text-on-surface" id="childModalName">Caca Cantika</h4>
+<span class="text-xs text-on-surface-variant">Murid Aktif Terdaftar</span>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2 text-center text-xs">
+<div class="bg-surface-container p-2.5 rounded-DEFAULT">
+<span class="text-on-surface-variant block">Total Main</span>
+<span class="font-headline-md text-base font-bold text-on-surface block mt-0.5" id="childModalTotalGames">2</span>
+</div>
+<div class="bg-surface-container p-2.5 rounded-DEFAULT">
+<span class="text-on-surface-variant block">Rata-rata Skor</span>
+<span class="font-headline-md text-base font-bold text-primary block mt-0.5" id="childModalAvgScore">98</span>
+</div>
+<div class="bg-surface-container p-2.5 rounded-DEFAULT">
+<span class="text-on-surface-variant block">Total Waktu</span>
+<span class="font-headline-md text-base font-bold text-on-surface block mt-0.5" id="childModalDuration">10m 02s</span>
+</div>
+</div>
+<div>
+<span class="text-xs font-bold text-on-surface-variant block mb-2 uppercase">Riwayat Permainan Anak:</span>
+<div class="max-h-48 overflow-y-auto rounded-DEFAULT border border-surface-container-high divide-y divide-surface-container-high text-xs">
+<div class="flex flex-col" id="childHistoryList">
+<!-- Dinamis dirender -->
+</div>
+</div>
+</div>
+</div>
+<div class="mt-5 flex justify-end">
+<button class="px-5 py-2.5 min-h-[44px] rounded-full bg-primary text-on-primary font-bold text-xs shadow-sm hover:opacity-95" onclick="closeChildDetailModal()" type="button">
+  Tutup Profil
+</button>
+</div>
+</div>
+</div>
+<!-- SCRIPT LOGIC -->
+<script type="module">import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  onSnapshot,
+  deleteDoc,
+  doc,
+  query,
+  where,
+  getDocs,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBpNQloPwRRwSCDf2K6wMrwRc4W9dV8TXU",
+  authDomain: "gameedukasi-f7c5a.firebaseapp.com",
+  projectId: "gameedukasi-f7c5a",
+  storageBucket: "gameedukasi-f7c5a.firebasestorage.app",
+  messagingSenderId: "342308052786",
+  appId: "1:342308052786:web:d8f63eac16d94d00c1012b"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const ADMIN_COLLECTION = 'admins';
+
+const GAME_NAMES = [
+  'Memasangkan Permainan Tradisional',
+  'Menyusun Huruf',
+  'Mencari Jejak'
+];
+
+let gameResultsData = [];
+let unsubscribeResults = null;
+let firebaseLoaded = false;
+
+const $ = id => document.getElementById(id);
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>'"]/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;'
+  }[ch]));
+}
+
+function normalizeDate(value) {
+  if (!value) return null;
+  if (typeof value?.toDate === 'function') return value.toDate();
+  if (typeof value === 'number') {
+    const d = new Date(value);
+    return isNaN(d.getTime()) ? null : d;
+  }
+  const d = new Date(value);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+function normalizeDuration(value) {
+  const n = Number(value) || 0;
+  // Game pages store duration in milliseconds.
+  return n > 10000 ? n / 1000 : n;
+}
+
+function normalizeDoc(snap) {
+  const d = snap.data() || {};
+  return {
+    id: snap.id,
+    playerName: String(d.playerName || 'Teman').trim(),
+    gameName: String(d.gameName || 'Tidak Diketahui').trim(),
+    startedAt: d.startedAt || null,
+    finishedAt: d.finishedAt || null,
+    duration: normalizeDuration(d.duration),
+    score: Number(d.score) || 0
+  };
+}
+
+function formatDuration(sec) {
+  sec = Math.max(0, Math.round(Number(sec) || 0));
+  const hours = Math.floor(sec / 3600);
+  const minutes = Math.floor((sec % 3600) / 60);
+  const seconds = sec % 60;
+  if (hours > 0) return `${hours}j ${minutes}m`;
+  return `${String(minutes).padStart(2,'0')}m ${String(seconds).padStart(2,'0')}s`;
+}
+
+function formatTime(value) {
+  const d = normalizeDate(value);
+  if (!d) return '-';
+  return d.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'}) + ' WIB';
+}
+
+function formatFullDate(value) {
+  const d = normalizeDate(value);
+  if (!d) return '-';
+  return d.toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'}) + ' ' + formatTime(d);
+}
+
+function initials(name) {
+  return name.split(/\s+/).filter(Boolean).map(x => x[0]).slice(0,2).join('').toUpperCase() || '?';
+}
+
+function setLoading(isLoading) {
+  const skeleton = $('skeletonContainer');
+  if (!skeleton) return;
+  skeleton.classList.toggle('hidden', !isLoading);
+  skeleton.classList.toggle('flex', isLoading);
+  if (isLoading) {
+    $('dataContentContainer')?.classList.add('hidden');
+    $('emptyContainer')?.classList.add('hidden');
+    $('errorContainer')?.classList.add('hidden');
+  }
+}
+
+function showError(show=true) {
+  $('errorContainer')?.classList.toggle('hidden', !show);
+  $('errorContainer')?.classList.toggle('flex', show);
+  if (show) {
+    $('dataContentContainer')?.classList.add('hidden');
+    $('emptyContainer')?.classList.add('hidden');
+    $('paginationBar')?.classList.add('hidden');
+  }
+}
+
+function getGlobalStats() {
+  const names = new Set(gameResultsData.map(x => x.playerName).filter(Boolean));
+  const finished = gameResultsData.filter(x => normalizeDate(x.finishedAt));
+  const avgScore = finished.length ? finished.reduce((a,x) => a + x.score, 0) / finished.length : 0;
+  const totalSeconds = gameResultsData.reduce((a,x) => a + x.duration, 0);
+  return {uniqueKids:names.size, finished:finished.length, avgScore, totalSeconds};
+}
+
+function renderStats() {
+  const s = getGlobalStats();
+  $('statUniqueKids').textContent = s.uniqueKids;
+  $('statFinishedGames').textContent = s.finished;
+  $('statAverageScore').textContent = Math.round(s.avgScore);
+  $('statTotalDuration').textContent = formatDuration(s.totalSeconds);
+  $('statPredicateText').textContent = s.finished ? (s.avgScore >= 85 ? 'Rata-rata skor tinggi' : 'Perlu pendampingan') : 'Belum Ada Data';
+  const completion = gameResultsData.length ? Math.round(s.finished / gameResultsData.length * 100) : 0;
+  if ($('statCompletion')) $('statCompletion').textContent = `${completion}% sesi tuntas`;
+}
+
+function getFilteredData() {
+  const queryText = ($('searchInput')?.value || '').toLowerCase().trim();
+  const selectedGame = $('gameFilter')?.value || 'all';
+  const selectedPeriod = $('periodFilter')?.value || '7';
+  const now = Date.now();
+
+  return gameResultsData.filter(item => {
+    const name = item.playerName.toLowerCase();
+    const game = item.gameName.toLowerCase();
+    const matchSearch = !queryText || name.includes(queryText) || game.includes(queryText);
+    const matchGame = selectedGame === 'all' || item.gameName === selectedGame;
+    let matchPeriod = true;
+    if (selectedPeriod !== 'all') {
+      const started = normalizeDate(item.startedAt)?.getTime();
+      matchPeriod = !!started && started >= now - Number(selectedPeriod) * 86400000;
+    }
+    return matchSearch && matchGame && matchPeriod;
+  }).sort((a,b) => (normalizeDate(b.startedAt)?.getTime() || 0) - (normalizeDate(a.startedAt)?.getTime() || 0));
+}
+
+function renderActivityChart() {
+  const container = $('chartContainer');
+  if (!container) return;
+  container.innerHTML = '';
+  const period = $('periodFilter')?.value || '7';
+  const now = new Date();
+  const buckets = [];
+
+  if (period === 'all') {
+    const dates = gameResultsData.map(x => normalizeDate(x.startedAt)).filter(Boolean);
+    if (!dates.length) {
+      container.innerHTML = '<div class="w-full h-full flex items-center justify-center text-xs text-on-surface-variant">Belum ada aktivitas.</div>';
+      return;
+    }
+    const first = new Date(Math.min(...dates.map(d=>d.getTime())));
+    let cursor = new Date(first.getFullYear(), first.getMonth(), 1);
+    const end = new Date(now.getFullYear(), now.getMonth(), 1);
+    while (cursor <= end) {
+      const y=cursor.getFullYear(), m=cursor.getMonth();
+      const count=gameResultsData.filter(x=>{const d=normalizeDate(x.startedAt);return d&&d.getFullYear()===y&&d.getMonth()===m}).length;
+      buckets.push({label:cursor.toLocaleDateString('id-ID',{month:'short',year:'2-digit'}),count});
+      cursor=new Date(y,m+1,1);
+      if (buckets.length > 24) buckets.shift();
+    }
+  } else {
+    const days = Number(period);
+    for (let i=days-1;i>=0;i--) {
+      const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i);
+      const start=d.getTime(), end=start+86400000;
+      const count=gameResultsData.filter(x=>{const t=normalizeDate(x.startedAt)?.getTime();return t>=start&&t<end}).length;
+      buckets.push({label:d.toLocaleDateString('id-ID',{weekday:'short'}).replace('.',''),count});
+    }
+  }
+
+  const max=Math.max(1,...buckets.map(x=>x.count));
+  buckets.forEach(b=>{
+    const wrap=document.createElement('div');
+    wrap.className='flex-1 flex flex-col items-center h-full justify-end group relative';
+    const h=b.count ? Math.max(10, Math.round(b.count/max*82)) : 3;
+    wrap.innerHTML=`<div class="w-full max-w-[42px] ${b.count?'bg-primary':'bg-surface-container-high'} rounded-t-DEFAULT relative" style="height:${h}%"><span class="opacity-0 group-hover:opacity-100 absolute -top-7 left-1/2 -translate-x-1/2 text-[10px] font-bold bg-surface-container-high px-2 py-1 rounded-full whitespace-nowrap">${b.count} sesi</span></div><span class="font-bold text-on-surface-variant mt-2 text-[10px] sm:text-xs">${escapeHtml(b.label)}</span>`;
+    container.appendChild(wrap);
+  });
+}
+
+function renderTableAndCards() {
+  const filtered=getFilteredData();
+  renderStats();
+  renderActivityChart();
+  const empty=$('emptyContainer'), content=$('dataContentContainer'), pag=$('paginationBar');
+  if (!filtered.length) {
+    content?.classList.add('hidden'); empty?.classList.remove('hidden'); empty?.classList.add('flex'); pag?.classList.add('hidden');
+    $('paginationInfo').textContent='0 aktivitas ditampilkan';
+    return;
+  }
+  empty?.classList.add('hidden'); empty?.classList.remove('flex'); content?.classList.remove('hidden'); pag?.classList.remove('hidden');
+  $('paginationInfo').textContent=`Menampilkan ${filtered.length} aktivitas dari ${gameResultsData.length} total permainan`;
+
+  $('tableBodyDesktop').innerHTML=filtered.map(doc=>`<tr class="hover:bg-surface-container-low/60 transition-colors">
+    <td class="py-3.5 px-4"><div class="flex items-center gap-3"><div class="w-9 h-9 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-xs">${escapeHtml(initials(doc.playerName))}</div><div><span class="font-bold text-on-surface block">${escapeHtml(doc.playerName)}</span><span class="text-xs text-on-surface-variant font-mono">ID: ${escapeHtml(doc.id)}</span></div></div></td>
+    <td class="py-3.5 px-4 font-semibold">${escapeHtml(doc.gameName)}</td>
+    <td class="py-3.5 px-4"><span class="text-lg text-primary font-bold">${doc.score}</span><span class="text-xs text-on-surface-variant"> / 100</span></td>
+    <td class="py-3.5 px-4 text-xs text-on-surface-variant">${formatFullDate(doc.startedAt)}</td>
+    <td class="py-3.5 px-4 text-xs font-bold">${formatDuration(doc.duration)}</td>
+    <td class="py-3.5 px-4"><span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-bold text-xs">${doc.finishedAt?'Selesai':'Belum Selesai'}</span></td>
+    <td class="py-3.5 px-4 text-right"><div class="flex justify-end gap-1.5"><button type="button" onclick="openSessionDetailModal('${escapeHtml(doc.id)}')" class="px-3 py-1.5 min-h-[36px] rounded-full bg-surface-container hover:bg-primary hover:text-on-primary text-primary font-bold text-xs">Detail</button><button type="button" onclick="deleteSession('${escapeHtml(doc.id)}')" class="px-3 py-1.5 min-h-[36px] rounded-full bg-error-container text-error font-bold text-xs hover:opacity-80">Hapus</button></div></td>
+  </tr>`).join('');
+
+  $('cardListMobile').innerHTML=filtered.map(doc=>`<div class="bg-surface-container-low p-4 rounded-DEFAULT flex flex-col gap-3 border border-surface-container-high">
+    <div class="flex items-center justify-between"><div class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-xs">${escapeHtml(initials(doc.playerName))}</div><div><span class="font-bold block text-sm">${escapeHtml(doc.playerName)}</span><span class="text-[11px] text-on-surface-variant">${formatTime(doc.startedAt)}</span></div></div><span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-bold text-xs">${doc.finishedAt?'Selesai':'Belum Selesai'}</span></div>
+    <div class="text-xs font-bold text-primary">${escapeHtml(doc.gameName)}</div><div class="grid grid-cols-2 bg-surface-container-lowest p-2.5 rounded-DEFAULT text-center"><div><span class="block text-[11px] text-on-surface-variant">Skor</span><span class="block text-lg font-bold text-primary">${doc.score} / 100</span></div><div><span class="block text-[11px] text-on-surface-variant">Durasi</span><span class="block text-sm font-bold">${formatDuration(doc.duration)}</span></div></div>
+    <div class="grid grid-cols-2 gap-2"><button type="button" onclick="openSessionDetailModal('${escapeHtml(doc.id)}')" class="py-2.5 min-h-[44px] rounded-full bg-surface-container-high text-primary font-bold text-xs">Detail</button><button type="button" onclick="deleteSession('${escapeHtml(doc.id)}')" class="py-2.5 min-h-[44px] rounded-full bg-error-container text-error font-bold text-xs">Hapus</button></div>
+  </div>`).join('');
+}
+
+function renderKidsData() {
+  const map=new Map();
+  gameResultsData.forEach(r=>{
+    if(!r.playerName) return;
+    if(!map.has(r.playerName)) map.set(r.playerName,[]);
+    map.get(r.playerName).push(r);
+  });
+  const rows=[...map.entries()].sort((a,b)=>a[0].localeCompare(b[0]));
+  if(!rows.length){ $('kidsTableBody').innerHTML='<tr><td colspan="5" class="py-10 text-center text-on-surface-variant text-sm">Belum ada anak yang bermain.</td></tr>'; return; }
+  $('kidsTableBody').innerHTML=rows.map(([name,records])=>{
+    const finished=records.filter(r=>r.finishedAt);
+    const avg=finished.length?Math.round(finished.reduce((a,r)=>a+r.score,0)/finished.length):0;
+    const dur=records.reduce((a,r)=>a+r.duration,0);
+    return `<tr class="hover:bg-surface-container-low/60 transition-colors"><td class="py-3.5 px-4"><div class="flex items-center gap-3"><div class="w-9 h-9 rounded-full bg-primary-container text-on-primary-container font-bold text-xs flex items-center justify-center">${escapeHtml(initials(name))}</div><span class="font-bold">${escapeHtml(name)}</span></div></td><td class="py-3.5 px-4 text-xs font-bold">${records.length} kali main</td><td class="py-3.5 px-4"><span class="font-bold text-primary text-base">${avg}</span><span class="text-xs text-on-surface-variant"> / 100</span></td><td class="py-3.5 px-4 text-xs font-semibold">${formatDuration(dur)}</td><td class="py-3.5 px-4 text-right"><div class="flex justify-end gap-1.5"><button type="button" onclick="openChildDetailModal('${encodeURIComponent(name)}')" class="px-3 py-1.5 min-h-[36px] rounded-full bg-surface-container text-primary font-bold text-xs">Detail</button><button type="button" onclick="deleteChildData('${encodeURIComponent(name)}')" class="px-3 py-1.5 min-h-[36px] rounded-full bg-error-container text-error font-bold text-xs">Hapus</button></div></td></tr>`;
+  }).join('');
+}
+
+function renderReports() {
+  const finished=gameResultsData.filter(r=>r.finishedAt);
+  const completion=gameResultsData.length?Math.round(finished.length/gameResultsData.length*100):0;
+  $('reportCompletion').textContent=`${completion}%`;
+  $('reportAvgDuration').textContent=formatDuration(finished.length?finished.reduce((a,r)=>a+r.duration,0)/finished.length:0);
+  $('reportAvgScore').textContent=`${finished.length?Math.round(finished.reduce((a,r)=>a+r.score,0)/finished.length):0} / 100`;
+  $('reportGameBody').innerHTML=GAME_NAMES.map(game=>{
+    const rows=gameResultsData.filter(r=>r.gameName===game), done=rows.filter(r=>r.finishedAt), kids=new Set(rows.map(r=>r.playerName));
+    const avg=done.length?Math.round(done.reduce((a,r)=>a+r.score,0)/done.length):0;
+    return `<tr><td class="py-3 px-4 font-semibold">${escapeHtml(game)}</td><td class="py-3 px-4">${rows.length}</td><td class="py-3 px-4">${kids.size}</td><td class="py-3 px-4 text-primary font-bold">${avg} / 100</td><td class="py-3 px-4">${done.length}</td></tr>`;
+  }).join('');
+}
+
+
+function refreshAll(){ renderStats(); renderActivityChart(); renderTableAndCards(); renderKidsData(); renderReports(); }
+
+async function deleteSession(id){
+  const item=gameResultsData.find(x=>x.id===id);
+  if(!item) return;
+  if(!confirm(`Hapus data permainan ${item.playerName} pada game ${item.gameName}?\n\nData yang dihapus tidak dapat dikembalikan.`)) return;
+  try { await deleteDoc(doc(db,'gameResults',id)); }
+  catch(e){ console.error(e); alert('Data belum dapat dihapus. Periksa koneksi atau izin Firebase.'); }
+}
+
+async function deleteChildData(encodedName){
+  const name=decodeURIComponent(encodedName);
+  const records=gameResultsData.filter(x=>x.playerName===name);
+  if(!records.length) return;
+  if(!confirm(`Hapus semua ${records.length} riwayat permainan milik ${name}?\n\nData yang dihapus tidak dapat dikembalikan.`)) return;
+  try {
+    await Promise.all(records.map(r=>deleteDoc(doc(db,'gameResults',r.id))));
+  } catch(e){ console.error(e); alert('Sebagian data mungkin belum terhapus. Periksa koneksi atau izin Firebase.'); }
+}
+
+function openSessionDetailModal(id){
+  const d=gameResultsData.find(x=>x.id===id); if(!d) return;
+  $('modalDetailName').textContent=d.playerName; $('modalDetailGame').textContent=d.gameName; $('modalDetailScore').textContent=d.score; $('modalDetailDuration').textContent=formatDuration(d.duration); $('modalDetailStart').textContent=formatFullDate(d.startedAt); $('modalDetailFinish').textContent=formatFullDate(d.finishedAt); $('modalDetailStatus').textContent=d.finishedAt?'Selesai (Tuntas)':'Belum Selesai'; $('modalDetailDocId').textContent=d.id; $('sessionDetailModal').classList.remove('hidden');
+}
+function closeSessionDetailModal(){ $('sessionDetailModal').classList.add('hidden'); }
+function openChildDetailModal(encodedName){
+  const name=decodeURIComponent(encodedName), records=gameResultsData.filter(x=>x.playerName===name); if(!records.length) return;
+  const done=records.filter(r=>r.finishedAt), avg=done.length?Math.round(done.reduce((a,r)=>a+r.score,0)/done.length):0;
+  $('childModalName').textContent=name; $('childModalAvatar').textContent=initials(name); $('childModalTotalGames').textContent=records.length; $('childModalAvgScore').textContent=avg; $('childModalDuration').textContent=formatDuration(records.reduce((a,r)=>a+r.duration,0));
+  $('childHistoryList').innerHTML=records.sort((a,b)=>(normalizeDate(b.startedAt)?.getTime()||0)-(normalizeDate(a.startedAt)?.getTime()||0)).map(r=>`<div class="p-3 bg-surface-container-lowest flex items-center justify-between"><div><span class="font-bold block text-xs">${escapeHtml(r.gameName)}</span><span class="text-[11px] text-on-surface-variant">${formatFullDate(r.startedAt)}</span></div><div class="text-right"><span class="font-bold text-primary block text-sm">${r.score}</span><span class="text-[10px] text-on-surface-variant">${formatDuration(r.duration)}</span></div></div>`).join('');
+  $('childDetailModal').classList.remove('hidden');
+}
+function closeChildDetailModal(){ $('childDetailModal').classList.add('hidden'); }
+function resetFilters(){ $('searchInput').value=''; $('gameFilter').value='all'; $('periodFilter').value='7'; renderTableAndCards(); }
+function retryFirebaseConnection(){ window.location.reload(); }
+async function handleLogout(){
+  if (!confirm('Apakah Anda yakin ingin keluar dari Portal Admin Taman TK?')) return;
+  try {
+    await signOut(auth);
+    window.location.href = 'index.html';
+  } catch (error) {
+    console.error('Gagal keluar:', error);
+    alert('Gagal keluar dari akun admin. Silakan coba lagi.');
+  }
+}
+
+function backToGame() {
+  window.location.href = 'index.html';
+}
+
+const views={dashboard:$('viewDashboard'),katalog:$('viewKatalog'),'data-anak':$('viewDataAnak'),laporan:$('viewLaporan')};
+function switchView(key){ Object.values(views).forEach(v=>v?.classList.add('hidden')); views[key]?.classList.remove('hidden'); document.querySelectorAll('.nav-item').forEach(btn=>{const active=btn.dataset.view===key; btn.classList.toggle('bg-primary-container',active);btn.classList.toggle('text-on-primary-container',active);btn.classList.toggle('font-bold',active);btn.classList.toggle('text-on-surface-variant',!active);}); if(key==='data-anak') renderKidsData(); if(key==='laporan') renderReports(); closeDrawer(); }
+
+document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click',()=>switchView(btn.dataset.view)));
+$('searchInput')?.addEventListener('input',renderTableAndCards); $('gameFilter')?.addEventListener('change',renderTableAndCards); $('periodFilter')?.addEventListener('change',renderTableAndCards);
+
+const mobileDrawer=$('mobileDrawer'), backdrop=$('mobileDrawerBackdrop');
+function openDrawer(){mobileDrawer?.classList.remove('-translate-x-full');backdrop?.classList.remove('hidden');}
+function closeDrawer(){mobileDrawer?.classList.add('-translate-x-full');backdrop?.classList.add('hidden');}
+$('openMobileDrawerBtn')?.addEventListener('click',openDrawer); $('closeMobileDrawerBtn')?.addEventListener('click',closeDrawer); backdrop?.addEventListener('click',closeDrawer);
+
+window.openSessionDetailModal=openSessionDetailModal; window.closeSessionDetailModal=closeSessionDetailModal; window.openChildDetailModal=openChildDetailModal; window.closeChildDetailModal=closeChildDetailModal; window.deleteSession=deleteSession; window.deleteChildData=deleteChildData; window.resetFilters=resetFilters; window.retryFirebaseConnection=retryFirebaseConnection; window.handleLogout=handleLogout; window.backToGame=backToGame; window.renderTableAndCards=renderTableAndCards;
+
+function startAdminDataListener() {
+  if (unsubscribeResults) unsubscribeResults();
+
+  setLoading(true);
+  unsubscribeResults = onSnapshot(collection(db, 'gameResults'), snapshot => {
+    gameResultsData = snapshot.docs.map(normalizeDoc);
+    firebaseLoaded = true;
+    setLoading(false);
+    showError(false);
+    refreshAll();
+  }, error => {
+    console.error('Firestore error:', error);
+    setLoading(false);
+    showError(true);
+  });
+}
+
+// Pintu keamanan Dashboard Admin:
+// 1) harus login Firebase Authentication
+// 2) UID harus memiliki dokumen /admins/{uid}
+//    dengan field isAdmin: true
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.replace('loginAdmin.html');
+    return;
+  }
+
+  try {
+    const adminRef = doc(db, ADMIN_COLLECTION, user.uid);
+    const adminSnap = await getDoc(adminRef);
+
+    if (!adminSnap.exists() || adminSnap.data().isAdmin !== true) {
+      await signOut(auth);
+      alert('Akun ini tidak memiliki akses Admin.');
+      window.location.replace('loginAdmin.html');
+      return;
+    }
+
+    startAdminDataListener();
+  } catch (error) {
+    console.error('Gagal memeriksa akses admin:', error);
+    await signOut(auth).catch(() => {});
+    alert('Akses Admin belum dapat diverifikasi.');
+    window.location.replace('loginAdmin.html');
+  }
+});
+
+// Initial UI before first snapshotpshot.
+renderStats(); renderActivityChart(); renderTableAndCards();
+</script>
+</body></html>
