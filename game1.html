@@ -91,16 +91,82 @@
 <meta content="web_standard" name="shell-type"/>
 
 <style id="game1-mobile-drag-fix">
-#game-workspace,
 #game-workspace .anchor-dot {
   touch-action: none !important;
   -webkit-user-select: none !important;
   user-select: none !important;
   -webkit-touch-callout: none !important;
+  -webkit-tap-highlight-color: transparent;
 }
 
-#game-workspace .anchor-dot {
-  -webkit-tap-highlight-color: transparent;
+#game-workspace [data-item-id] img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  #game-workspace {
+    padding: 12px !important;
+    overflow: visible !important;
+  }
+
+  #game-workspace > div.flex.justify-between.items-center {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr) !important;
+    align-items: start !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+
+  #left-cards-col,
+  #right-cards-col {
+    width: 100% !important;
+    min-width: 0 !important;
+    gap: 12px !important;
+  }
+
+  #left-cards-col > div,
+  #right-cards-col > div {
+    width: 100% !important;
+    min-width: 0 !important;
+    gap: 5px !important;
+  }
+
+  #left-cards-col [data-item-id],
+  #right-cards-col [data-item-id] {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 92px !important;
+    padding: 6px !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+  }
+
+  #left-cards-col [data-item-id] > div {
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+  }
+
+  #right-cards-col [data-item-id] span {
+    max-width: 100% !important;
+    font-size: clamp(.62rem, 2.8vw, .8rem) !important;
+    line-height: 1.1 !important;
+    overflow-wrap: anywhere !important;
+    text-align: center !important;
+  }
 }
 </style>
 </head>
@@ -160,34 +226,37 @@
 <main class="w-full max-w-7xl px-4 py-4 sm:py-6 flex flex-col items-center text-center z-10 my-auto">
 <div class="flex flex-col w-full relative">
 <!-- TOP HEADER AREA -->
-<header class="flex flex-row items-start justify-between gap-4 w-full mb-4">
-<div class="flex flex-col items-start text-left gap-1.5">
-<div class="flex items-center gap-2">
-<span class="rounded-full bg-white/95 px-4 py-1.5 text-sm font-bold text-amber-800 shadow-sm inline-flex items-center gap-1.5 border border-amber-100">
-<span>🌈</span> Permainan Tradisional Indonesia
-</span>
-</div>
-<h1 class="text-3xl sm:text-4xl font-bold text-slate-800 drop-shadow-sm tracking-tight text-left">
-  Yuk, Pasangkan Permainan Tradisional!
-</h1>
-<p class="text-base text-slate-600 font-semibold inline-flex items-center gap-2 bg-white/80 px-4 py-1.5 rounded-full shadow-sm text-left">
-<span>⭐</span> Hubungkan gambar dengan nama permainan yang tepat, ya!
-</p>
-</div>
-<!-- TOMBOL MUSIK DI POJOK KANAN ATAS -->
-<div class="flex items-center pt-1 z-30">
-<button class="flex items-center gap-2 bg-emerald-400 hover:bg-emerald-300 text-slate-900 font-bold px-5 py-2.5 rounded-full shadow-md transition-all transform hover:scale-105 active:scale-95 text-base cursor-pointer border border-emerald-500/20" id="bgm-action-btn" type="button">
-<span id="bgm-icon">♫</span>
-<span id="bgm-label">Musik Nyala</span>
-</button>
-<button
-  id="btn-back-dashboard"
-  type="button"
-  class="flex items-center gap-2 bg-white hover:bg-sky-100 text-sky-900 font-bold px-5 py-2.5 rounded-full shadow-md transition-all transform hover:scale-105 active:scale-95 text-base cursor-pointer border border-sky-200"
->
-  🏡Kembali
-</button>
-</div>
+<header class="game1-header flex flex-col w-full mb-5 sm:mb-6 bg-white/80 backdrop-blur-md px-5 sm:px-8 py-4 sm:py-6 rounded-3xl shadow-sm border border-sky-100">
+  <div class="flex flex-col items-start text-left gap-2 w-full">
+    <div class="flex items-center gap-2">
+      <span class="rounded-full bg-sky-100/90 px-4 py-1.5 text-sm font-bold text-sky-800 shadow-sm inline-flex items-center gap-1.5 border border-sky-200">
+        <span>🌈</span> Permainan Tradisional Indonesia
+      </span>
+    </div>
+
+    <h1 class="text-3xl sm:text-4xl font-bold text-slate-800 drop-shadow-sm tracking-tight text-left leading-tight">
+      Yuk, Pasangkan Permainan Tradisional!
+    </h1>
+
+    <p class="text-base sm:text-lg text-slate-600 font-semibold inline-flex items-center gap-2 text-left">
+      <span>⭐</span> Hubungkan gambar dengan nama permainan yang tepat, ya!
+    </p>
+  </div>
+
+  <!-- TOMBOL MUSIK DAN KEMBALI -->
+  <div class="flex items-center self-end mt-4 z-30 gap-2 sm:gap-3 bg-sky-50/90 p-1.5 sm:p-2 rounded-full border border-sky-200 shadow-inner">
+    <button class="flex items-center gap-2 bg-emerald-400 hover:bg-emerald-300 text-slate-900 font-bold px-5 py-2.5 rounded-full shadow-md transition-all transform hover:scale-105 active:scale-95 text-base cursor-pointer border border-emerald-500/20" id="bgm-action-btn" type="button">
+      <span id="bgm-icon">♫</span>
+      <span id="bgm-label">Musik Nyala</span>
+    </button>
+    <button
+      id="btn-back-dashboard"
+      type="button"
+      class="flex items-center gap-2 bg-white hover:bg-sky-100 text-sky-900 font-bold px-5 py-2.5 rounded-full shadow-md transition-all transform hover:scale-105 active:scale-95 text-base cursor-pointer border border-sky-200"
+    >
+      🏡Kembali
+    </button>
+  </div>
 </header>
 <!-- STATUS BAR (SESI DAN SKOR) -->
 <div class="w-full max-w-6xl mx-auto flex items-center justify-between bg-white/90 px-6 py-2.5 rounded-full shadow-md mb-6 border border-slate-100">
@@ -799,6 +868,10 @@ function saveGameCompletion() {
 
   clearActiveState();
 });
+
+    window.addEventListener('pointercancel', () => {
+      clearActiveState();
+    });
 
     function clearActiveState() {
       if (activeStartDot && activeStartDot.dot) {
